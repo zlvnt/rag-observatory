@@ -5,3 +5,5 @@ venv/
 results/*.json
 results/*.jsonl
 .env
+
+prompt/
