@@ -1,0 +1,29 @@
+# Example Domain Configuration for RAG Observatory
+# This is a template configuration file for a domain
+
+domain_name: example
+
+# Directory containing knowledge base documents (.md, .txt files)
+knowledge_base_dir: knowledge_bases/example/
+
+# Directory where FAISS vector store will be saved
+vector_store_dir: data/vector_stores/example/
+
+# Optional: Path to personality configuration JSON
+# personality_config_path: personalities/example_personality.json
+
+# Optional: Path to supervisor routing prompt template
+# supervisor_prompt_path: prompts/example_supervisor.txt
+
+# Embedding model from HuggingFace
+embedding_model: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+
+# Gemini LLM configuration
+llm_model: gemini-pro
+llm_temperature: 0.7
+
+# RAG parameters
+relevance_threshold: 0.8  # Minimum relevance score (0-1)
+chunk_size: 700           # Document chunk size in characters
+chunk_overlap: 100        # Overlap between chunks
+retrieval_k: 4            # Number of documents to retrieve
