@@ -1,3 +1,0 @@
-[submodule "z3_agent"]
-	path = z3_agent
-	url = https://github.com/zlvnt/z3-Agent.git
