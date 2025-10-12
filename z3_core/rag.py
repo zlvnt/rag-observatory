@@ -16,8 +16,9 @@ def retrieve_context(
     k_docs: int = 3,
     k_web: int = 3,
     max_len: int = 2000,
-    relevance_threshold: float = 0.8
-) -> str:
+    relevance_threshold: float = 0.8,
+    return_debug_info: bool = False
+):
     """Retrieve context from documents and/or web.
 
     Args:
@@ -30,11 +31,24 @@ def retrieve_context(
         k_web: Number of web results to retrieve
         max_len: Maximum length of each context snippet
         relevance_threshold: Minimum relevance score (0-1)
+        return_debug_info: Return tuple (context, debug_info) instead of just context
 
     Returns:
-        Retrieved context as formatted string
+        str: Retrieved context string (if return_debug_info=False)
+        tuple: (context, debug_info) (if return_debug_info=True)
+            debug_info contains:
+            - docs_retrieved: List of doc metadata (source, score, relevance_score)
+            - num_docs_initial: Number of docs before filtering
+            - num_docs_final: Number of docs after filtering
+            - retrieval_mode: Mode used for retrieval
     """
     contexts = []
+    debug_data = {
+        "docs_retrieved": [],
+        "num_docs_initial": 0,
+        "num_docs_final": 0,
+        "retrieval_mode": mode
+    }
 
     if mode in {"docs", "all"}:
         # Build retriever on-demand if not provided
@@ -45,26 +59,38 @@ def retrieve_context(
             retriever = get_retriever(vector_dir, embedding_model, k=k_docs)
 
         docs = retriever.get_relevant_documents(query)
-        
+
+        debug_data["num_docs_initial"] = len(docs)
+
         # Apply simple relevance filtering (threshold 0.8)
         if docs:
             # Filter docs based on simple content relevance
             filtered_docs = []
             query_words = set(query.lower().split())
-            
-            for doc in docs:
+
+            for i, doc in enumerate(docs):
                 content_words = set(doc.page_content.lower().split())
                 if query_words and content_words:
                     # Simple word overlap score
                     overlap = len(query_words.intersection(content_words))
                     relevance_score = overlap / len(query_words)
-                    
+
+                    # Store doc metadata for debug
+                    doc_metadata = {
+                        "source": doc.metadata.get("source", "unknown"),
+                        "relevance_score": relevance_score,
+                        "rank": i,
+                        "passed_threshold": relevance_score >= relevance_threshold
+                    }
+                    debug_data["docs_retrieved"].append(doc_metadata)
+
                     if relevance_score >= relevance_threshold:
                         filtered_docs.append(doc)
-            
+
             # Use filtered docs if any pass threshold, otherwise use all
             final_docs = filtered_docs if filtered_docs else docs
-            
+            debug_data["num_docs_final"] = len(final_docs)
+
             context_docs = "\n".join(
                 f"[Docs] { _safe_content(d.page_content.strip(), max_len) }"
                 for d in final_docs if d.page_content.strip()
@@ -91,8 +117,14 @@ def retrieve_context(
 
     if not contexts:
         print(f"WARNING: No RAG context found - query: {query}, mode: {mode}")
-        return ""
-    return "\n\n".join(contexts)
+        result = ""
+    else:
+        result = "\n\n".join(contexts)
+
+    if return_debug_info:
+        return result, debug_data
+
+    return result
 
 
 def rebuild_index(
