@@ -72,8 +72,9 @@ def generate_reply(
     personality_config_path: Optional[Path] = None,
     model_name: str = "gemini-pro",
     temperature: float = 0.7,
-    verbose: bool = False
-) -> str:
+    verbose: bool = False,
+    return_debug_info: bool = False
+):
     """Generate reply using LLM with personality configuration.
 
     Args:
@@ -84,9 +85,16 @@ def generate_reply(
         model_name: Gemini model name
         temperature: LLM temperature
         verbose: Print debug information
+        return_debug_info: Return tuple (answer, debug_info) instead of just answer
 
     Returns:
-        Generated reply string
+        str: Generated reply string (if return_debug_info=False)
+        tuple: (answer, debug_info) (if return_debug_info=True)
+            debug_info contains:
+            - final_prompt: Exact prompt sent to LLM
+            - prompt_tokens_approx: Estimated token count
+            - template_used: Personality config path
+            - context_length: Length of retrieved context
     """
     try:
         # Load personality config
@@ -119,18 +127,35 @@ def generate_reply(
         prompt_template = ChatPromptTemplate.from_template(template_str)
         messages = prompt_template.format_messages(**template_vars)
 
+        # Get final prompt content
+        final_prompt = messages[0].content
+
         if verbose:
             print(f"{'='*60}")
-            print("PROMPT TO LLM:")
-            print(messages[0].content)
+            print("🔍 FINAL PROMPT TO LLM:")
+            print(final_prompt)
             print(f"{'='*60}")
 
         ai_msg = _get_llm(model_name, temperature).invoke(messages)
         reply = ai_msg.content.strip()
         print(f"INFO: Generated reply successfully")
 
+        # Build debug info if requested
+        if return_debug_info:
+            debug_info = {
+                "final_prompt": final_prompt,
+                "prompt_tokens_approx": len(final_prompt) // 4,  # Rough estimate
+                "template_used": str(personality_config_path) if personality_config_path else "default",
+                "context_length": len(context),
+                "history_length": len(conversation_history)
+            }
+            return reply, debug_info
+
     except Exception as e:
         print(f"ERROR: Reply generation failed - error: {e}")
         reply = "Sorry, I encountered an issue processing your message. Please try again."
+
+        if return_debug_info:
+            return reply, {"error": str(e)}
 
     return reply
