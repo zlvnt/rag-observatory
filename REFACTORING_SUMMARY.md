@@ -122,9 +122,47 @@ GEMINI_API_KEY=your_api_key_here
 
 ---
 
+## Debug Info Capture (for Test Runner)
+
+Both `retrieve_context()` and `generate_reply()` support optional debug info return:
+
+```python
+# Retrieve with debug info
+context, retrieval_debug = retrieve_context(
+    query="What is Product A?",
+    retriever=retriever,
+    return_debug_info=True  # Returns tuple
+)
+
+# retrieval_debug contains:
+# - docs_retrieved: [{"source": "...", "relevance_score": 0.85, ...}]
+# - num_docs_initial: 4
+# - num_docs_final: 3
+# - retrieval_mode: "docs"
+
+# Generate with debug info
+reply, generation_debug = generate_reply(
+    query="What is Product A?",
+    context=context,
+    return_debug_info=True  # Returns tuple
+)
+
+# generation_debug contains:
+# - final_prompt: "Exact prompt sent to LLM..."
+# - prompt_tokens_approx: 1847
+# - template_used: "path/to/config.json"
+# - context_length: 456
+```
+
+This enables test runner to capture full pipeline trace for analysis.
+
+---
+
 ## Next Steps
 
 1. Buat knowledge base di `knowledge_bases/{domain}/`
 2. Buat config YAML di `configs/`
 3. Build vector index dengan `build_index()`
-4. Mulai testing!
+4. Create golden datasets
+5. Build test runner dengan debug info capture
+6. Mulai testing!
