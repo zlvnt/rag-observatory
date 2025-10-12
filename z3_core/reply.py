@@ -51,7 +51,7 @@ def _load_personality_config(config_path: Optional[Path]) -> dict:
                 "Provide clear and accurate information",
                 "Use a friendly tone"
             ],
-            "reply_template": "Identity: {identity_name} from {company}\n\n{service_guidelines}\n\nUser Query: {query}\n\nContext: {context}\n\nResponse:"
+            "reply_template": "Identity: {identity_name} from {company}\n\n{service_guidelines}\n\nConversation History: {history}\n\nUser Query: {query}\n\nContext: {context}\n\nResponse:"
         }
 
     try:
@@ -68,6 +68,7 @@ def _load_personality_config(config_path: Optional[Path]) -> dict:
 def generate_reply(
     query: str,
     context: str = "",
+    conversation_history: str = "",
     personality_config_path: Optional[Path] = None,
     model_name: str = "gemini-pro",
     temperature: float = 0.7,
@@ -78,6 +79,7 @@ def generate_reply(
     Args:
         query: User query/question
         context: Retrieved context from RAG system
+        conversation_history: Previous conversation context (optional)
         personality_config_path: Path to personality config JSON (optional)
         model_name: Gemini model name
         temperature: LLM temperature
@@ -107,6 +109,7 @@ def generate_reply(
         template_vars = {
             "query": query,
             "context": context or "No additional information available.",
+            "history": conversation_history or "No previous conversation.",
             "identity_name": identity.get("name", "AI Assistant"),
             "company": identity.get("company", "Your Business"),
             "service_guidelines": guidelines_text
