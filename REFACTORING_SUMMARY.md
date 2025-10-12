@@ -84,6 +84,7 @@ context = retrieve_context(
 reply = generate_reply(
     query="What is Product A?",
     context=context,
+    conversation_history="",  # Optional: previous conversation
     personality_config_path=config.personality_config_path,
     model_name=config.llm_model,
     temperature=config.llm_temperature
