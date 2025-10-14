@@ -23,13 +23,11 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from z3_core.domain_config import load_domain_config
 from z3_core.vector import build_index, get_retriever
 from z3_core.rag import retrieve_context
-from z3_core.router import supervisor_route
-from z3_core.reply import generate_reply
 from evaluators.metrics import (
     calculate_precision_at_k,
     calculate_recall_at_k,
     calculate_reciprocal_rank,
-    calculate_keyword_coverage,
+    calculate_f1_score,
     aggregate_metrics,
     group_by_category,
 )
@@ -119,7 +117,7 @@ def run_single_test(
     retriever,
     verbose: bool = False
 ) -> Dict[str, Any]:
-    """Run a single test case through the full RAG pipeline.
+    """Run a single test case - RETRIEVAL FOCUSED.
 
     Args:
         test_case: Test case from golden dataset
@@ -128,7 +126,7 @@ def run_single_test(
         verbose: Print detailed information
 
     Returns:
-        Result dictionary with pipeline trace and evaluation
+        Result dictionary with retrieval trace and evaluation
     """
     query = test_case["query"]
     test_id = test_case["id"]
@@ -144,51 +142,27 @@ def run_single_test(
         "query": query,
         "category": test_case.get("category", "unknown"),
         "difficulty": test_case.get("difficulty", "unknown"),
+        "expected_docs": test_case.get("expected_docs", []),
         "timestamp": datetime.now().isoformat(),
-        "pipeline_trace": {},
+        "rag_config": {
+            "chunk_size": config.chunk_size,
+            "chunk_overlap": config.chunk_overlap,
+            "embedding_model": config.embedding_model,
+            "vector_store": "FAISS",
+            "retrieval_k": config.retrieval_k,
+            "relevance_threshold": config.relevance_threshold
+        },
+        "retrieval_trace": {},
         "evaluation": {}
     }
 
-    # Step 1: Routing
-    start_time = time.time()
-    try:
-        if config.supervisor_prompt_path and config.supervisor_prompt_path.exists():
-            routing_decision = supervisor_route(
-                user_input=query,
-                supervisor_prompt_path=config.supervisor_prompt_path,
-                model_name=config.llm_model,
-                temperature=0  # Use 0 for deterministic routing
-            )
-        else:
-            # Default to docs if no supervisor prompt
-            routing_decision = "docs"
-            print(f"INFO: No supervisor prompt, defaulting to 'docs' mode")
-
-        routing_latency = (time.time() - start_time) * 1000
-
-        result["pipeline_trace"]["routing"] = {
-            "decision": routing_decision,
-            "expected": test_case.get("expected_route", "docs"),
-            "correct": routing_decision == test_case.get("expected_route", "docs"),
-            "latency_ms": round(routing_latency, 2)
-        }
-
-    except Exception as e:
-        print(f"✗ Routing failed: {e}")
-        result["pipeline_trace"]["routing"] = {
-            "error": str(e),
-            "decision": "docs",  # Fallback
-            "latency_ms": 0
-        }
-        routing_decision = "docs"
-
-    # Step 2: Retrieval
+    # Retrieval step (no routing, always use docs mode)
     start_time = time.time()
     try:
         context, retrieval_debug = retrieve_context(
             query=query,
             retriever=retriever,
-            mode=routing_decision,
+            mode="docs",  # Always docs mode
             k_docs=config.retrieval_k,
             relevance_threshold=config.relevance_threshold,
             return_debug_info=True
@@ -196,93 +170,68 @@ def run_single_test(
 
         retrieval_latency = (time.time() - start_time) * 1000
 
-        # Extract doc sources
-        retrieved_doc_names = [doc["source"] for doc in retrieval_debug["docs_retrieved"]]
+        # Extract unique doc sources (filenames only)
+        all_doc_sources = [doc["source"] for doc in retrieval_debug["docs_retrieved"]]
+        unique_doc_names = []
+        seen = set()
+        for doc in all_doc_sources:
+            # Extract just filename from path
+            filename = doc.split("/")[-1] if "/" in doc else doc
+            if filename not in seen:
+                unique_doc_names.append(filename)
+                seen.add(filename)
 
-        result["pipeline_trace"]["retrieval"] = {
-            "docs_retrieved": retrieval_debug["docs_retrieved"],
-            "num_docs_initial": retrieval_debug["num_docs_initial"],
-            "num_docs_final": retrieval_debug["num_docs_final"],
-            "retrieved_context": context[:500] + "..." if len(context) > 500 else context,  # Truncate for storage
+        # Calculate token count (rough estimate: 1 token ≈ 4 chars)
+        context_tokens = len(context) // 4
+
+        result["retrieval_trace"] = {
+            "docs_retrieved": retrieval_debug["docs_retrieved"],  # Full chunk details
+            "unique_docs": unique_doc_names,  # Unique filenames for metrics
+            "num_chunks_retrieved": retrieval_debug["num_docs_final"],
+            "num_unique_docs": len(unique_doc_names),
+            "context_length_chars": len(context),
+            "context_tokens_approx": context_tokens,
+            "retrieved_context_preview": context[:500] + "..." if len(context) > 500 else context,
             "latency_ms": round(retrieval_latency, 2)
         }
 
     except Exception as e:
         print(f"✗ Retrieval failed: {e}")
-        context = ""
-        retrieved_doc_names = []
-        retrieval_latency = 0
-        result["pipeline_trace"]["retrieval"] = {
+        unique_doc_names = []
+        result["retrieval_trace"] = {
             "error": str(e),
             "docs_retrieved": [],
+            "unique_docs": [],
+            "num_chunks_retrieved": 0,
+            "num_unique_docs": 0,
+            "context_tokens_approx": 0,
             "latency_ms": 0
         }
 
-    # Step 3: Generation
-    start_time = time.time()
-    try:
-        answer, generation_debug = generate_reply(
-            query=query,
-            context=context,
-            conversation_history="",  # No history for golden dataset tests
-            personality_config_path=config.personality_config_path,
-            model_name=config.llm_model,
-            temperature=config.llm_temperature,
-            verbose=verbose,
-            return_debug_info=True
-        )
-
-        generation_latency = (time.time() - start_time) * 1000
-
-        result["pipeline_trace"]["prompt_construction"] = {
-            "final_prompt": generation_debug["final_prompt"][:1000] + "..." if len(generation_debug["final_prompt"]) > 1000 else generation_debug["final_prompt"],
-            "prompt_tokens_approx": generation_debug["prompt_tokens_approx"],
-            "template_used": generation_debug["template_used"]
-        }
-
-        result["pipeline_trace"]["generation"] = {
-            "answer": answer,
-            "latency_ms": round(generation_latency, 2)
-        }
-
-    except Exception as e:
-        print(f"✗ Generation failed: {e}")
-        answer = ""
-        generation_latency = 0
-        result["pipeline_trace"]["generation"] = {
-            "error": str(e),
-            "answer": "",
-            "latency_ms": 0
-        }
-
-    # Calculate total latency
-    result["pipeline_trace"]["total_latency_ms"] = round(
-        result["pipeline_trace"]["routing"]["latency_ms"] +
-        result["pipeline_trace"]["retrieval"]["latency_ms"] +
-        result["pipeline_trace"]["generation"]["latency_ms"],
-        2
-    )
-
-    # Step 4: Evaluation
+    # Evaluation - Retrieval metrics only
     expected_docs = test_case.get("expected_docs", [])
 
-    # Calculate retrieval metrics
-    precision = calculate_precision_at_k(retrieved_doc_names, expected_docs, k=3)
-    recall = calculate_recall_at_k(retrieved_doc_names, expected_docs, k=3)
-    rr = calculate_reciprocal_rank(retrieved_doc_names, expected_docs)
+    # Calculate retrieval metrics using unique doc names
+    precision = calculate_precision_at_k(unique_doc_names, expected_docs, k=3)
+    recall = calculate_recall_at_k(unique_doc_names, expected_docs, k=3)
+    rr = calculate_reciprocal_rank(unique_doc_names, expected_docs)
 
-    # Calculate keyword coverage
-    expected_keywords = test_case.get("expected_keywords", [])
-    keyword_result = calculate_keyword_coverage(answer, expected_keywords)
+    # Calculate true positives, false positives, false negatives
+    expected_set = set(expected_docs)
+    retrieved_set = set(unique_doc_names)
+
+    true_positives = list(expected_set.intersection(retrieved_set))
+    false_positives = list(retrieved_set - expected_set)
+    false_negatives = list(expected_set - retrieved_set)
 
     result["evaluation"] = {
-        "routing_correct": result["pipeline_trace"]["routing"].get("correct", False),
         "precision": round(precision, 3),
         "recall": round(recall, 3),
+        "f1_score": round(calculate_f1_score(precision, recall), 3),
         "reciprocal_rank": round(rr, 3),
-        "keyword_coverage": round(keyword_result["coverage"], 3),
-        "keywords_found": keyword_result["found"],
-        "keywords_missing": keyword_result["missing"]
+        "true_positives": true_positives,
+        "false_positives": false_positives,
+        "false_negatives": false_negatives
     }
 
     return result
@@ -305,7 +254,7 @@ def save_detailed_result(result: Dict[str, Any], output_dir: Path):
 
 
 def save_summary_csv(results: List[Dict[str, Any]], output_dir: Path, timestamp: str):
-    """Save summary results to CSV.
+    """Save summary results to CSV - RETRIEVAL FOCUSED.
 
     Args:
         results: List of test results
@@ -317,47 +266,46 @@ def save_summary_csv(results: List[Dict[str, Any]], output_dir: Path, timestamp:
     with open(csv_file, "w", newline="", encoding="utf-8") as f:
         fieldnames = [
             "test_id", "category", "difficulty", "query",
-            "routing_correct", "routing_decision",
-            "docs_retrieved", "precision", "recall", "reciprocal_rank",
-            "answer", "final_prompt_preview",
-            "keyword_coverage", "keywords_missing", "total_latency_ms"
+            "expected_docs", "retrieved_docs", "num_chunks",
+            "precision", "recall", "f1_score", "mrr",
+            "true_positives", "false_positives", "false_negatives",
+            "context_tokens", "latency_ms"
         ]
 
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
 
         for result in results:
-            # Get docs retrieved
-            docs_retrieved = [doc["source"] for doc in result["pipeline_trace"]["retrieval"].get("docs_retrieved", [])]
-            docs_str = "; ".join(docs_retrieved) if docs_retrieved else "None"
+            # Get retrieved docs
+            unique_docs = result["retrieval_trace"].get("unique_docs", [])
+            docs_str = "; ".join(unique_docs) if unique_docs else "None"
 
-            # Get answer
-            answer = result["pipeline_trace"]["generation"].get("answer", "")
+            # Get expected docs from golden dataset
+            # We need to extract this from somewhere - let's add it to result during test
+            expected = "; ".join(result.get("expected_docs", []))
 
-            # Get final prompt (truncated)
-            final_prompt = result["pipeline_trace"].get("prompt_construction", {}).get("final_prompt", "")
-            prompt_preview = final_prompt[:200] + "..." if len(final_prompt) > 200 else final_prompt
-
-            # Get keywords missing
-            keywords_missing = result["evaluation"].get("keywords_missing", [])
-            keywords_str = "; ".join(keywords_missing) if keywords_missing else "None"
+            # True/false positives/negatives
+            tp = "; ".join(result["evaluation"].get("true_positives", []))
+            fp = "; ".join(result["evaluation"].get("false_positives", []))
+            fn = "; ".join(result["evaluation"].get("false_negatives", []))
 
             writer.writerow({
                 "test_id": result["test_id"],
                 "category": result["category"],
                 "difficulty": result["difficulty"],
                 "query": result["query"],
-                "routing_correct": result["evaluation"]["routing_correct"],
-                "routing_decision": result["pipeline_trace"]["routing"].get("decision", "unknown"),
-                "docs_retrieved": docs_str,
+                "expected_docs": expected if expected else "None",
+                "retrieved_docs": docs_str,
+                "num_chunks": result["retrieval_trace"].get("num_chunks_retrieved", 0),
                 "precision": result["evaluation"]["precision"],
                 "recall": result["evaluation"]["recall"],
-                "reciprocal_rank": result["evaluation"]["reciprocal_rank"],
-                "answer": answer,
-                "final_prompt_preview": prompt_preview,
-                "keyword_coverage": result["evaluation"]["keyword_coverage"],
-                "keywords_missing": keywords_str,
-                "total_latency_ms": result["pipeline_trace"]["total_latency_ms"]
+                "f1_score": result["evaluation"]["f1_score"],
+                "mrr": result["evaluation"]["reciprocal_rank"],
+                "true_positives": tp if tp else "None",
+                "false_positives": fp if fp else "None",
+                "false_negatives": fn if fn else "None",
+                "context_tokens": result["retrieval_trace"].get("context_tokens_approx", 0),
+                "latency_ms": result["retrieval_trace"].get("latency_ms", 0)
             })
 
     print(f"\n✓ Summary CSV saved: {csv_file}")
@@ -391,29 +339,42 @@ def generate_report(results: List[Dict[str, Any]], output_dir: Path, timestamp: 
         for cat, tests in by_category.items()
     }
 
-    # Find failed queries
-    failed = [r for r in results if not r["evaluation"]["routing_correct"] or r["evaluation"]["recall"] < 0.5]
+    # Find failed queries (low recall)
+    failed = [r for r in results if r["evaluation"]["recall"] < 0.5]
 
     # Generate report
     with open(report_file, "w", encoding="utf-8") as f:
         f.write("=" * 60 + "\n")
-        f.write("RAG EVALUATION REPORT\n")
+        f.write("RAG RETRIEVAL EVALUATION REPORT\n")
         f.write("=" * 60 + "\n\n")
 
         f.write(f"Domain: {config.domain_name}\n")
         f.write(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
         f.write(f"Total Queries: {overall_metrics['total_queries']}\n\n")
 
+        # RAG Configuration
         f.write("-" * 60 + "\n")
-        f.write("OVERALL METRICS\n")
+        f.write("RAG CONFIGURATION\n")
         f.write("-" * 60 + "\n")
-        f.write(f"Routing Accuracy:  {overall_metrics['routing_accuracy']*100:.1f}% ({overall_metrics['routing_correct_count']}/{overall_metrics['total_queries']})\n")
+        sample_config = results[0]["rag_config"]
+        f.write(f"Chunk Size:         {sample_config['chunk_size']}\n")
+        f.write(f"Chunk Overlap:      {sample_config['chunk_overlap']}\n")
+        f.write(f"Embedding Model:    {sample_config['embedding_model'].split('/')[-1]}\n")
+        f.write(f"Vector Store:       {sample_config['vector_store']}\n")
+        f.write(f"Retrieval K:        {sample_config['retrieval_k']}\n")
+        f.write(f"Relevance Threshold: {sample_config['relevance_threshold']}\n\n")
+
+        f.write("-" * 60 + "\n")
+        f.write("RETRIEVAL METRICS\n")
+        f.write("-" * 60 + "\n")
         f.write(f"Avg Precision@3:   {overall_metrics['avg_precision']:.3f}\n")
         f.write(f"Avg Recall@3:      {overall_metrics['avg_recall']:.3f}\n")
         f.write(f"Avg F1 Score:      {overall_metrics['avg_f1']:.3f}\n")
         f.write(f"Mean Reciprocal Rank: {overall_metrics['mrr']:.3f}\n")
-        f.write(f"Keyword Coverage:  {overall_metrics['avg_keyword_coverage']*100:.1f}%\n")
         f.write(f"Success Rate:      {overall_metrics['success_rate']*100:.1f}%\n\n")
+
+        f.write(f"Avg Chunks/Query:  {overall_metrics['avg_chunks_per_query']:.1f}\n")
+        f.write(f"Avg Tokens/Query:  {overall_metrics['avg_tokens_per_query']:.0f}\n\n")
 
         f.write(f"Latency (avg):     {overall_metrics['latency_avg']:.0f}ms\n")
         f.write(f"Latency (P50):     {overall_metrics['latency_p50']:.0f}ms\n")
@@ -429,10 +390,9 @@ def generate_report(results: List[Dict[str, Any]], output_dir: Path, timestamp: 
             else:
                 return "✗"
 
-        f.write(f"Status: Routing {status(overall_metrics['routing_accuracy'], 0.9, 0.8)} | ")
-        f.write(f"Precision {status(overall_metrics['avg_precision'], 0.8, 0.7)} | ")
+        f.write(f"Status: Precision {status(overall_metrics['avg_precision'], 0.8, 0.7)} | ")
         f.write(f"Recall {status(overall_metrics['avg_recall'], 0.8, 0.7)} | ")
-        f.write(f"Keywords {status(overall_metrics['avg_keyword_coverage'], 0.8, 0.7)}\n\n")
+        f.write(f"F1 {status(overall_metrics['avg_f1'], 0.8, 0.7)}\n\n")
 
         # By difficulty
         f.write("-" * 60 + "\n")
@@ -442,8 +402,8 @@ def generate_report(results: List[Dict[str, Any]], output_dir: Path, timestamp: 
             if diff in difficulty_metrics:
                 m = difficulty_metrics[diff]
                 f.write(f"{diff.capitalize()} ({len(by_difficulty[diff])} queries):\n")
-                f.write(f"  Precision@3: {m['avg_precision']:.3f} | Recall@3: {m['avg_recall']:.3f} | ")
-                f.write(f"Keywords: {m['avg_keyword_coverage']:.3f}\n")
+                f.write(f"  Precision: {m['avg_precision']:.3f} | Recall: {m['avg_recall']:.3f} | ")
+                f.write(f"F1: {m['avg_f1']:.3f} | MRR: {m['mrr']:.3f}\n")
         f.write("\n")
 
         # By category
@@ -452,21 +412,22 @@ def generate_report(results: List[Dict[str, Any]], output_dir: Path, timestamp: 
         f.write("-" * 60 + "\n")
         for cat, m in category_metrics.items():
             f.write(f"{cat.capitalize()} ({len(by_category[cat])} queries):\n")
-            f.write(f"  Precision@3: {m['avg_precision']:.3f} | Recall@3: {m['avg_recall']:.3f} | ")
-            f.write(f"Keywords: {m['avg_keyword_coverage']:.3f}\n")
+            f.write(f"  Precision: {m['avg_precision']:.3f} | Recall: {m['avg_recall']:.3f} | ")
+            f.write(f"F1: {m['avg_f1']:.3f}\n")
         f.write("\n")
 
         # Failed queries
         if failed:
             f.write("-" * 60 + "\n")
-            f.write(f"FAILED/PROBLEMATIC QUERIES ({len(failed)})\n")
+            f.write(f"LOW RECALL QUERIES ({len(failed)})\n")
             f.write("-" * 60 + "\n")
             for i, r in enumerate(failed, 1):
                 f.write(f"{i}. {r['test_id']} ({r['difficulty']}): {r['query'][:60]}...\n")
-                if not r["evaluation"]["routing_correct"]:
-                    f.write(f"   Issue: Routing incorrect\n")
-                if r["evaluation"]["recall"] < 0.5:
-                    f.write(f"   Issue: Low recall ({r['evaluation']['recall']:.2f})\n")
+                f.write(f"   Recall: {r['evaluation']['recall']:.2f} | Precision: {r['evaluation']['precision']:.2f}\n")
+                if r['evaluation']['false_negatives']:
+                    f.write(f"   Missing docs: {', '.join(r['evaluation']['false_negatives'])}\n")
+                if r['evaluation']['false_positives']:
+                    f.write(f"   Irrelevant docs: {', '.join(r['evaluation']['false_positives'])}\n")
             f.write("\n")
 
         # Recommendations
@@ -474,21 +435,23 @@ def generate_report(results: List[Dict[str, Any]], output_dir: Path, timestamp: 
         f.write("RECOMMENDATIONS\n")
         f.write("-" * 60 + "\n")
 
-        if overall_metrics['routing_accuracy'] < 0.85:
-            f.write("⚠ Routing accuracy below target - review supervisor prompt\n")
         if overall_metrics['avg_precision'] < 0.8:
-            f.write("⚠ Precision below target - review retrieval strategy\n")
+            f.write("⚠ Precision below target (0.8) - too many irrelevant docs retrieved\n")
+            f.write("  → Consider: Higher relevance threshold, better chunking strategy\n")
         if overall_metrics['avg_recall'] < 0.7:
-            f.write("⚠ Recall below target - consider increasing k or adjusting threshold\n")
-        if overall_metrics['avg_keyword_coverage'] < 0.8:
-            f.write("⚠ Keyword coverage low - review prompt engineering\n")
-        if overall_metrics['latency_p95'] > 3000:
-            f.write("⚠ P95 latency > 3s - optimize pipeline performance\n")
+            f.write("⚠ Recall below target (0.7) - missing relevant docs\n")
+            f.write("  → Consider: Increase k, lower relevance threshold, improve embeddings\n")
+        if overall_metrics['avg_f1'] < 0.75:
+            f.write("⚠ F1 score below target (0.75) - balance between precision and recall needed\n")
+        if overall_metrics['avg_tokens_per_query'] > 2000:
+            f.write("⚠ High token usage per query - consider smaller chunks or stricter filtering\n")
+        if overall_metrics['latency_p95'] > 1000:
+            f.write("⚠ P95 latency > 1s - retrieval may be slow\n")
 
-        if (overall_metrics['routing_accuracy'] >= 0.85 and
-            overall_metrics['avg_precision'] >= 0.8 and
-            overall_metrics['avg_recall'] >= 0.7):
-            f.write("✓ Overall system performance meets targets\n")
+        if (overall_metrics['avg_precision'] >= 0.8 and
+            overall_metrics['avg_recall'] >= 0.7 and
+            overall_metrics['avg_f1'] >= 0.75):
+            f.write("✓ Retrieval performance meets targets!\n")
 
         f.write("\n")
         f.write("=" * 60 + "\n")
@@ -569,7 +532,8 @@ def main():
 
         # Update progress
         status = f"| {test_case['id']} "
-        if result["evaluation"]["routing_correct"]:
+        # Success = retrieved at least 1 relevant doc (recall > 0)
+        if result["evaluation"]["recall"] > 0:
             status += "✓"
         else:
             status += "✗"

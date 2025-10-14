@@ -3,69 +3,67 @@
   "query": "Berapa lama batas waktu return untuk produk elektronik?",
   "category": "returns",
   "difficulty": "easy",
-  "timestamp": "2025-10-14T13:39:03.014431",
-  "pipeline_trace": {
-    "routing": {
-      "decision": "docs",
-      "expected": "docs",
-      "correct": true,
-      "latency_ms": 1096.93
-    },
-    "retrieval": {
-      "docs_retrieved": [
-        {
-          "source": "docs/policy_returns.md",
-          "relevance_score": 0.5,
-          "rank": 0,
-          "passed_threshold": false
-        },
-        {
-          "source": "docs/policy_returns.md",
-          "relevance_score": 0.25,
-          "rank": 1,
-          "passed_threshold": false
-        },
-        {
-          "source": "docs/product_faq.md",
-          "relevance_score": 0.25,
-          "rank": 2,
-          "passed_threshold": false
-        },
-        {
-          "source": "docs/policy_returns.md",
-          "relevance_score": 0.375,
-          "rank": 3,
-          "passed_threshold": false
-        }
-      ],
-      "num_docs_initial": 4,
-      "num_docs_final": 4,
-      "retrieved_context": "[Docs] ### Batas waktu pengajuan return:\n- **Elektronik**: 7 hari sejak diterima\n- **Fashion**: 3 hari sejak diterima\n- **Lainnya**: 2 hari sejak diterima\n- **Garansi toko**: Sesuai ketentuan masing-masing toko\n\n## Prosedur Return\n\n### Step 1: Ajukan Return\n1. Buka \"Pesanan Saya\" → pilih transaksi\n2. Klik \"Ajukan Return/Refund\"\n3. Pilih alasan return dari dropdown\n4. Upload bukti (foto/video) minimal 3 gambar\n5. Tulis deskripsi masalah detail\n\n### Step 2: Persetujuan Penjual\n- Penjual punya 2x24...",
-      "latency_ms": 23.48
-    },
-    "prompt_construction": {
-      "final_prompt": "=== CUSTOMER QUERY ===\nCustomer: \"Berapa lama batas waktu return untuk produk elektronik?\"\n\n=== CONTEXT ===\nKnowledge Base:\n[Docs] ### Batas waktu pengajuan return:\n- **Elektronik**: 7 hari sejak diterima\n- **Fashion**: 3 hari sejak diterima\n- **Lainnya**: 2 hari sejak diterima\n- **Garansi toko**: Sesuai ketentuan masing-masing toko\n\n## Prosedur Return\n\n### Step 1: Ajukan Return\n1. Buka \"Pesanan Saya\" → pilih transaksi\n2. Klik \"Ajukan Return/Refund\"\n3. Pilih alasan return dari dropdown\n4. Upload bukti (foto/video) minimal 3 gambar\n5. Tulis deskripsi masalah detail\n\n### Step 2: Persetujuan Penjual\n- Penjual punya 2x24 jam untuk respond\n- Jika tidak respond → otomatis disetujui\n- Jika ditolak → bisa ajukan banding ke TokoPedia\n[Docs] ### Step 3: Kirim Balik Produk\n**Packaging:**\n- Gunakan packaging original jika ada\n- Sertakan semua aksesoris/bonus\n- Print label return dari sistem\n- Foto paket sebelum kirim sebagai bukti\n\n**Pengiriman:**\n- Gunakan kurir yang ditentukan sistem\n- Input res...",
-      "prompt_tokens_approx": 618,
-      "template_used": "content/reply_config1.json"
-    },
-    "generation": {
-      "answer": "Tentu, untuk produk elektronik, batas waktu pengajuan return adalah 7 hari sejak barang diterima ya. Jika ada kendala atau pertanyaan lain terkait proses return, jangan ragu untuk menghubungi kami kembali. Terima kasih sudah berbelanja di TokoLapak!",
-      "latency_ms": 1556.65
-    },
-    "total_latency_ms": 2677.06
+  "expected_docs": [
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-14T15:38:25.538286",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 100,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 4,
+    "relevance_threshold": 0.8
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.5,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.25,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.25,
+        "rank": 2,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.375,
+        "rank": 3,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md",
+      "product_faq.md"
+    ],
+    "num_chunks_retrieved": 4,
+    "num_unique_docs": 2,
+    "context_length_chars": 1956,
+    "context_tokens_approx": 489,
+    "retrieved_context_preview": "[Docs] ### Batas waktu pengajuan return:\n- **Elektronik**: 7 hari sejak diterima\n- **Fashion**: 3 hari sejak diterima\n- **Lainnya**: 2 hari sejak diterima\n- **Garansi toko**: Sesuai ketentuan masing-masing toko\n\n## Prosedur Return\n\n### Step 1: Ajukan Return\n1. Buka \"Pesanan Saya\" → pilih transaksi\n2. Klik \"Ajukan Return/Refund\"\n3. Pilih alasan return dari dropdown\n4. Upload bukti (foto/video) minimal 3 gambar\n5. Tulis deskripsi masalah detail\n\n### Step 2: Persetujuan Penjual\n- Penjual punya 2x24...",
+    "latency_ms": 10.87
   },
   "evaluation": {
-    "routing_correct": true,
-    "precision": 0.0,
-    "recall": 0.0,
-    "reciprocal_rank": 0.0,
-    "keyword_coverage": 0.667,
-    "keywords_found": [
-      "7 hari",
-      "elektronik"
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
     ],
-    "keywords_missing": [
-      "sejak diterima"
-    ]
+    "false_positives": [
+      "product_faq.md"
+    ],
+    "false_negatives": []
   }
 }

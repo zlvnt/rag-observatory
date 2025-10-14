@@ -1,0 +1,57 @@
+============================================================
+RAG RETRIEVAL EVALUATION REPORT
+============================================================
+
+Domain: z3_agent
+Date: 2025-10-14 15:38:25
+Total Queries: 5
+
+------------------------------------------------------------
+RAG CONFIGURATION
+------------------------------------------------------------
+Chunk Size:         700
+Chunk Overlap:      100
+Embedding Model:    paraphrase-multilingual-MiniLM-L12-v2
+Vector Store:       FAISS
+Retrieval K:        4
+Relevance Threshold: 0.8
+
+------------------------------------------------------------
+RETRIEVAL METRICS
+------------------------------------------------------------
+Avg Precision@3:   0.800
+Avg Recall@3:      1.000
+Avg F1 Score:      0.867
+Mean Reciprocal Rank: 1.000
+Success Rate:      100.0%
+
+Avg Chunks/Query:  4.0
+Avg Tokens/Query:  559
+
+Latency (avg):     59ms
+Latency (P50):     11ms
+Latency (P95):     251ms
+Latency (P99):     251ms
+
+Status: Precision ✓ | Recall ✓ | F1 ✓
+
+------------------------------------------------------------
+BY DIFFICULTY
+------------------------------------------------------------
+Easy (5 queries):
+  Precision: 0.800 | Recall: 1.000 | F1: 0.867 | MRR: 1.000
+
+------------------------------------------------------------
+BY CATEGORY
+------------------------------------------------------------
+Returns (4 queries):
+  Precision: 0.750 | Recall: 1.000 | F1: 0.833
+Contact (1 queries):
+  Precision: 1.000 | Recall: 1.000 | F1: 1.000
+
+------------------------------------------------------------
+RECOMMENDATIONS
+------------------------------------------------------------
+✓ Retrieval performance meets targets!
+
+============================================================

@@ -224,7 +224,7 @@ def calculate_percentile(values: List[float], percentile: int) -> float:
 
 
 def aggregate_metrics(results: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """Aggregate metrics from multiple test results.
+    """Aggregate metrics from multiple test results - RETRIEVAL FOCUSED.
 
     Args:
         results: List of individual test result dictionaries
@@ -236,33 +236,29 @@ def aggregate_metrics(results: List[Dict[str, Any]]) -> Dict[str, Any]:
         return {}
 
     # Extract individual metrics
-    routing_correct = [r["evaluation"]["routing_correct"] for r in results]
     precisions = [r["evaluation"]["precision"] for r in results]
     recalls = [r["evaluation"]["recall"] for r in results]
-    keyword_coverages = [r["evaluation"]["keyword_coverage"] for r in results]
-    latencies = [r["pipeline_trace"]["total_latency_ms"] for r in results]
+    f1_scores = [r["evaluation"]["f1_score"] for r in results]
+    latencies = [r["retrieval_trace"]["latency_ms"] for r in results]
     rrs = [r["evaluation"].get("reciprocal_rank", 0.0) for r in results]
 
-    # Check if docs were retrieved
-    has_docs = [
-        r["pipeline_trace"]["retrieval"]["num_docs_final"] > 0
-        for r in results
-    ]
+    # Token usage
+    tokens = [r["retrieval_trace"].get("context_tokens_approx", 0) for r in results]
+    num_chunks = [r["retrieval_trace"].get("num_chunks_retrieved", 0) for r in results]
+
+    # Success rate: recall > 0 (at least 1 relevant doc retrieved)
+    successful = sum(1 for r in recalls if r > 0)
 
     # Calculate aggregates
     return {
         "total_queries": len(results),
-        "routing_accuracy": sum(routing_correct) / len(routing_correct),
-        "routing_correct_count": sum(routing_correct),
         "avg_precision": sum(precisions) / len(precisions),
         "avg_recall": sum(recalls) / len(recalls),
-        "avg_f1": calculate_f1_score(
-            sum(precisions) / len(precisions),
-            sum(recalls) / len(recalls)
-        ),
-        "avg_keyword_coverage": sum(keyword_coverages) / len(keyword_coverages),
+        "avg_f1": sum(f1_scores) / len(f1_scores),
         "mrr": calculate_mrr(rrs),
-        "success_rate": calculate_success_rate(routing_correct, has_docs),
+        "success_rate": successful / len(results),
+        "avg_chunks_per_query": sum(num_chunks) / len(num_chunks),
+        "avg_tokens_per_query": sum(tokens) / len(tokens),
         "latency_avg": sum(latencies) / len(latencies),
         "latency_p50": calculate_percentile(latencies, 50),
         "latency_p95": calculate_percentile(latencies, 95),

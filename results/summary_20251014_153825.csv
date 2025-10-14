@@ -1,0 +1,6 @@
+test_id,category,difficulty,query,expected_docs,retrieved_docs,num_chunks,precision,recall,f1_score,mrr,true_positives,false_positives,false_negatives,context_tokens,latency_ms
+ecom_easy_001,returns,easy,Bagaimana cara return barang yang rusak?,policy_returns.md,policy_returns.md,4,1.0,1.0,1.0,1.0,policy_returns.md,None,None,556,250.82
+ecom_easy_002,returns,easy,Berapa lama batas waktu return untuk produk elektronik?,policy_returns.md,policy_returns.md; product_faq.md,4,0.5,1.0,0.667,1.0,policy_returns.md,product_faq.md,None,489,10.87
+ecom_easy_003,returns,easy,Apakah produk custom bisa di-return?,policy_returns.md,policy_returns.md,4,1.0,1.0,1.0,1.0,policy_returns.md,None,None,577,10.15
+ecom_easy_004,returns,easy,Berapa lama refund cair ke rekening bank?,policy_returns.md,policy_returns.md; troubleshooting_guide.md,4,0.5,1.0,0.667,1.0,policy_returns.md,troubleshooting_guide.md,None,570,9.93
+ecom_easy_005,contact,easy,Nomor customer service TokoPedia berapa?,contact_escalation.md,contact_escalation.md,4,1.0,1.0,1.0,1.0,contact_escalation.md,None,None,603,10.8

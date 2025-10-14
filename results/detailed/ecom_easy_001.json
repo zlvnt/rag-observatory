@@ -3,70 +3,64 @@
   "query": "Bagaimana cara return barang yang rusak?",
   "category": "returns",
   "difficulty": "easy",
-  "timestamp": "2025-10-14T13:38:59.567719",
-  "pipeline_trace": {
-    "routing": {
-      "decision": "docs",
-      "expected": "docs",
-      "correct": true,
-      "latency_ms": 1215.45
-    },
-    "retrieval": {
-      "docs_retrieved": [
-        {
-          "source": "docs/policy_returns.md",
-          "relevance_score": 0.3333333333333333,
-          "rank": 0,
-          "passed_threshold": false
-        },
-        {
-          "source": "docs/policy_returns.md",
-          "relevance_score": 0.16666666666666666,
-          "rank": 1,
-          "passed_threshold": false
-        },
-        {
-          "source": "docs/policy_returns.md",
-          "relevance_score": 0.16666666666666666,
-          "rank": 2,
-          "passed_threshold": false
-        },
-        {
-          "source": "docs/policy_returns.md",
-          "relevance_score": 0.16666666666666666,
-          "rank": 3,
-          "passed_threshold": false
-        }
-      ],
-      "num_docs_initial": 4,
-      "num_docs_final": 4,
-      "retrieved_context": "[Docs] # Kebijakan Return & Refund - TokoPedia\n\n## Ketentuan Umum Return\n\n### Produk yang BISA di-return:\n- Produk rusak/cacat dari pabrik\n- Produk tidak sesuai deskripsi/foto\n- Produk salah kirim (warna/ukuran/model)\n- Produk tidak lengkap/kurang aksesoris\n- Produk tidak original (untuk Official Store)\n\n### Produk yang TIDAK BISA di-return:\n- Produk digital (voucher, software, top-up)\n- Makanan, minuman, dan produk kadaluarsa\n- Produk custom/made-by-order\n- Produk yang sudah dibuka segel khusus...",
-      "latency_ms": 279.34
-    },
-    "prompt_construction": {
-      "final_prompt": "=== CUSTOMER QUERY ===\nCustomer: \"Bagaimana cara return barang yang rusak?\"\n\n=== CONTEXT ===\nKnowledge Base:\n[Docs] # Kebijakan Return & Refund - TokoPedia\n\n## Ketentuan Umum Return\n\n### Produk yang BISA di-return:\n- Produk rusak/cacat dari pabrik\n- Produk tidak sesuai deskripsi/foto\n- Produk salah kirim (warna/ukuran/model)\n- Produk tidak lengkap/kurang aksesoris\n- Produk tidak original (untuk Official Store)\n\n### Produk yang TIDAK BISA di-return:\n- Produk digital (voucher, software, top-up)\n- Makanan, minuman, dan produk kadaluarsa\n- Produk custom/made-by-order\n- Produk yang sudah dibuka segel khusus\n- Underwear dan produk kesehatan personal\n- Produk dengan tag \"No Return\" yang jelas\n[Docs] ### Q: Refund partial itu bagaimana?\n**A:** Contoh: Beli 5 item, 1 rusak. Bisa refund hanya untuk 1 item tersebut tanpa return semua.\n\n---\n*Catatan Penting:*\n- Screenshot semua komunikasi dengan penjual\n- Simpan packaging original hingga transaksi selesai\n- Video unboxing sangat membantu klaim\n- B...",
-      "prompt_tokens_approx": 682,
-      "template_used": "content/reply_config1.json"
-    },
-    "generation": {
-      "answer": "Tentu, saya mengerti Anda ingin melakukan return barang yang rusak. Silakan ikuti langkah-langkah pengajuan return di \"Pesanan Saya\" lalu pilih transaksi terkait, dan klik \"Ajukan Return/Refund\". Jangan lupa sertakan bukti foto/video kerusakannya ya! Jika ada kendala, jangan ragu menghubungi kami kembali.",
-      "latency_ms": 1951.22
-    },
-    "total_latency_ms": 3446.01
+  "expected_docs": [
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-14T15:38:25.287017",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 100,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 4,
+    "relevance_threshold": 0.8
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.3333333333333333,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.16666666666666666,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.16666666666666666,
+        "rank": 2,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.16666666666666666,
+        "rank": 3,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 4,
+    "num_unique_docs": 1,
+    "context_length_chars": 2225,
+    "context_tokens_approx": 556,
+    "retrieved_context_preview": "[Docs] # Kebijakan Return & Refund - TokoPedia\n\n## Ketentuan Umum Return\n\n### Produk yang BISA di-return:\n- Produk rusak/cacat dari pabrik\n- Produk tidak sesuai deskripsi/foto\n- Produk salah kirim (warna/ukuran/model)\n- Produk tidak lengkap/kurang aksesoris\n- Produk tidak original (untuk Official Store)\n\n### Produk yang TIDAK BISA di-return:\n- Produk digital (voucher, software, top-up)\n- Makanan, minuman, dan produk kadaluarsa\n- Produk custom/made-by-order\n- Produk yang sudah dibuka segel khusus...",
+    "latency_ms": 250.82
   },
   "evaluation": {
-    "routing_correct": true,
-    "precision": 0.0,
-    "recall": 0.0,
-    "reciprocal_rank": 0.0,
-    "keyword_coverage": 0.25,
-    "keywords_found": [
-      "ajukan return"
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
     ],
-    "keywords_missing": [
-      "2x24 jam",
-      "foto bukti",
-      "packaging original"
-    ]
+    "false_positives": [],
+    "false_negatives": []
   }
 }
