@@ -1,0 +1,28 @@
+# z3-agent Domain Configuration
+
+domain_name: z3_agent
+
+# Knowledge base from original z3-agent
+knowledge_base_dir: docs/
+
+# Vector store location
+vector_store_dir: data/vector_stores/z3_agent/
+
+# Optional: Personality configuration (from original z3-agent)
+personality_config_path: content/reply_config1.json
+
+# Optional: Supervisor prompt (from original z3-agent)
+supervisor_prompt_path: content/supervisor-prompt.txt
+
+# Embedding model (same as original z3-agent)
+embedding_model: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+
+# Gemini LLM configuration
+llm_model: gemini-2.0-flash
+llm_temperature: 0.7
+
+# RAG parameters
+relevance_threshold: 0.8
+chunk_size: 700
+chunk_overlap: 100
+retrieval_k: 4

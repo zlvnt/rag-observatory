@@ -116,6 +116,7 @@ def generate_reply(
         # Format template variables
         template_vars = {
             "query": query,
+            "comment": query,  # Alias for compatibility with different templates
             "context": context or "No additional information available.",
             "history": conversation_history or "No previous conversation.",
             "identity_name": identity.get("name", "AI Assistant"),

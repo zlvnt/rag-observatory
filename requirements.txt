@@ -9,6 +9,7 @@ langchain-core==0.3.64
 langchain-community==0.3.24
 langchain-google-genai==2.1.5
 langchain-text-splitters==0.3.8
+langchain-huggingface
 google-genai==1.20.0
 faiss-cpu==1.11.0
 pydantic==2.11.7

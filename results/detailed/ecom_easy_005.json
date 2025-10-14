@@ -1,0 +1,45 @@
+{
+  "test_id": "ecom_easy_005",
+  "query": "Nomor customer service TokoPedia berapa?",
+  "category": "contact",
+  "difficulty": "easy",
+  "timestamp": "2025-10-14T13:39:12.869022",
+  "pipeline_trace": {
+    "routing": {
+      "decision": "web",
+      "expected": "docs",
+      "correct": false,
+      "latency_ms": 1590.54
+    },
+    "retrieval": {
+      "docs_retrieved": [],
+      "num_docs_initial": 0,
+      "num_docs_final": 0,
+      "retrieved_context": "",
+      "latency_ms": 53.37
+    },
+    "prompt_construction": {
+      "final_prompt": "=== CUSTOMER QUERY ===\nCustomer: \"Nomor customer service TokoPedia berapa?\"\n\n=== CONTEXT ===\nKnowledge Base:\nNo additional information available.\n\nPrevious Interaction:\nNo previous conversation.\n\n=== YOUR ROLE ===\nYou are z3, AI Customer Service for TokoLapak.\nRespond professionally and helpfully in 1-3 sentences.\n\n- Acknowledge the customer's issue dengan empati\n- Provide clear, actionable solutions\n- Use simple, friendly language\n- Show appreciation untuk customer's trust\n- Offer additional help kalau diperlukan\n\n=== RESPOND NOW ===",
+      "prompt_tokens_approx": 135,
+      "template_used": "content/reply_config1.json"
+    },
+    "generation": {
+      "answer": "Tentu, saya mengerti Anda ingin menghubungi customer service Tokopedia. Sayangnya, saya adalah asisten virtual untuk TokoLapak, bukan Tokopedia. Mungkin Anda bisa menemukan informasi nomor customer service Tokopedia di situs web resmi atau aplikasi mereka.",
+      "latency_ms": 14943.17
+    },
+    "total_latency_ms": 16587.08
+  },
+  "evaluation": {
+    "routing_correct": false,
+    "precision": 0.0,
+    "recall": 0.0,
+    "reciprocal_rank": 0.0,
+    "keyword_coverage": 0.0,
+    "keywords_found": [],
+    "keywords_missing": [
+      "1500-600",
+      "24/7",
+      "call center"
+    ]
+  }
+}
