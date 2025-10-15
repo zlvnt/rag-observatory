@@ -1,0 +1,28 @@
+# Experiment 2: Increase Retrieval K
+# Goal: Improve recall for multi-doc queries
+# Change: retrieval_k 4 → 6, threshold 0.8 → 0.3
+
+domain_name: z3_agent_exp2
+
+# Knowledge base (same as baseline)
+knowledge_base_dir: docs/
+
+# Vector store location (reuse baseline - no rebuild needed)
+vector_store_dir: data/vector_stores/z3_agent/
+
+# Personality & prompts (not used in retrieval-only eval)
+personality_config_path: content/reply_config1.json
+supervisor_prompt_path: content/supervisor-prompt.txt
+
+# Embedding model (SAME as baseline)
+embedding_model: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+
+# LLM config (not used)
+llm_model: gemini-2.0-flash
+llm_temperature: 0.7
+
+# RAG parameters - EXPERIMENT CHANGES
+relevance_threshold: 0.3  # From Exp1
+chunk_size: 700           # Same
+chunk_overlap: 100        # Same
+retrieval_k: 6            # ← CHANGED from 4

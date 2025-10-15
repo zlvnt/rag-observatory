@@ -1,0 +1,28 @@
+# Experiment 4: Better Embedding Model
+# Goal: Improve semantic understanding with larger model
+# Change: embedding_model MiniLM-L12 → MPNet-base-v2
+
+domain_name: z3_agent_exp4
+
+# Knowledge base (same as baseline)
+knowledge_base_dir: docs/
+
+# Vector store location (NEEDS REBUILD - different embedding model)
+vector_store_dir: data/vector_stores/z3_agent_exp4/
+
+# Personality & prompts (not used in retrieval-only eval)
+personality_config_path: content/reply_config1.json
+supervisor_prompt_path: content/supervisor-prompt.txt
+
+# Embedding model (CHANGED - larger, better model)
+embedding_model: sentence-transformers/paraphrase-multilingual-mpnet-base-v2  # ← CHANGED
+
+# LLM config (not used)
+llm_model: gemini-2.0-flash
+llm_temperature: 0.7
+
+# RAG parameters - Combined best settings
+relevance_threshold: 0.3  # From Exp1
+chunk_size: 500           # From Exp3
+chunk_overlap: 50         # From Exp3
+retrieval_k: 6            # From Exp2

@@ -1,0 +1,28 @@
+# Experiment 3: Smaller Chunks
+# Goal: More granular retrieval, reduce noise
+# Change: chunk_size 700 → 500, chunk_overlap 100 → 50
+
+domain_name: z3_agent_exp3
+
+# Knowledge base (same as baseline)
+knowledge_base_dir: docs/
+
+# Vector store location (NEEDS REBUILD - different chunk size)
+vector_store_dir: data/vector_stores/z3_agent_exp3/
+
+# Personality & prompts (not used in retrieval-only eval)
+personality_config_path: content/reply_config1.json
+supervisor_prompt_path: content/supervisor-prompt.txt
+
+# Embedding model (SAME as baseline)
+embedding_model: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+
+# LLM config (not used)
+llm_model: gemini-2.0-flash
+llm_temperature: 0.7
+
+# RAG parameters - EXPERIMENT CHANGES
+relevance_threshold: 0.3  # From Exp1
+chunk_size: 500           # ← CHANGED from 700
+chunk_overlap: 50         # ← CHANGED from 100
+retrieval_k: 6            # From Exp2
