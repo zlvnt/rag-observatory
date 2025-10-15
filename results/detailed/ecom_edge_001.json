@@ -1,12 +1,12 @@
 {
-  "test_id": "ecom_easy_004",
-  "query": "Berapa lama refund cair ke rekening bank?",
+  "test_id": "ecom_edge_001",
+  "query": "gmna cra retrn brng yg rusk?",
   "category": "returns",
   "difficulty": "easy",
   "expected_docs": [
     "policy_returns.md"
   ],
-  "timestamp": "2025-10-14T16:16:27.532868",
+  "timestamp": "2025-10-14T16:16:27.804264",
   "rag_config": {
     "chunk_size": 700,
     "chunk_overlap": 100,
@@ -19,39 +19,39 @@
     "docs_retrieved": [
       {
         "source": "docs/policy_returns.md",
-        "relevance_score": 0.14285714285714285,
+        "relevance_score": 0.0,
         "rank": 0,
         "passed_threshold": false
       },
       {
-        "source": "docs/troubleshooting_guide.md",
-        "relevance_score": 0.14285714285714285,
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
         "rank": 1,
         "passed_threshold": false
       },
       {
-        "source": "docs/policy_returns.md",
-        "relevance_score": 0.14285714285714285,
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
         "rank": 2,
         "passed_threshold": false
       },
       {
-        "source": "docs/policy_returns.md",
-        "relevance_score": 0.14285714285714285,
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
         "rank": 3,
         "passed_threshold": false
       }
     ],
     "unique_docs": [
       "policy_returns.md",
-      "troubleshooting_guide.md"
+      "contact_escalation.md"
     ],
     "num_chunks_retrieved": 4,
     "num_unique_docs": 2,
-    "context_length_chars": 2283,
-    "context_tokens_approx": 570,
+    "context_length_chars": 2499,
+    "context_tokens_approx": 624,
     "retrieved_context_preview": "[Docs] ### Nominal Refund:\n- **100% refund** untuk:\n  - Produk tidak dikirim\n  - Produk palsu dari Official Store\n  - Kesalahan sistem TokoPedia\n  \n- **Refund - ongkir** untuk:\n  - Return karena berubah pikiran\n  - Salah pesan dari pembeli\n  \n- **Partial refund** untuk:\n  - Produk kurang lengkap tapi masih bisa digunakan\n  - Kesepakatan pembeli-penjual\n\n### Refund Ongkir:\nOngkir di-refund JIKA:\n- Penjual kirim produk salah\n- Produk rusak karena packaging buruk\n- Penjual membatalkan sepihak\n\nOngk...",
-    "latency_ms": 10.46
+    "latency_ms": 10.17
   },
   "evaluation": {
     "precision": 0.5,
@@ -62,7 +62,7 @@
       "policy_returns.md"
     ],
     "false_positives": [
-      "troubleshooting_guide.md"
+      "contact_escalation.md"
     ],
     "false_negatives": []
   }

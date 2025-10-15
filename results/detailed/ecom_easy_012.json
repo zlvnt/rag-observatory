@@ -1,12 +1,12 @@
 {
-  "test_id": "ecom_easy_002",
-  "query": "Berapa lama batas waktu return untuk produk elektronik?",
-  "category": "returns",
+  "test_id": "ecom_easy_012",
+  "query": "Berapa lama batas waktu bayar setelah checkout?",
+  "category": "payment",
   "difficulty": "easy",
   "expected_docs": [
-    "policy_returns.md"
+    "product_faq.md"
   ],
-  "timestamp": "2025-10-14T16:16:27.509980",
+  "timestamp": "2025-10-14T16:16:27.627306",
   "rag_config": {
     "chunk_size": 700,
     "chunk_overlap": 100,
@@ -19,50 +19,54 @@
     "docs_retrieved": [
       {
         "source": "docs/policy_returns.md",
-        "relevance_score": 0.5,
+        "relevance_score": 0.2857142857142857,
         "rank": 0,
         "passed_threshold": false
       },
       {
-        "source": "docs/policy_returns.md",
-        "relevance_score": 0.25,
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
         "rank": 1,
         "passed_threshold": false
       },
       {
         "source": "docs/product_faq.md",
-        "relevance_score": 0.25,
+        "relevance_score": 0.0,
         "rank": 2,
         "passed_threshold": false
       },
       {
-        "source": "docs/policy_returns.md",
-        "relevance_score": 0.375,
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.0,
         "rank": 3,
         "passed_threshold": false
       }
     ],
     "unique_docs": [
       "policy_returns.md",
-      "product_faq.md"
+      "contact_escalation.md",
+      "product_faq.md",
+      "troubleshooting_guide.md"
     ],
     "num_chunks_retrieved": 4,
-    "num_unique_docs": 2,
-    "context_length_chars": 1956,
-    "context_tokens_approx": 489,
+    "num_unique_docs": 4,
+    "context_length_chars": 2174,
+    "context_tokens_approx": 543,
     "retrieved_context_preview": "[Docs] ### Batas waktu pengajuan return:\n- **Elektronik**: 7 hari sejak diterima\n- **Fashion**: 3 hari sejak diterima\n- **Lainnya**: 2 hari sejak diterima\n- **Garansi toko**: Sesuai ketentuan masing-masing toko\n\n## Prosedur Return\n\n### Step 1: Ajukan Return\n1. Buka \"Pesanan Saya\" → pilih transaksi\n2. Klik \"Ajukan Return/Refund\"\n3. Pilih alasan return dari dropdown\n4. Upload bukti (foto/video) minimal 3 gambar\n5. Tulis deskripsi masalah detail\n\n### Step 2: Persetujuan Penjual\n- Penjual punya 2x24...",
-    "latency_ms": 12.15
+    "latency_ms": 10.01
   },
   "evaluation": {
-    "precision": 0.5,
+    "precision": 0.333,
     "recall": 1.0,
-    "f1_score": 0.667,
-    "reciprocal_rank": 1.0,
+    "f1_score": 0.5,
+    "reciprocal_rank": 0.333,
     "true_positives": [
-      "policy_returns.md"
+      "product_faq.md"
     ],
     "false_positives": [
-      "product_faq.md"
+      "contact_escalation.md",
+      "policy_returns.md",
+      "troubleshooting_guide.md"
     ],
     "false_negatives": []
   }

@@ -1,0 +1,69 @@
+{
+  "test_id": "ecom_easy_011",
+  "query": "Apakah transaksi di TokoPedia aman?",
+  "category": "product",
+  "difficulty": "easy",
+  "expected_docs": [
+    "product_faq.md"
+  ],
+  "timestamp": "2025-10-14T16:16:27.616981",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 100,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 4,
+    "relevance_threshold": 0.8
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.2,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 1.0,
+        "rank": 1,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.6,
+        "rank": 2,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.2,
+        "rank": 3,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md",
+      "product_faq.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 2,
+    "context_length_chars": 506,
+    "context_tokens_approx": 126,
+    "retrieved_context_preview": "[Docs] ### Q: Kenapa voucher saya tidak bisa digunakan?\n**A:** Voucher mungkin tidak berlaku karena:\n- Minimum pembelian tidak terpenuhi\n- Voucher sudah kadaluarsa\n- Produk tidak termasuk dalam kategori voucher\n- Kuota voucher sudah habis\n\n## Keamanan Transaksi\n\n### Q: Apakah transaksi di TokoPedia aman?\n**A:** Ya, kami menggunakan:\n- Enkripsi SSL untuk semua transaksi\n- Sistem escrow (dana ditahan sampai barang diterima)\n- Verifikasi 2 langkah untuk akun\n- Monitoring 24/7 untuk aktivitas mencur...",
+    "latency_ms": 9.95
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 0.5,
+    "true_positives": [
+      "product_faq.md"
+    ],
+    "false_positives": [
+      "policy_returns.md"
+    ],
+    "false_negatives": []
+  }
+}

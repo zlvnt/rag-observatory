@@ -1,12 +1,12 @@
 {
-  "test_id": "ecom_easy_001",
-  "query": "Bagaimana cara return barang yang rusak?",
+  "test_id": "ecom_easy_015",
+  "query": "Apakah ongkir di-refund kalau return?",
   "category": "returns",
   "difficulty": "easy",
   "expected_docs": [
     "policy_returns.md"
   ],
-  "timestamp": "2025-10-14T16:16:27.267618",
+  "timestamp": "2025-10-14T16:16:27.659245",
   "rag_config": {
     "chunk_size": 700,
     "chunk_overlap": 100,
@@ -19,25 +19,25 @@
     "docs_retrieved": [
       {
         "source": "docs/policy_returns.md",
-        "relevance_score": 0.3333333333333333,
+        "relevance_score": 0.4,
         "rank": 0,
         "passed_threshold": false
       },
       {
         "source": "docs/policy_returns.md",
-        "relevance_score": 0.16666666666666666,
+        "relevance_score": 0.0,
         "rank": 1,
         "passed_threshold": false
       },
       {
         "source": "docs/policy_returns.md",
-        "relevance_score": 0.16666666666666666,
+        "relevance_score": 0.0,
         "rank": 2,
         "passed_threshold": false
       },
       {
         "source": "docs/policy_returns.md",
-        "relevance_score": 0.16666666666666666,
+        "relevance_score": 0.4,
         "rank": 3,
         "passed_threshold": false
       }
@@ -47,10 +47,10 @@
     ],
     "num_chunks_retrieved": 4,
     "num_unique_docs": 1,
-    "context_length_chars": 2225,
-    "context_tokens_approx": 556,
-    "retrieved_context_preview": "[Docs] # Kebijakan Return & Refund - TokoPedia\n\n## Ketentuan Umum Return\n\n### Produk yang BISA di-return:\n- Produk rusak/cacat dari pabrik\n- Produk tidak sesuai deskripsi/foto\n- Produk salah kirim (warna/ukuran/model)\n- Produk tidak lengkap/kurang aksesoris\n- Produk tidak original (untuk Official Store)\n\n### Produk yang TIDAK BISA di-return:\n- Produk digital (voucher, software, top-up)\n- Makanan, minuman, dan produk kadaluarsa\n- Produk custom/made-by-order\n- Produk yang sudah dibuka segel khusus...",
-    "latency_ms": 241.87
+    "context_length_chars": 2289,
+    "context_tokens_approx": 572,
+    "retrieved_context_preview": "[Docs] ### Nominal Refund:\n- **100% refund** untuk:\n  - Produk tidak dikirim\n  - Produk palsu dari Official Store\n  - Kesalahan sistem TokoPedia\n  \n- **Refund - ongkir** untuk:\n  - Return karena berubah pikiran\n  - Salah pesan dari pembeli\n  \n- **Partial refund** untuk:\n  - Produk kurang lengkap tapi masih bisa digunakan\n  - Kesepakatan pembeli-penjual\n\n### Refund Ongkir:\nOngkir di-refund JIKA:\n- Penjual kirim produk salah\n- Produk rusak karena packaging buruk\n- Penjual membatalkan sepihak\n\nOngk...",
+    "latency_ms": 10.17
   },
   "evaluation": {
     "precision": 1.0,

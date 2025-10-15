@@ -1,12 +1,12 @@
 {
-  "test_id": "ecom_easy_005",
-  "query": "Nomor customer service TokoPedia berapa?",
+  "test_id": "ecom_easy_014",
+  "query": "Email CS TokoPedia apa ya?",
   "category": "contact",
   "difficulty": "easy",
   "expected_docs": [
     "contact_escalation.md"
   ],
-  "timestamp": "2025-10-14T16:16:27.543802",
+  "timestamp": "2025-10-14T16:16:27.649240",
   "rag_config": {
     "chunk_size": 700,
     "chunk_overlap": 100,
@@ -19,13 +19,13 @@
     "docs_retrieved": [
       {
         "source": "docs/contact_escalation.md",
-        "relevance_score": 0.6,
+        "relevance_score": 0.4,
         "rank": 0,
         "passed_threshold": false
       },
       {
         "source": "docs/contact_escalation.md",
-        "relevance_score": 0.4,
+        "relevance_score": 0.2,
         "rank": 1,
         "passed_threshold": false
       },
@@ -37,7 +37,7 @@
       },
       {
         "source": "docs/contact_escalation.md",
-        "relevance_score": 0.0,
+        "relevance_score": 0.2,
         "rank": 3,
         "passed_threshold": false
       }
@@ -47,10 +47,10 @@
     ],
     "num_chunks_retrieved": 4,
     "num_unique_docs": 1,
-    "context_length_chars": 2415,
-    "context_tokens_approx": 603,
-    "retrieved_context_preview": "[Docs] # Prosedur Kontak & Eskalasi - TokoPedia Customer Service\n\n## Level 1: Self-Service\n\n### Help Center Online\n- **URL**: help.tokopedia.com\n- **Tersedia**: 24/7\n- **Gunakan untuk**: FAQ, tutorial, kebijakan umum\n\n### Chatbot TOKI\n- **Akses**: Icon chat di app/website\n- **Respon**: Instant\n- **Capabilities**:\n  - Cek status pesanan\n  - Info resi\n  - FAQ automation\n  - Redirect ke agent jika perlu\n\n### Community Forum\n- **URL**: community.tokopedia.com\n- **Best for**: Tips, diskusi, sharing p...",
-    "latency_ms": 11.63
+    "context_length_chars": 2473,
+    "context_tokens_approx": 618,
+    "retrieved_context_preview": "[Docs] ## Kontak Darurat Khusus\n\n### Media Relations (hanya untuk pers):\n- Email: pr@tokopedia.com\n- Tidak melayani komplain user\n\n### Partnership/B2B:\n- Email: partnership@tokopedia.com\n- Untuk kerja sama bisnis only\n\n### Kantor Pusat:\n```\nTokopedia Tower\nJl. Prof. Dr. Satrio Kav. 11\nJakarta 12950\n(Tidak melayani walk-in complaint)\n```\n\n---\n*Tips Terakhir:*\n- Simpan semua komunikasi sebagai bukti\n- Catat nama CS dan waktu handling\n- Eskalasi bertahap, jangan loncat level\n- Kesabaran adalah kunc...",
+    "latency_ms": 9.65
   },
   "evaluation": {
     "precision": 1.0,

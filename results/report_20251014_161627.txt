@@ -3,8 +3,8 @@ RAG RETRIEVAL EVALUATION REPORT
 ============================================================
 
 Domain: z3_agent
-Date: 2025-10-14 15:38:25
-Total Queries: 5
+Date: 2025-10-14 16:16:27
+Total Queries: 30
 
 ------------------------------------------------------------
 RAG CONFIGURATION
@@ -19,39 +19,56 @@ Relevance Threshold: 0.8
 ------------------------------------------------------------
 RETRIEVAL METRICS
 ------------------------------------------------------------
-Avg Precision@3:   0.800
-Avg Recall@3:      1.000
-Avg F1 Score:      0.867
-Mean Reciprocal Rank: 1.000
+Avg Precision@3:   0.706
+Avg Recall@3:      0.950
+Avg F1 Score:      0.752
+Mean Reciprocal Rank: 0.872
 Success Rate:      100.0%
 
-Avg Chunks/Query:  4.0
-Avg Tokens/Query:  559
+Avg Chunks/Query:  3.9
+Avg Tokens/Query:  583
 
-Latency (avg):     59ms
+Latency (avg):     19ms
 Latency (P50):     11ms
-Latency (P95):     251ms
-Latency (P99):     251ms
+Latency (P95):     15ms
+Latency (P99):     242ms
 
-Status: Precision ✓ | Recall ✓ | F1 ✓
+Status: Precision ⚠ | Recall ✓ | F1 ⚠
 
 ------------------------------------------------------------
 BY DIFFICULTY
 ------------------------------------------------------------
-Easy (5 queries):
-  Precision: 0.800 | Recall: 1.000 | F1: 0.867 | MRR: 1.000
+Easy (19 queries):
+  Precision: 0.684 | Recall: 1.000 | F1: 0.763 | MRR: 0.798
+Medium (9 queries):
+  Precision: 0.722 | Recall: 0.889 | F1: 0.733 | MRR: 1.000
+Hard (2 queries):
+  Precision: 0.834 | Recall: 0.750 | F1: 0.734 | MRR: 1.000
 
 ------------------------------------------------------------
 BY CATEGORY
 ------------------------------------------------------------
-Returns (4 queries):
-  Precision: 0.750 | Recall: 1.000 | F1: 0.833
-Contact (1 queries):
+Returns (11 queries):
+  Precision: 0.818 | Recall: 0.909 | F1: 0.818
+Contact (6 queries):
+  Precision: 0.750 | Recall: 1.000 | F1: 0.828
+Account (2 queries):
+  Precision: 0.834 | Recall: 1.000 | F1: 0.900
+Payment (4 queries):
+  Precision: 0.500 | Recall: 0.875 | F1: 0.542
+Shipping (2 queries):
+  Precision: 0.666 | Recall: 1.000 | F1: 0.750
+Product (3 queries):
+  Precision: 0.556 | Recall: 1.000 | F1: 0.711
+Technical (1 queries):
   Precision: 1.000 | Recall: 1.000 | F1: 1.000
+Out_of_scope (1 queries):
+  Precision: 0.000 | Recall: 1.000 | F1: 0.000
 
 ------------------------------------------------------------
 RECOMMENDATIONS
 ------------------------------------------------------------
-✓ Retrieval performance meets targets!
+⚠ Precision below target (0.8) - too many irrelevant docs retrieved
+  → Consider: Higher relevance threshold, better chunking strategy
 
 ============================================================
