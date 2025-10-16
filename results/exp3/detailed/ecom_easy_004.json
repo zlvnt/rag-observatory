@@ -1,0 +1,83 @@
+{
+  "test_id": "ecom_easy_004",
+  "query": "Berapa lama refund cair ke rekening bank?",
+  "category": "returns",
+  "difficulty": "easy",
+  "expected_docs": [
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-16T11:05:02.262062",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 6,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.2857142857142857,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.14285714285714285,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.2857142857142857,
+        "rank": 2,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.14285714285714285,
+        "rank": 3,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
+        "rank": 4,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.14285714285714285,
+        "rank": 5,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "troubleshooting_guide.md",
+      "policy_returns.md",
+      "product_faq.md"
+    ],
+    "num_chunks_retrieved": 6,
+    "num_unique_docs": 3,
+    "context_length_chars": 2484,
+    "context_tokens_approx": 621,
+    "retrieved_context_preview": "[Docs] ## Masalah Pembayaran\n\n### Pembayaran gagal tapi saldo terpotong\n**Gejala:** Notifikasi gagal tapi uang sudah terpotong dari rekening\n\n**Solusi:**\n1. **Jangan bayar ulang!**\n2. Cek status pesanan dalam 1x24 jam\n3. Saldo akan auto-refund dalam 3-7 hari kerja\n4. Jika >7 hari, kirim bukti mutasi rekening ke CS\n\n### Virtual Account tidak terdeteksi\n**Gejala:** Sudah transfer tapi status masih \"Menunggu Pembayaran\"\n[Docs] ## Kebijakan Refund\n\n### Metode Refund:\n1. **Saldo TokoPedia** (instant)...",
+    "latency_ms": 9.38
+  },
+  "evaluation": {
+    "precision": 0.333,
+    "recall": 1.0,
+    "f1_score": 0.5,
+    "reciprocal_rank": 0.5,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [
+      "product_faq.md",
+      "troubleshooting_guide.md"
+    ],
+    "false_negatives": []
+  }
+}

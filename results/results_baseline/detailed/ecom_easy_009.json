@@ -1,0 +1,71 @@
+{
+  "test_id": "ecom_easy_009",
+  "query": "Paket sudah 10 hari belum sampai, harus gimana?",
+  "category": "shipping",
+  "difficulty": "easy",
+  "expected_docs": [
+    "troubleshooting_guide.md"
+  ],
+  "timestamp": "2025-10-16T10:52:48.075174",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 100,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 4,
+    "relevance_threshold": 0.8
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.0,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.375,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.25,
+        "rank": 2,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.25,
+        "rank": 3,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "product_faq.md",
+      "troubleshooting_guide.md",
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 4,
+    "num_unique_docs": 3,
+    "context_length_chars": 2185,
+    "context_tokens_approx": 546,
+    "retrieved_context_preview": "[Docs] ### Q: Apakah bisa COD (Cash on Delivery)?\n**A:** COD tersedia untuk:\n- Wilayah tertentu (cek saat checkout)\n- Maksimal transaksi Rp 5.000.000\n- Tidak berlaku untuk produk Pre-Order\n\n---\n*Dokumen ini update terakhir: Januari 2025*\n*Untuk pertanyaan lain, hubungi CS di 1500-600*\n[Docs] ### Paket diterima dalam kondisi rusak\n**Langkah immediate:**\n1. **JANGAN konfirmasi pesanan diterima**\n2. Foto/video kondisi paket (packaging + isi)\n3. Buat komplain dengan kategori \"Barang Rusak\"\n4. Tolak ...",
+    "latency_ms": 9.96
+  },
+  "evaluation": {
+    "precision": 0.333,
+    "recall": 1.0,
+    "f1_score": 0.5,
+    "reciprocal_rank": 0.5,
+    "true_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_positives": [
+      "product_faq.md",
+      "policy_returns.md"
+    ],
+    "false_negatives": []
+  }
+}

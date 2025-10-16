@@ -1,0 +1,78 @@
+{
+  "test_id": "ecom_easy_006",
+  "query": "Jam operasional live chat TokoPedia?",
+  "category": "contact",
+  "difficulty": "easy",
+  "expected_docs": [
+    "contact_escalation.md"
+  ],
+  "timestamp": "2025-10-16T11:05:02.282796",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 6,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.2,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.4,
+        "rank": 1,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.2,
+        "rank": 2,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 3,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.2,
+        "rank": 4,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.2,
+        "rank": 5,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 1,
+    "context_length_chars": 388,
+    "context_tokens_approx": 97,
+    "retrieved_context_preview": "[Docs] ### Community Forum\n- **URL**: community.tokopedia.com\n- **Best for**: Tips, diskusi, sharing pengalaman\n- **Moderator response**: 1-2 hari kerja\n\n## Level 2: Customer Service\n\n### Live Chat\n- **Jam operasional**: 08:00 - 22:00 WIB\n- **Queue time**: 5-15 menit (peak: 30 menit)\n- **Prioritas untuk**:\n  - Transaksi > Rp 1 juta\n  - Member Gold/Platinum\n  - Case urgent (fraud, hack)",
+    "latency_ms": 9.34
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "contact_escalation.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

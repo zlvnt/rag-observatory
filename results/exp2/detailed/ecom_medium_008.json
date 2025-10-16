@@ -1,0 +1,83 @@
+{
+  "test_id": "ecom_medium_008",
+  "query": "Voucher tidak bisa dipakai padahal belum expired, kenapa ya?",
+  "category": "payment",
+  "difficulty": "medium",
+  "expected_docs": [
+    "product_faq.md"
+  ],
+  "timestamp": "2025-10-16T11:04:18.657295",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 100,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 6,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.4444444444444444,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.1111111111111111,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.3333333333333333,
+        "rank": 2,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.2222222222222222,
+        "rank": 3,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.1111111111111111,
+        "rank": 4,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.2222222222222222,
+        "rank": 5,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "product_faq.md",
+      "troubleshooting_guide.md",
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 2,
+    "num_unique_docs": 3,
+    "context_length_chars": 1201,
+    "context_tokens_approx": 300,
+    "retrieved_context_preview": "[Docs] ### Q: Kenapa voucher saya tidak bisa digunakan?\n**A:** Voucher mungkin tidak berlaku karena:\n- Minimum pembelian tidak terpenuhi\n- Voucher sudah kadaluarsa\n- Produk tidak termasuk dalam kategori voucher\n- Kuota voucher sudah habis\n\n## Keamanan Transaksi\n\n### Q: Apakah transaksi di TokoPedia aman?\n**A:** Ya, kami menggunakan:\n- Enkripsi SSL untuk semua transaksi\n- Sistem escrow (dana ditahan sampai barang diterima)\n- Verifikasi 2 langkah untuk akun\n- Monitoring 24/7 untuk aktivitas mencur...",
+    "latency_ms": 10.28
+  },
+  "evaluation": {
+    "precision": 0.333,
+    "recall": 1.0,
+    "f1_score": 0.5,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "product_faq.md"
+    ],
+    "false_positives": [
+      "troubleshooting_guide.md",
+      "policy_returns.md"
+    ],
+    "false_negatives": []
+  }
+}

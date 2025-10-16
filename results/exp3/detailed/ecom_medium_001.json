@@ -1,0 +1,84 @@
+{
+  "test_id": "ecom_medium_001",
+  "query": "Saya mau return barang tapi penjual tidak respon sudah 3 hari, bagaimana?",
+  "category": "returns",
+  "difficulty": "medium",
+  "expected_docs": [
+    "policy_returns.md",
+    "contact_escalation.md"
+  ],
+  "timestamp": "2025-10-16T11:05:02.378884",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 6,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.25,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.3333333333333333,
+        "rank": 1,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.3333333333333333,
+        "rank": 2,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.16666666666666666,
+        "rank": 3,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.3333333333333333,
+        "rank": 4,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.16666666666666666,
+        "rank": 5,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md",
+      "troubleshooting_guide.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 2,
+    "context_length_chars": 1410,
+    "context_tokens_approx": 352,
+    "retrieved_context_preview": "[Docs] ## FAQ Return/Refund\n\n### Q: Bolehkah return karena tidak suka?\n**A:** Tergantung kebijakan toko. Beberapa toko terima \"change of mind\" tapi ongkir ditanggung pembeli.\n\n### Q: Bagaimana jika penjual menolak return yang valid?\n**A:** Ajukan banding dengan klik \"Minta Bantuan TokoPedia\". Tim mediasi akan review dalam 2x24 jam.\n\n### Q: Apakah bisa tukar ukuran/warna?\n**A:** Bisa, dengan catatan:\n- Stock pengganti tersedia\n- Biaya kirim PP ditanggung pembeli\n- Melalui proses return dulu\n[Docs...",
+    "latency_ms": 8.89
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 0.5,
+    "f1_score": 0.5,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_negatives": [
+      "contact_escalation.md"
+    ]
+  }
+}

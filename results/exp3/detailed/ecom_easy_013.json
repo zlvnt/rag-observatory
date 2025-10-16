@@ -1,0 +1,81 @@
+{
+  "test_id": "ecom_easy_013",
+  "query": "Aplikasi sering crash, solusinya apa?",
+  "category": "technical",
+  "difficulty": "easy",
+  "expected_docs": [
+    "troubleshooting_guide.md"
+  ],
+  "timestamp": "2025-10-16T11:05:02.350064",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 6,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.4,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.2,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.0,
+        "rank": 2,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 3,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.0,
+        "rank": 4,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.0,
+        "rank": 5,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "troubleshooting_guide.md",
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 2,
+    "context_length_chars": 408,
+    "context_tokens_approx": 102,
+    "retrieved_context_preview": "[Docs] ## Masalah Teknis Aplikasi\n\n### Aplikasi sering crash/force close\n**Troubleshooting:**\n1. Update ke versi terbaru\n2. Clear cache aplikasi\n3. Restart device\n4. Reinstall aplikasi\n5. Cek storage tersisa (minimal 1GB)\n\n### Gambar/halaman tidak loading\n**Cek list:**\n- Koneksi internet stabil (min 3G)\n- Matikan VPN/Proxy\n- Ganti DNS ke 8.8.8.8\n- Coba browser/device lain\n- Clear cookies dan cache browser",
+    "latency_ms": 9.25
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_positives": [
+      "contact_escalation.md"
+    ],
+    "false_negatives": []
+  }
+}

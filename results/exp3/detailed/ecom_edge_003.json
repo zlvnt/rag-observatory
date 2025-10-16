@@ -1,0 +1,84 @@
+{
+  "test_id": "ecom_edge_003",
+  "query": "Saya mau komplain produk tapi juga mau tanya promo",
+  "category": "product",
+  "difficulty": "medium",
+  "expected_docs": [
+    "policy_returns.md",
+    "product_faq.md"
+  ],
+  "timestamp": "2025-10-16T11:05:02.505615",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 6,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.125,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.125,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.125,
+        "rank": 2,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.25,
+        "rank": 3,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
+        "rank": 4,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.125,
+        "rank": 5,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "troubleshooting_guide.md",
+      "policy_returns.md",
+      "product_faq.md"
+    ],
+    "num_chunks_retrieved": 6,
+    "num_unique_docs": 3,
+    "context_length_chars": 2748,
+    "context_tokens_approx": 687,
+    "retrieved_context_preview": "[Docs] **Proses komplain:**\n- Ajukan dalam 2x24 jam setelah terima\n- Pilih alasan \"Produk tidak sesuai\"\n- Tunggu mediasi penjual-pembeli\n- Eskalasi ke TokoPedia jika tidak ada solusi\n\n### Produk cacat/tidak berfungsi\n**Dokumentasi wajib:**\n- Video yang menunjukkan cacat/kerusakan\n- Foto serial number/label produk\n- Bukti testing untuk produk elektronik\n\n**Opsi solusi:**\n1. Refund penuh\n2. Tukar dengan produk sama\n3. Perbaikan (jika garansi tersedia)\n\n## Masalah Teknis Aplikasi\n[Docs] ### Produk ...",
+    "latency_ms": 9.45
+  },
+  "evaluation": {
+    "precision": 0.667,
+    "recall": 1.0,
+    "f1_score": 0.8,
+    "reciprocal_rank": 0.5,
+    "true_positives": [
+      "product_faq.md",
+      "policy_returns.md"
+    ],
+    "false_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_negatives": []
+  }
+}

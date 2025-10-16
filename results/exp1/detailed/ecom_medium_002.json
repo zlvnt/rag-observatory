@@ -1,0 +1,69 @@
+{
+  "test_id": "ecom_medium_002",
+  "query": "Bayar sudah terpotong tapi pesanan gagal, uangnya kapan balik?",
+  "category": "payment",
+  "difficulty": "medium",
+  "expected_docs": [
+    "troubleshooting_guide.md",
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-16T10:55:33.939916",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 100,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 4,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.1111111111111111,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.1111111111111111,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.1111111111111111,
+        "rank": 2,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
+        "rank": 3,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 4,
+    "num_unique_docs": 1,
+    "context_length_chars": 2597,
+    "context_tokens_approx": 649,
+    "retrieved_context_preview": "[Docs] ### Nominal Refund:\n- **100% refund** untuk:\n  - Produk tidak dikirim\n  - Produk palsu dari Official Store\n  - Kesalahan sistem TokoPedia\n  \n- **Refund - ongkir** untuk:\n  - Return karena berubah pikiran\n  - Salah pesan dari pembeli\n  \n- **Partial refund** untuk:\n  - Produk kurang lengkap tapi masih bisa digunakan\n  - Kesepakatan pembeli-penjual\n\n### Refund Ongkir:\nOngkir di-refund JIKA:\n- Penjual kirim produk salah\n- Produk rusak karena packaging buruk\n- Penjual membatalkan sepihak\n\nOngk...",
+    "latency_ms": 11.98
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 0.5,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [],
+    "false_negatives": [
+      "troubleshooting_guide.md"
+    ]
+  }
+}
