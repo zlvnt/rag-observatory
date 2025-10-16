@@ -440,8 +440,9 @@ def main():
         print(f"✗ Failed to load domain config: {e}")
         return 1
 
-    # Load golden dataset
-    dataset_path = Path(f"golden_datasets/{args.domain}_tests.json")
+    # Load golden dataset (extract base domain for experiments)
+    base_domain = args.domain.split('_exp')[0]  # z3_agent_exp1 → z3_agent
+    dataset_path = Path(f"golden_datasets/{base_domain}_tests.json")
     try:
         dataset = load_golden_dataset(dataset_path)
     except Exception as e:
