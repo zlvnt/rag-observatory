@@ -8,6 +8,9 @@ knowledge_base_dir: docs/
 # Vector store location
 vector_store_dir: data/vector_stores/z3_agent/
 
+# Golden dataset for testing
+golden_dataset: golden_datasets/z3_agent_tests.json
+
 # Optional: Personality configuration (from original z3-agent)
 personality_config_path: content/reply_config1.json
 

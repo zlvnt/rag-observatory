@@ -10,6 +10,9 @@ knowledge_base_dir: docs/
 # Vector store location (reuse baseline - no rebuild needed)
 vector_store_dir: data/vector_stores/z3_agent/
 
+# Golden dataset for testing
+golden_dataset: golden_datasets/z3_agent_tests.json
+
 # Personality & prompts (not used in retrieval-only eval)
 personality_config_path: content/reply_config1.json
 supervisor_prompt_path: content/supervisor-prompt.txt
