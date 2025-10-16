@@ -29,6 +29,7 @@ class DomainConfig:
     domain_name: str
     knowledge_base_dir: Path
     vector_store_dir: Path
+    golden_dataset: Optional[Path] = None
     personality_config_path: Optional[Path] = None
     supervisor_prompt_path: Optional[Path] = None
     embedding_model: str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
@@ -63,6 +64,9 @@ class DomainConfig:
         data["vector_store_dir"] = Path(data["vector_store_dir"])
 
         # Convert optional path fields
+        if "golden_dataset" in data and data["golden_dataset"]:
+            data["golden_dataset"] = Path(data["golden_dataset"])
+
         if "personality_config_path" in data and data["personality_config_path"]:
             data["personality_config_path"] = Path(data["personality_config_path"])
 
