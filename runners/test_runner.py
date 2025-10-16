@@ -1,5 +1,4 @@
-"""RAG Test Runner - Execute golden dataset tests and generate reports.
-
+"""
 Usage:
     python runners/test_runner.py --domain z3_agent --output results/
 """
@@ -14,10 +13,8 @@ from typing import Dict, Any, List, Optional
 import sys
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
 load_dotenv()
 
-# Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from z3_core.domain_config import load_domain_config
@@ -34,7 +31,7 @@ from evaluators.metrics import (
 
 
 class ProgressBar:
-    """Simple progress bar for terminal output."""
+    #bar aja
 
     def __init__(self, total: int, prefix: str = "Progress"):
         self.total = total
@@ -42,7 +39,6 @@ class ProgressBar:
         self.prefix = prefix
 
     def update(self, current: int, status: str = ""):
-        """Update progress bar."""
         self.current = current
         percent = (current / self.total) * 100
         filled = int(50 * current / self.total)
@@ -51,18 +47,11 @@ class ProgressBar:
         print(f"\r{self.prefix}: [{bar}] {current}/{self.total} ({percent:.1f}%) {status}", end="", flush=True)
 
         if current == self.total:
-            print()  # New line when complete
+            print() 
 
 
 def load_golden_dataset(dataset_path: Path) -> Dict[str, Any]:
-    """Load golden dataset from JSON file.
-
-    Args:
-        dataset_path: Path to golden dataset JSON file
-
-    Returns:
-        Dictionary with metadata and test_cases
-    """
+    #Load golden dataset from JSON file.
     if not dataset_path.exists():
         raise FileNotFoundError(f"Golden dataset not found: {dataset_path}")
 
@@ -78,14 +67,8 @@ def load_golden_dataset(dataset_path: Path) -> Dict[str, Any]:
 
 
 def ensure_vector_store(config) -> bool:
-    """Ensure vector store exists, build if necessary.
+    # Ensure vector store exists, build if necessary.
 
-    Args:
-        config: Domain configuration
-
-    Returns:
-        True if vector store ready
-    """
     index_path = config.vector_store_dir / "index.faiss"
 
     if index_path.exists():
@@ -117,17 +100,8 @@ def run_single_test(
     retriever,
     verbose: bool = False
 ) -> Dict[str, Any]:
-    """Run a single test case - RETRIEVAL FOCUSED.
+   # Run a single test case - RETRIEVAL FOCUSED
 
-    Args:
-        test_case: Test case from golden dataset
-        config: Domain configuration
-        retriever: Pre-built retriever
-        verbose: Print detailed information
-
-    Returns:
-        Result dictionary with retrieval trace and evaluation
-    """
     query = test_case["query"]
     test_id = test_case["id"]
 
@@ -156,7 +130,7 @@ def run_single_test(
         "evaluation": {}
     }
 
-    # Retrieval step (no routing, always use docs mode)
+    # no routing, always use docs mode
     start_time = time.time()
     try:
         context, retrieval_debug = retrieve_context(
@@ -208,7 +182,7 @@ def run_single_test(
             "latency_ms": 0
         }
 
-    # Evaluation - Retrieval metrics only
+    # Evaluation
     expected_docs = test_case.get("expected_docs", [])
 
     # Calculate retrieval metrics using unique doc names
@@ -238,12 +212,8 @@ def run_single_test(
 
 
 def save_detailed_result(result: Dict[str, Any], output_dir: Path):
-    """Save detailed result for a single test case.
+   # Save detailed result for a single test case.
 
-    Args:
-        result: Test result dictionary
-        output_dir: Output directory
-    """
     detailed_dir = output_dir / "detailed"
     detailed_dir.mkdir(parents=True, exist_ok=True)
 
@@ -254,13 +224,9 @@ def save_detailed_result(result: Dict[str, Any], output_dir: Path):
 
 
 def save_summary_csv(results: List[Dict[str, Any]], output_dir: Path, timestamp: str):
-    """Save summary results to CSV - RETRIEVAL FOCUSED.
 
-    Args:
-        results: List of test results
-        output_dir: Output directory
-        timestamp: Timestamp string for filename
-    """
+#Save summary results to CSV - RETRIEVAL FOCUSED.
+
     csv_file = output_dir / f"summary_{timestamp}.csv"
 
     with open(csv_file, "w", newline="", encoding="utf-8") as f:
@@ -281,7 +247,6 @@ def save_summary_csv(results: List[Dict[str, Any]], output_dir: Path, timestamp:
             docs_str = "; ".join(unique_docs) if unique_docs else "None"
 
             # Get expected docs from golden dataset
-            # We need to extract this from somewhere - let's add it to result during test
             expected = "; ".join(result.get("expected_docs", []))
 
             # True/false positives/negatives
@@ -312,14 +277,8 @@ def save_summary_csv(results: List[Dict[str, Any]], output_dir: Path, timestamp:
 
 
 def generate_report(results: List[Dict[str, Any]], output_dir: Path, timestamp: str, config):
-    """Generate human-readable report.
+    # Generate human-readable report.
 
-    Args:
-        results: List of test results
-        output_dir: Output directory
-        timestamp: Timestamp string for filename
-        config: Domain configuration
-    """
     report_file = output_dir / f"report_{timestamp}.txt"
 
     # Calculate aggregated metrics

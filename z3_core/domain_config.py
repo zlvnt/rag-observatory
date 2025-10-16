@@ -1,8 +1,4 @@
-"""Domain configuration management for RAG Observatory.
-
-This module provides configuration management for multi-domain RAG testing.
-Each domain can have its own knowledge base, prompts, personality, and parameters.
-"""
+# Domain configuration management for RAG Observatory.
 
 from __future__ import annotations
 from dataclasses import dataclass, field
@@ -45,18 +41,8 @@ class DomainConfig:
 
     @classmethod
     def from_yaml(cls, config_path: Path) -> "DomainConfig":
-        """Load domain configuration from YAML file.
+        # Load domain configuration from YAML file.
 
-        Args:
-            config_path: Path to YAML configuration file
-
-        Returns:
-            DomainConfig instance
-
-        Raises:
-            FileNotFoundError: If config file doesn't exist
-            ValueError: If required fields are missing
-        """
         if not config_path.exists():
             raise FileNotFoundError(f"Config file not found: {config_path}")
 
@@ -86,11 +72,8 @@ class DomainConfig:
         return cls(**data)
 
     def validate_paths(self) -> list[str]:
-        """Validate that required paths exist.
+        # Validate that required paths exist.
 
-        Returns:
-            List of validation error messages (empty if all valid)
-        """
         errors = []
 
         if not self.knowledge_base_dir.exists():
@@ -105,11 +88,8 @@ class DomainConfig:
         return errors
 
     def to_dict(self) -> dict:
-        """Convert config to dictionary with string paths.
+        # Convert config to dictionary with string paths.
 
-        Returns:
-            Dictionary representation
-        """
         return {
             "domain_name": self.domain_name,
             "knowledge_base_dir": str(self.knowledge_base_dir),
@@ -128,44 +108,23 @@ class DomainConfig:
 
 def load_domain_config(domain_name: str, config_dir: Path = Path("configs")) -> DomainConfig:
     """Load domain configuration by name.
-
     Looks for a YAML file named {domain_name}_config.yaml in the config directory.
-
-    Args:
-        domain_name: Name of the domain to load
-        config_dir: Directory containing config files
-
-    Returns:
-        DomainConfig instance
-
-    Raises:
-        FileNotFoundError: If config file doesn't exist
-
-    Example:
-        >>> config = load_domain_config("tokopedia")
-        >>> print(config.domain_name)
-        tokopedia
     """
     config_path = config_dir / f"{domain_name}_config.yaml"
-
     if not config_path.exists():
-        raise FileNotFoundError(
-            f"Configuration file not found: {config_path}\n"
-            f"Please create a config file for domain '{domain_name}' at {config_path}"
-        )
+        config_path = config_dir / f"{domain_name}.yaml"
+        if not config_path.exists():
+            raise FileNotFoundError(
+                f"Configuration file not found: {config_path}\n"
+                f"Please create a config file for domain '{domain_name}' at {config_path}"
+            )
 
     return DomainConfig.from_yaml(config_path)
 
 
 def list_available_domains(config_dir: Path = Path("configs")) -> list[str]:
-    """List all available domain configurations.
+   # List all available domain configurations.
 
-    Args:
-        config_dir: Directory containing config files
-
-    Returns:
-        List of domain names
-    """
     if not config_dir.exists():
         return []
 
