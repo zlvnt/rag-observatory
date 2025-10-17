@@ -1,0 +1,60 @@
+{
+  "test_id": "ecom_medium_007",
+  "query": "Response time CS berapa lama untuk kasus yang high priority?",
+  "category": "contact",
+  "difficulty": "medium",
+  "expected_docs": [
+    "contact_escalation.md"
+  ],
+  "timestamp": "2025-10-17T11:03:49.179992",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.5
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.1,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.2,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.2,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 1,
+    "context_length_chars": 1271,
+    "context_tokens_approx": 317,
+    "retrieved_context_preview": "[Docs] ## Prioritas & SLA\n\n### Kategori URGENT (Response <2 jam):\n- Akun di-hack dengan kerugian aktif\n- Transaksi fraud in-progress\n- Data pribadi tersebar\n- Ancaman keselamatan\n\n### Kategori HIGH (Response <6 jam):\n- Payment stuck > Rp 5 juta\n- Pesanan hilang > Rp 2 juta\n- Seller tidak respon > 5 hari\n- Produk berbahaya/ilegal\n\n### Kategori MEDIUM (Response <24 jam):\n- Return/refund normal\n- Pertanyaan produk\n- Update data akun\n- Komplain layanan\n[Docs] ### Kategori LOW (Response <48 jam):\n- S...",
+    "latency_ms": 27.43
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "contact_escalation.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "test_id": "ecom_easy_001",
+  "query": "Bagaimana cara return barang yang rusak?",
+  "category": "returns",
+  "difficulty": "easy",
+  "expected_docs": [
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-17T11:03:47.690187",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.5
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.3333333333333333,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.16666666666666666,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.16666666666666666,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 1,
+    "context_length_chars": 1291,
+    "context_tokens_approx": 322,
+    "retrieved_context_preview": "[Docs] # Kebijakan Return & Refund - TokoPedia\n\n## Ketentuan Umum Return\n\n### Produk yang BISA di-return:\n- Produk rusak/cacat dari pabrik\n- Produk tidak sesuai deskripsi/foto\n- Produk salah kirim (warna/ukuran/model)\n- Produk tidak lengkap/kurang aksesoris\n- Produk tidak original (untuk Official Store)\n[Docs] ### Produk yang TIDAK BISA di-return:\n- Produk digital (voucher, software, top-up)\n- Makanan, minuman, dan produk kadaluarsa\n- Produk custom/made-by-order\n- Produk yang sudah dibuka segel ...",
+    "latency_ms": 921.15
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}
