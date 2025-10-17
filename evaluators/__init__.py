@@ -1,5 +1,4 @@
 """Evaluators package for RAG metrics calculation."""
-
 from .metrics import (
     calculate_precision_at_k,
     calculate_recall_at_k,
