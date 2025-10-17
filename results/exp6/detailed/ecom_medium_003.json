@@ -1,0 +1,63 @@
+{
+  "test_id": "ecom_medium_003",
+  "query": "Paket diterima rusak, tapi sudah saya klik terima pesanan. Masih bisa komplain?",
+  "category": "shipping",
+  "difficulty": "medium",
+  "expected_docs": [
+    "troubleshooting_guide.md",
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-17T10:45:09.646737",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.25,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.25,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.08333333333333333,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "troubleshooting_guide.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 1,
+    "context_length_chars": 1365,
+    "context_tokens_approx": 341,
+    "retrieved_context_preview": "[Docs] ### Alamat pengiriman salah\n**Jika belum dikirim:**\n- Hubungi penjual SEGERA untuk ubah alamat\n- Biaya perubahan ditanggung pembeli\n\n**Jika sudah dikirim:**\n- Koordinasi dengan kurir untuk redirect (biaya tambahan)\n- Jika gagal, paket akan retur ke penjual\n- Diskusikan re-pengiriman dengan penjual\n\n## Masalah Produk\n\n### Produk tidak sesuai deskripsi\n**Bukti yang diperlukan:**\n1. Foto produk yang diterima (berbagai angle)\n2. Screenshot deskripsi/foto dari listing\n3. Video unboxing jika ad...",
+    "latency_ms": 28.6
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 0.5,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_positives": [],
+    "false_negatives": [
+      "policy_returns.md"
+    ]
+  }
+}

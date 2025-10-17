@@ -1,21 +1,22 @@
 # RAG Observatory - Progress Report
 
-**Last Updated:** 2025-10-14
-**Status:** Baseline complete, ready for ablation experiments
+**Last Updated:** 2025-10-16
+**Status:** Phase 1 complete (5 experiments), Phase 2 ready with refined hypothesis
 
 ---
 
 ## 🎯 Current Objective
 
-**Optimize RAG retrieval configuration** through systematic experimentation.
+**Phase 2:** Test optimal hypothesis (MPNet + k=4) to achieve target metrics.
 
-**Goal:** Find the best combination of:
-- Chunk size & overlap
-- Retrieval k parameter
-- Relevance threshold
-- Embedding model
+**Hypothesis:** MPNet embedding + k=4 + chunk=500 will achieve:
+- Precision ≥ 0.75-0.80 (combining MPNet quality with k=4 selectivity)
+- Recall ≥ 0.90-0.95 (maintain high coverage)
+- F1 ≥ 0.80 (balanced improvement)
 
-**Success Criteria:** Precision ≥ 0.80, Recall ≥ 0.70, F1 ≥ 0.75
+**Next Experiment:** Exp5 (CRITICAL - validates hypothesis)
+
+**Success Criteria:** Precision ≥ 0.80, Recall ≥ 0.90, F1 ≥ 0.75
 
 ---
 
@@ -50,37 +51,43 @@
 - ✅ Ran 30 queries with baseline config
 - ✅ Results analyzed and documented
 
+### Phase 6: Ablation Study - Phase 1 (Oct 16)
+- ✅ Ran 4 experiments (Exp1-4) with different configurations
+- ✅ Identified k=6 as bottleneck (precision drop -23.6%)
+- ✅ Validated MPNet superiority (MRR +9%, 0.950)
+- ✅ Found threshold has no impact on precision/recall
+- ✅ Developed optimal hypothesis: MPNet + k=4 + chunk=500
+
 ---
 
-## 📊 Baseline Results
+## 📊 Phase 1 Results Summary
 
-**Configuration:**
-```yaml
-chunk_size: 700
-chunk_overlap: 100
-embedding_model: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
-vector_store: FAISS
-retrieval_k: 4
-relevance_threshold: 0.8
-```
+### Comparative Metrics:
 
-**Metrics:**
-| Metric | Score | Target | Status |
-|--------|-------|--------|--------|
-| Precision@3 | **0.706** | 0.80 | ⚠️ Below target |
-| Recall@3 | **0.950** | 0.70 | ✅ Excellent |
-| F1 Score | **0.752** | 0.75 | ✅ At target |
-| MRR | **0.872** | 0.80 | ✅ Good |
-| Success Rate | **100%** | 90% | ✅ Perfect |
+| Experiment | Config Changes | Precision | Recall | F1 | MRR | Tokens/Q | Verdict |
+|------------|----------------|-----------|--------|----|----|----------|---------|
+| **Baseline** | k=4, t=0.8, chunk=700, MiniLM | **0.706** | 0.950 | **0.752** | 0.872 | 583 | ⚠️ Reference |
+| **Exp1** | t=0.3 | **0.706** | 0.950 | **0.752** | 0.872 | **382** ✅ | ⚠️ No metric change |
+| **Exp2** | k=6 | **0.539** ❌ | 0.967 | **0.652** | 0.872 | 513 | ❌ Precision crashed |
+| **Exp3** | k=6, chunk=500 | **0.589** | 0.950 | **0.680** | 0.861 | **369** ✅ | ⚠️ Below baseline |
+| **Exp4** | k=6, chunk=500, MPNet | **0.639** | 0.950 | **0.725** | **0.950** ⭐ | **352** ✅ | ⭐ Best MRR |
 
-**Performance:**
-- Avg Latency: 19ms (excellent)
-- P95 Latency: 15ms
-- Avg Tokens/Query: 583
+**Target Metrics:** Precision ≥0.80, Recall ≥0.90, F1 ≥0.75
 
-**By Category Performance:**
-- 🏆 Best: Technical (1.000), Account (0.834)
-- ⚠️ Worst: Payment (0.500), Product (0.556)
+### Key Insights from Phase 1:
+
+✅ **What Worked:**
+1. **MPNet embedding** - MRR improved to 0.950 (+9%), best ranking quality
+2. **Token efficiency** - Exp1 reduced tokens 34% without hurting metrics
+3. **Smaller chunks** - Exp3/4 achieved ~350 tokens/query (40% reduction)
+
+❌ **What Failed:**
+1. **k=6** - Precision dropped 23.6% (0.706 → 0.539), too much noise
+2. **Lowering threshold** - No impact on precision/recall (threshold irrelevant)
+3. **Stacking changes** - Exp2-4 couldn't recover from k=6 damage
+
+💡 **Critical Discovery:**
+**k=6 is the bottleneck** - All experiments with k=6 performed worse than baseline. MPNet showed promise (MRR 0.950) but was tested with suboptimal k=6. **Hypothesis:** MPNet + k=4 could achieve precision 0.75-0.80.
 
 ---
 
@@ -159,30 +166,28 @@ Problem: No diversity in retrieval
 
 ---
 
-## 🔧 Planned Experiments
+## 🔧 Phase 2 Planned Experiments
 
-### Experiment Matrix
+### Priority Experiments (Next Steps):
 
-| Exp | chunk_size | overlap | embedding | k | threshold | Expected Impact |
-|-----|------------|---------|-----------|---|-----------|-----------------|
-| **Baseline** | 700 | 100 | MiniLM-L12 | 4 | 0.8 | (current) |
-| **Exp1** | 700 | 100 | MiniLM-L12 | 4 | **0.3** | Precision +10-15% |
-| **Exp2** | 700 | 100 | MiniLM-L12 | **6** | 0.3 | Recall +5% (multi-doc) |
-| **Exp3** | **500** | **50** | MiniLM-L12 | 6 | 0.3 | Precision +5% |
-| **Exp4** | 500 | 50 | **mpnet-v2** | 6 | 0.3 | Precision +15-20% |
+| Exp | chunk_size | overlap | embedding | k | threshold | Expected Result | Rationale |
+|-----|------------|---------|-----------|---|-----------|-----------------|-----------|
+| **Exp5** ⭐ | 500 | 50 | **MPNet-v2** | **4** | 0.3 | Prec 0.75-0.80 | **Optimal hypothesis** |
+| **Exp6** | 500 | 50 | MPNet-v2 | **3** | 0.3 | Prec 0.80+, Rec 0.90 | Test lower k |
+| **Exp7** | 500 | 50 | MPNet-v2 | **5** | 0.3 | Balance test | K sweet spot |
+| **Exp8** | 700 | 100 | MPNet-v2 | 4 | 0.3 | Embedding ablation | Isolate MPNet impact |
 
-**Rationale:**
-1. **Exp1:** Fix threshold to actually filter low-quality docs
-2. **Exp2:** Increase k to improve multi-doc retrieval
-3. **Exp3:** Smaller chunks for more granular retrieval
-4. **Exp4:** Better embedding model for improved semantic understanding
+**Why Exp5 is Critical:**
+- Combines MPNet's ranking quality (MRR 0.950 from Exp4)
+- With k=4's precision (baseline's best parameter)
+- Plus chunk=500's token efficiency (352 tokens/query)
+- **This was never tested in Phase 1** - Exp4 used k=6 which hurt precision
 
 **Estimated Time:**
-- Exp1: 1 min (config change only)
-- Exp2: 1 min (config change only)
-- Exp3: 5 min (rebuild vector store)
-- Exp4: 15 min (download model + rebuild)
-- **Total:** ~25 minutes
+- Exp5: ~5 min (rebuild vector store - new config)
+- Exp6-7: <1 min each (k change only, no rebuild)
+- Exp8: ~5 min (rebuild - different chunk size)
+- **Total:** ~15 minutes for priority experiments
 
 ---
 
@@ -190,41 +195,49 @@ Problem: No diversity in retrieval
 
 ```
 results/
-└── baseline/  (Oct 14, 16:16)
-    ├── detailed/
-    │   ├── ecom_easy_001.json
-    │   ├── ... (30 files)
-    ├── summary_20251014_161627.csv
-    └── report_20251014_161627.txt
+├── results_baseline/  (Oct 16, 10:52) - Original baseline
+├── exp1/              (Oct 16, 10:55) - Threshold 0.3
+├── exp2/              (Oct 16, 11:04) - k=6
+├── exp3/              (Oct 16, 11:05) - k=6, chunk=500
+├── exp4/              (Oct 16, 16:50) - k=6, chunk=500, MPNet
+└── exp5/              (Planned) - k=4, chunk=500, MPNet ⭐
 ```
 
-**Baseline can be renamed to:**
-```bash
-mv results results_baseline
-# Or keep as-is and create new folders for experiments
-```
+**Each experiment folder contains:**
+- `detailed/` - 30 JSON files with per-query details
+- `summary_TIMESTAMP.csv` - Quick metrics comparison
+- `report_TIMESTAMP.txt` - Human-readable analysis
 
 ---
 
 ## 🎯 Next Steps
 
-### Immediate (Today)
-1. Create experiment configs (exp1-exp4.yaml)
-2. Run Exp1 (threshold 0.3)
-3. Compare results with baseline
-4. Decide: continue with Exp2-4 or iterate on threshold?
+### Immediate (Now)
+1. ✅ Create Exp5 config (z3_agent_exp5.yaml) - **DONE**
+2. ✅ Update EXPERIMENT_PROPOSAL.md with Phase 1 results - **DONE**
+3. ✅ Update PROGRESS.md - **DONE**
+4. **RUN Exp5** - Critical test of optimal hypothesis
+5. Analyze Exp5 results vs baseline and Exp4
 
-### Short-term (This Week)
-5. Complete experiment matrix
-6. Create comparison script/tool
-7. Identify winning configuration
-8. Document findings
+### If Exp5 Succeeds (Precision ≥0.75):
+6. Run Exp6 (k=3) to test if lower k improves further
+7. Run Exp7 (k=5) to find sweet spot
+8. Create comparison report across all experiments
+9. Document winning configuration
 
-### Future (Optional)
-- Hybrid search (BM25 + semantic)
-- Reranking layer (cross-encoder)
-- Query classification for routing
-- Expand to additional domains
+### If Exp5 Fails (Precision <0.75):
+6. Run Exp8 (embedding ablation) to isolate MPNet impact
+7. Consider alternative approaches:
+   - Reranking layer (cross-encoder)
+   - Hybrid search (BM25 + semantic)
+   - Query expansion or reformulation
+   - MMR (Maximal Marginal Relevance) for diversity
+
+### Future Enhancements (After Optimal Config Found):
+- Build comparison dashboard/visualization
+- Test on additional domains beyond e-commerce
+- Implement production deployment script
+- Add monitoring and A/B testing framework
 
 ---
 
@@ -284,4 +297,28 @@ mv results results_baseline
 
 ---
 
-**Status:** Ready to execute experiment matrix 🚀
+**Status:** Phase 1 complete ✅ | Phase 2 ready - Exp5 config created 🚀
+
+---
+
+## 📊 Quick Reference - Phase 1 Learnings
+
+**What We Learned:**
+1. **Threshold doesn't matter** - All scores < 0.8, so threshold 0.8 vs 0.3 = same result
+2. **k=6 is too high** - Precision drops 24% due to noise
+3. **MPNet > MiniLM** - Better ranking (MRR +9%) and semantic understanding
+4. **chunk=500 > chunk=700** - Better token efficiency (40% reduction) with same quality
+
+**What to Test Next:**
+- **Exp5 (CRITICAL):** MPNet + k=4 + chunk=500 - Combines best parameters
+- **Exp6-7:** Optimize k value (test k=3 and k=5)
+- **Exp8:** Isolate MPNet impact (keep chunk=700 to isolate embedding change)
+
+**Predicted Optimal Config:**
+```yaml
+embedding_model: paraphrase-multilingual-mpnet-base-v2
+chunk_size: 500
+chunk_overlap: 50
+retrieval_k: 3 or 4  # To be determined by Exp5-7
+relevance_threshold: 0.3  # Doesn't matter, but keep for consistency
+```

@@ -1,0 +1,60 @@
+{
+  "test_id": "ecom_edge_004",
+  "query": "Refund atau ganti barang?",
+  "category": "returns",
+  "difficulty": "easy",
+  "expected_docs": [
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-17T10:45:09.967274",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.25,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.25,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 1,
+    "context_length_chars": 1070,
+    "context_tokens_approx": 267,
+    "retrieved_context_preview": "[Docs] ### Q: Refund partial itu bagaimana?\n**A:** Contoh: Beli 5 item, 1 rusak. Bisa refund hanya untuk 1 item tersebut tanpa return semua.\n\n---\n*Catatan Penting:*\n- Screenshot semua komunikasi dengan penjual\n- Simpan packaging original hingga transaksi selesai\n- Video unboxing sangat membantu klaim\n- Baca deskripsi produk teliti sebelum beli\n\n*Hotline Return/Refund: 1500-600 ext 2*\n[Docs] ## FAQ Return/Refund\n\n### Q: Bolehkah return karena tidak suka?\n**A:** Tergantung kebijakan toko. Beberapa...",
+    "latency_ms": 27.15
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

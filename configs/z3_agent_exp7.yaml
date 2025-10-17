@@ -1,0 +1,45 @@
+# Experiment 5: Optimal Hypothesis Test
+# Goal: Test MPNet with optimal k=4 (instead of k=6)
+# Rationale: Exp4 showed MPNet improves ranking (MRR 0.950), but k=6 introduced noise
+#            This tests if MPNet + k=4 gives best precision/recall balance
+# Changes from baseline:
+#   - embedding_model: MiniLM-L12 → MPNet-v2 (better semantic understanding)
+#   - chunk_size: 700 → 500 (better granularity, token efficiency)
+#   - chunk_overlap: 100 → 50 (match smaller chunk size)
+#   - threshold: 0.8 → 0.3 (consistency with Phase 1)
+#   - k: KEEP at 4 (avoid noise from k=6)
+
+domain_name: z3_agent_exp5
+
+# Knowledge base (same as baseline)
+knowledge_base_dir: docs/
+
+# Vector store location (NEEDS REBUILD - different embedding model + chunk size)
+vector_store_dir: data/vector_stores/z3_agent_exp5/
+
+# Golden dataset for testing
+golden_dataset: golden_datasets/z3_agent_tests.json
+
+# Personality & prompts (not used in retrieval-only eval)
+personality_config_path: content/reply_config1.json
+supervisor_prompt_path: content/supervisor-prompt.txt
+
+# Embedding model (CHANGED - larger, better model from Exp4)
+embedding_model: sentence-transformers/paraphrase-multilingual-mpnet-base-v2  # ← Better than MiniLM
+
+# LLM config (not used)
+llm_model: gemini-2.0-flash
+llm_temperature: 0.7
+
+# RAG parameters - OPTIMAL COMBINATION
+relevance_threshold: 0.5  # Consistent with Phase 1
+chunk_size: 500           # From Exp3/4 - better granularity
+chunk_overlap: 50         # From Exp3/4 - match chunk size
+retrieval_k: 3            # ← BACK TO BASELINE (avoid k=6 noise)
+
+# Expected Results:
+# - Precision: 0.75-0.80 (MPNet quality + k=4 selectivity)
+# - Recall: 0.95 (maintain high coverage)
+# - F1: 0.80-0.85 (balanced improvement)
+# - MRR: 0.95 (MPNet ranking quality from Exp4)
+# - Tokens/query: ~250-300 (smaller chunks + k=4)
