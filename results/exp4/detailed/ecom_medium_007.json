@@ -1,0 +1,81 @@
+{
+  "test_id": "ecom_medium_007",
+  "query": "Response time CS berapa lama untuk kasus yang high priority?",
+  "category": "contact",
+  "difficulty": "medium",
+  "expected_docs": [
+    "contact_escalation.md"
+  ],
+  "timestamp": "2025-10-16T16:50:02.902112",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 6,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.1,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.2,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.2,
+        "rank": 2,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.3,
+        "rank": 3,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.3,
+        "rank": 4,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.3,
+        "rank": 5,
+        "passed_threshold": true
+      }
+    ],
+    "unique_docs": [
+      "contact_escalation.md",
+      "troubleshooting_guide.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 2,
+    "context_length_chars": 1159,
+    "context_tokens_approx": 289,
+    "retrieved_context_preview": "[Docs] ### Template komunikasi efektif:\n```\nHalo CS, saya [nama] mengalami [masalah].\nOrder ID: [XXXX]\nKronologi: [waktu dan detail kejadian]\nBukti: [terlampir]\nHarapan solusi: [refund/replace/etc]\n```\n\n### Do's:\n- Gunakan bahasa sopan tapi tegas\n- Satu ticket untuk satu masalah\n- Follow up tiap 24 jam jika no response\n- Simpan reference number\n\n### Don'ts:\n- Spam multiple channel bersamaan\n- Mengancam atau kata kasar\n- Memberikan password/OTP\n- Post di sosmed tanpa coba CS dulu\n\n## Eskalasi Mat...",
+    "latency_ms": 23.27
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "contact_escalation.md"
+    ],
+    "false_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_negatives": []
+  }
+}
