@@ -1,0 +1,66 @@
+{
+  "test_id": "ecom_easy_014",
+  "query": "Email CS TokoPedia apa ya?",
+  "category": "contact",
+  "difficulty": "easy",
+  "expected_docs": [
+    "contact_escalation.md"
+  ],
+  "timestamp": "2025-10-17T10:14:10.200048",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 4,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.2,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.2,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 2,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.4,
+        "rank": 3,
+        "passed_threshold": true
+      }
+    ],
+    "unique_docs": [
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 1,
+    "context_length_chars": 457,
+    "context_tokens_approx": 114,
+    "retrieved_context_preview": "[Docs] ### Partnership/B2B:\n- Email: partnership@tokopedia.com\n- Untuk kerja sama bisnis only\n\n### Kantor Pusat:\n```\nTokopedia Tower\nJl. Prof. Dr. Satrio Kav. 11\nJakarta 12950\n(Tidak melayani walk-in complaint)\n```\n\n---\n*Tips Terakhir:*\n- Simpan semua komunikasi sebagai bukti\n- Catat nama CS dan waktu handling\n- Eskalasi bertahap, jangan loncat level\n- Kesabaran adalah kunci resolusi cepat\n\n*Quick Escalation Code: Sebut \"PRIORITY-ESC\" untuk case urgent*",
+    "latency_ms": 25.99
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "contact_escalation.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}
