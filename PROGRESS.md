@@ -1,7 +1,7 @@
 # RAG Observatory - Progress Report
 
-**Last Updated:** 2025-10-17
-**Status:** ✅ All experiments complete | Winner: Exp6 (k=3)
+**Last Updated:** 2025-10-19
+**Status:** 🔬 Phase 8 in progress | Qualitative Analysis + Advanced Optimization
 
 ---
 
@@ -25,6 +25,36 @@ Optimize RAG retrieval configuration for e-commerce domain through systematic ab
 - ✅ Ran 7 experiments (Baseline + Exp1-7)
 - ✅ Tested 4 variables: k, threshold, chunk_size, embedding_model
 - ✅ Identified optimal configuration
+
+### Phase 7: Research Documentation (Oct 17)
+- ✅ Created comprehensive analysis (`EXPERIMENT_RESULTS_ANALYSIS.md`)
+- ✅ Generated 6 CSV exports for all comparisons
+- ✅ Documented parameter impact hierarchy
+- ✅ Planned advanced optimization roadmap (`PHASE_2_ROADMAP.md`)
+
+---
+
+## 🔬 Current Phase: Phase 8 - Advanced Optimization
+
+### Phase 8A: Qualitative Analysis ✅ (Oct 19)
+- ✅ Created `qualitative_analysis_exp6.csv` with retrieved text inspection
+- ✅ Generated script: `scripts/create_qualitative_csv.py`
+- ⏳ Manual inspection pending (identify failure patterns)
+
+### Phase 8B: Embedding Model Ablation (Planned)
+- ⏳ Download bge-m3 model (BAAI/bge-m3, 2.2GB)
+- ⏳ Re-run ALL 8 experiment configs with bge-m3
+- ⏳ Compare MPNet vs bge-m3 side-by-side
+- ⏳ Create `qualitative_analysis_exp6_bge.csv`
+
+### Phase 8C: Splitter Ablation (Planned)
+- ⏳ Test MarkdownHeaderTextSplitter
+- ⏳ Compare with RecursiveCharacterTextSplitter
+- ⏳ Re-run optimal config with new splitter
+
+### Phase 8D: Final Optimal Configuration (Planned)
+- ⏳ Combine best embedding + best splitter + optimal k
+- ⏳ Document in `configs/z3_agent_production_v2.yaml`
 
 ---
 
@@ -109,7 +139,14 @@ rag-observatory/
 ├── results/                    # Experiment results
 │   ├── results_baseline/
 │   ├── exp1/ ... exp7/
-│   └── *.csv, *.txt reports
+│   └── report/                # Phase 1 analysis exports
+│       ├── experiment_comparison_summary.csv
+│       ├── experiment_by_difficulty.csv
+│       ├── experiment_by_category.csv
+│       ├── all_experiments_overview.csv
+│       └── qualitative_analysis_exp6.csv  # ⭐ Phase 2A
+├── scripts/
+│   └── create_qualitative_csv.py  # ⭐ Phase 2A script
 ├── z3_core/                    # RAG engine
 │   ├── vector.py              # FAISS vector store
 │   ├── rag.py                 # Retrieval logic
@@ -118,8 +155,8 @@ rag-observatory/
 │   └── test_runner.py         # Test execution
 ├── golden_datasets/
 │   └── z3_agent_tests.json    # 30 test queries
-├── EXPERIMENT_RESULTS_ANALYSIS.md  # Detailed analysis
-├── experiment_*.csv           # Comparison tables
+├── EXPERIMENT_RESULTS_ANALYSIS.md  # Phase 1 detailed analysis
+├── PHASE_2_ROADMAP.md         # Phase 2 plan
 └── PROGRESS.md                # This file
 ```
 
@@ -177,28 +214,49 @@ relevance_threshold: 0.3
 
 ## 📚 Key Documents
 
-- **`CLAUDE.md`** - Project instructions and philosophy
-- **`EXPERIMENT_PROPOSAL.md`** - Experiment plan and rationale
-- **`EXPERIMENT_RESULTS_ANALYSIS.md`** - Detailed analysis (this is the main reference)
-- **`experiment_*.csv`** - Comparison tables for analysis
+### Research Analysis:
+- **`EXPERIMENT_RESULTS_ANALYSIS.md`** - Phase 1 detailed analysis (all 8 experiments)
+- **`PHASE_2_ROADMAP.md`** - Phase 2 plan (qualitative + ablation studies)
+- **`NEXT_EXPERIMENTS_PLAN.md`** - Parameter impact hierarchy & advanced techniques
+
+### Configuration & Data:
+- **`CLAUDE.md`** - Project instructions and research standards
+- **`EXPERIMENT_PROPOSAL.md`** - Initial experiment plan
 - **`PROGRESS.md`** - This file (progress summary)
+
+### CSV Exports (results/report/):
+- `experiment_comparison_summary.csv` - All 8 experiments compared
+- `experiment_by_difficulty.csv` - Performance by easy/medium/hard
+- `experiment_by_category.csv` - Performance by category (returns, payment, etc.)
+- `all_experiments_overview.csv` - Complete overview with rankings
+- `qualitative_analysis_exp6.csv` - ⭐ Phase 8A: Retrieved text inspection
 
 ---
 
 ## 🚀 Next Steps
 
-### Immediate:
-1. ✅ Select production config (Exp6 or Exp5)
-2. Deploy to production environment
-3. Monitor real-world performance
+### Phase 8 Roadmap:
 
-### Optional Enhancements:
-- Add A/B testing framework
-- Build comparison dashboard
-- Test on additional domains
-- Implement reranking layer
+**Phase 8A (Current):** ✅ Qualitative Analysis
+- ✅ Created CSV with retrieved text previews
+- ⏳ Manual inspection to identify failure patterns
+
+**Phase 8B (Next):** Embedding Model Ablation
+- Test bge-m3 across all 8 experiment configs
+- Compare MPNet vs bge-m3 performance
+- Expected improvement: +5-10% precision
+
+**Phase 8C:** Splitter Ablation
+- Test MarkdownHeaderTextSplitter for structured docs
+- Compare with current RecursiveCharacterTextSplitter
+- Expected improvement: +3-5% precision
+
+**Phase 8D:** Final Optimal Configuration
+- Combine best findings from 8A-8C
+- Document production-ready config v2
 
 ---
 
-**Status:** Project complete ✅ | Ready for production deployment 🚀
-**Winner:** Exp6 (k=3, precision 0.783, recall 0.917, F1 0.795)
+**Status:** Phase 8A complete ✅ | Manual inspection pending ⏳
+**Current Best:** Exp6 (k=3, precision 0.783, recall 0.917, F1 0.795)
+**Target Gap:** +2.2% precision to reach 0.80 target
