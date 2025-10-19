@@ -20,7 +20,7 @@
 
 ---
 
-## 📊 Phase 1 Recap (What We Know)
+## 📊 latest Phase Recap (What We Know)
 
 **Metrics-based evaluation complete:**
 - 8 experiments (Baseline + Exp1-7)
@@ -372,10 +372,11 @@ relevance_threshold: 0.3
 ## 📊 Deliverables Summary
 
 ### Phase 8A Outputs: ✅ COMPLETE
-- ✅ `qualitative_analysis_exp6.csv` (30 queries with retrieved text)
+- ✅ `qualitative_analysis_exp6.csv` (30 queries with retrieved text + inspection notes)
 - ✅ `scripts/create_qualitative_csv.py` (reusable script)
-- ⏳ Summary document: Top 5 patterns identified (manual inspection pending)
-- ⏳ Recommendations for future experiments
+- ✅ `PHASE_8A_SUMMARY.md` - Complete analysis with top 5 failure patterns
+- ✅ Root cause diagnosis: Splitter (70%), Embedding (60%), Chunk size (40%)
+- ✅ Recommendations prioritized for Phase 8B-8C
 
 ### Phase 8B Outputs: ⏳ PLANNED
 - ⏳ 7 new experiment results (Baseline_bge through Exp7_bge)
@@ -555,11 +556,14 @@ Phase 8C (MarkdownSplitter):
 **Completed (2025-10-19):**
 1. ✅ Created `qualitative_analysis_exp6.csv` with retrieved text
 2. ✅ Generated reusable script `scripts/create_qualitative_csv.py`
-3. ✅ Updated PROGRESS.md to reflect Phase 8 status
+3. ✅ Manual inspection complete (sampled queries with detailed notes)
+4. ✅ Created `PHASE_8A_SUMMARY.md` with complete analysis
+5. ✅ Identified failure patterns: Context Cutting (40%), Meleset Sedikit (30%), Multi-doc (20%)
+6. ✅ Updated PROGRESS.md and PHASE_8_ROADMAP.md
 
 **Immediate (Next):**
-4. ⏳ Manual inspection of Exp6 results (identify top 5 failure patterns)
-5. ⏳ Download bge-m3 model (2.2GB, prepare for Phase 8B)
+7. ⏳ Download bge-m3 model (2.2GB, prepare for Phase 8B)
+8. ⏳ Setup configs for bge-m3 ablation study
 
 **Short-term (This Week):**
 6. Run bge-m3 ablation study (7 experiments across all configs)
@@ -574,5 +578,5 @@ Phase 8C (MarkdownSplitter):
 
 ---
 
-**Status:** Phase 8A complete ✅ | Manual inspection pending ⏳
-**Next task:** Manual inspection OR download bge-m3 for Phase 8B
+**Status:** Phase 8A complete ✅ | Ready for Phase 8B
+**Next task:** Download bge-m3 model and begin embedding ablation study

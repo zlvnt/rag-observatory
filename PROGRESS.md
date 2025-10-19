@@ -36,10 +36,13 @@ Optimize RAG retrieval configuration for e-commerce domain through systematic ab
 
 ## 🔬 Current Phase: Phase 8 - Advanced Optimization
 
-### Phase 8A: Qualitative Analysis ✅ (Oct 19)
+### Phase 8A: Qualitative Analysis ✅ COMPLETE (Oct 19)
 - ✅ Created `qualitative_analysis_exp6.csv` with retrieved text inspection
 - ✅ Generated script: `scripts/create_qualitative_csv.py`
-- ⏳ Manual inspection pending (identify failure patterns)
+- ✅ Manual inspection complete (sampled queries with notes)
+- ✅ Identified top 5 failure patterns
+- ✅ Root cause analysis: Splitter (70%) + Embedding (60%) + Chunk size (40%)
+- ✅ Summary documented: `PHASE_8A_SUMMARY.md`
 
 ### Phase 8B: Embedding Model Ablation (Planned)
 - ⏳ Download bge-m3 model (BAAI/bge-m3, 2.2GB)
@@ -230,6 +233,7 @@ relevance_threshold: 0.3
 - `experiment_by_category.csv` - Performance by category (returns, payment, etc.)
 - `all_experiments_overview.csv` - Complete overview with rankings
 - `qualitative_analysis_exp6.csv` - ⭐ Phase 8A: Retrieved text inspection
+- `PHASE_8A_SUMMARY.md` - ⭐ Phase 8A: Complete analysis & findings
 
 ---
 
@@ -257,6 +261,7 @@ relevance_threshold: 0.3
 
 ---
 
-**Status:** Phase 8A complete ✅ | Manual inspection pending ⏳
+**Status:** Phase 8A complete ✅ | Ready for Phase 8B (bge-m3 ablation)
 **Current Best:** Exp6 (k=3, precision 0.783, recall 0.917, F1 0.795)
 **Target Gap:** +2.2% precision to reach 0.80 target
+**Root Causes Identified:** Splitter (70%), Embedding (60%), Chunk size (40%)
