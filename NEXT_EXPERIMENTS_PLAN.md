@@ -353,26 +353,6 @@ llm_model: gemini-flash (for query rewriting)
 
 ---
 
-## 💭 Decision Points
-
-### After Exp8 (Reranker):
-- **If precision ≥ 0.80:** ✅ Target achieved! Consider production deployment
-- **If precision < 0.80:** Continue to Exp10 (better embedding)
-
-### After Exp10 (bge-m3):
-- **If precision ≥ 0.82:** ✅ Excellent! Combine with reranker (Exp11)
-- **If precision < 0.75:** Consider different approach (domain fine-tuning)
-
-### K Parameter:
-- ✅ **Locked at k=3** (Exp6 proven optimal)
-- ❌ No need to re-test k variations
-
-### Chunk Size/Overlap:
-- ✅ **Keep chunk=500, overlap=50** (proven efficient)
-- ⚠️ Only adjust after **manual text inspection** shows context issues
-
----
-
 ## 🔬 Manual Inspection Plan (Before Chunk Tuning)
 
 **Before adjusting chunk size/overlap, do this:**
