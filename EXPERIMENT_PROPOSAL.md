@@ -26,15 +26,6 @@
 - **MPNet is better than MiniLM** - But never tested with optimal k=4
 - **Hypothesis:** MPNet + k=4 + chunk=500 could achieve **precision 0.75-0.80**
 
-**Run commands:**
-```bash
-# Already completed
-python runners/test_runner.py --domain z3_agent_exp1 --output results/exp1/
-python runners/test_runner.py --domain z3_agent_exp2 --output results/exp2/
-python runners/test_runner.py --domain z3_agent_exp3 --output results/exp3/
-python runners/test_runner.py --domain z3_agent_exp4 --output results/exp4/
-```
-
 ---
 
 ## Phase 2: Refined Experiments (Based on Phase 1 Insights) ⏱️ ~20 min
