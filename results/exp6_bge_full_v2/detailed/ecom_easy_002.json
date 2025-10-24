@@ -1,0 +1,47 @@
+{
+  "test_id": "ecom_easy_002",
+  "query": "Berapa lama batas waktu return untuk produk elektronik?",
+  "category": "returns",
+  "difficulty": "easy",
+  "expected_docs": [
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-24T14:18:21.534564",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "embedding_type": "bge_m3_multifunctional",
+    "vector_store": "BGE-M3 Custom",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3,
+    "dense_weight": 0.7,
+    "sparse_weight": 0.2,
+    "colbert_weight": 0.1
+  },
+  "retrieval_trace": {
+    "unique_docs": [
+      "policy_returns.md",
+      "product_faq.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 2,
+    "context_length_chars": 1358,
+    "context_tokens_approx": 339,
+    "retrieved_context_preview": "### Produk yang TIDAK BISA di-return:\n- Produk digital (voucher, software, top-up)\n- Makanan, minuman, dan produk kadaluarsa\n- Produk custom/made-by-order\n- Produk yang sudah dibuka segel khusus\n- Underwear dan produk kesehatan personal\n- Produk dengan tag \"No Return\" yang jelas\n\n### Batas waktu pengajuan return:\n- **Elektronik**: 7 hari sejak diterima\n- **Fashion**: 3 hari sejak diterima\n- **Lainnya**: 2 hari sejak diterima\n- **Garansi toko**: Sesuai ketentuan masing-masing toko\n\n[Docs]\n\n### Q:...",
+    "latency_ms": 87.4
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [
+      "product_faq.md"
+    ],
+    "false_negatives": []
+  }
+}

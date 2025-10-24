@@ -1,0 +1,44 @@
+{
+  "test_id": "ecom_easy_009",
+  "query": "Paket sudah 10 hari belum sampai, harus gimana?",
+  "category": "shipping",
+  "difficulty": "easy",
+  "expected_docs": [
+    "troubleshooting_guide.md"
+  ],
+  "timestamp": "2025-10-24T14:02:55.322058",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "embedding_type": "bge_m3_multifunctional",
+    "vector_store": "BGE-M3 Custom",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3,
+    "dense_weight": 0.4,
+    "sparse_weight": 0.3,
+    "colbert_weight": 0.3
+  },
+  "retrieval_trace": {
+    "unique_docs": [
+      "troubleshooting_guide.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 1,
+    "context_length_chars": 1301,
+    "context_tokens_approx": 325,
+    "retrieved_context_preview": "**Solusi:**\n1. Pastikan nominal transfer tepat hingga digit terakhir\n2. Tunggu 10-30 menit untuk proses verifikasi\n3. Upload bukti transfer di halaman pesanan\n4. Pastikan transfer ke VA yang benar (cek nomor VA)\n\n## Masalah Pengiriman\n\n### Paket tidak kunjung diterima\n**Timeline pengecekan:**\n- H+1: Cek nomor resi di kurir\n- H+3: Hubungi penjual\n- H+7: Ajukan komplain di sistem\n- H+10: Eskalasi ke CS TokoPedia\n\n[Docs]\n\n**Yang perlu disiapkan:**\n- Screenshot tracking terakhir\n- Foto penerima jika...",
+    "latency_ms": 45.31
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

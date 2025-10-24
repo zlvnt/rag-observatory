@@ -1,0 +1,44 @@
+{
+  "test_id": "ecom_medium_007",
+  "query": "Response time CS berapa lama untuk kasus yang high priority?",
+  "category": "contact",
+  "difficulty": "medium",
+  "expected_docs": [
+    "contact_escalation.md"
+  ],
+  "timestamp": "2025-10-24T14:18:22.717868",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "embedding_type": "bge_m3_multifunctional",
+    "vector_store": "BGE-M3 Custom",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3,
+    "dense_weight": 0.7,
+    "sparse_weight": 0.2,
+    "colbert_weight": 0.1
+  },
+  "retrieval_trace": {
+    "unique_docs": [
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 1,
+    "context_length_chars": 1161,
+    "context_tokens_approx": 290,
+    "retrieved_context_preview": "### Kategori LOW (Response <48 jam):\n- Saran & feedback\n- Pertanyaan umum\n- Request fitur\n- Report bug minor\n\n## Tips Efektif Kontak CS\n\n### Persiapkan sebelum kontak:\n1. **Order ID** atau nomor transaksi\n2. **Screenshot/foto** bukti masalah\n3. **Kronologi** singkat dan jelas\n4. **Solusi yang diinginkan**\n\n[Docs]\n\n## Prioritas & SLA\n\n### Kategori URGENT (Response <2 jam):\n- Akun di-hack dengan kerugian aktif\n- Transaksi fraud in-progress\n- Data pribadi tersebar\n- Ancaman keselamatan\n\n### Kategor...",
+    "latency_ms": 73.22
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "contact_escalation.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

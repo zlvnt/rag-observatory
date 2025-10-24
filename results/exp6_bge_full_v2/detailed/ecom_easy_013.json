@@ -1,0 +1,44 @@
+{
+  "test_id": "ecom_easy_013",
+  "query": "Aplikasi sering crash, solusinya apa?",
+  "category": "technical",
+  "difficulty": "easy",
+  "expected_docs": [
+    "troubleshooting_guide.md"
+  ],
+  "timestamp": "2025-10-24T14:18:22.128340",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "embedding_type": "bge_m3_multifunctional",
+    "vector_store": "BGE-M3 Custom",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3,
+    "dense_weight": 0.7,
+    "sparse_weight": 0.2,
+    "colbert_weight": 0.1
+  },
+  "retrieval_trace": {
+    "unique_docs": [
+      "troubleshooting_guide.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 1,
+    "context_length_chars": 1384,
+    "context_tokens_approx": 346,
+    "retrieved_context_preview": "## Masalah Teknis Aplikasi\n\n### Aplikasi sering crash/force close\n**Troubleshooting:**\n1. Update ke versi terbaru\n2. Clear cache aplikasi\n3. Restart device\n4. Reinstall aplikasi\n5. Cek storage tersisa (minimal 1GB)\n\n### Gambar/halaman tidak loading\n**Cek list:**\n- Koneksi internet stabil (min 3G)\n- Matikan VPN/Proxy\n- Ganti DNS ke 8.8.8.8\n- Coba browser/device lain\n- Clear cookies dan cache browser\n\n[Docs]\n\n**Proses komplain:**\n- Ajukan dalam 2x24 jam setelah terima\n- Pilih alasan \"Produk tidak ...",
+    "latency_ms": 52.84
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "test_id": "ecom_easy_008",
+  "query": "Sudah bayar tapi status masih menunggu pembayaran, kenapa?",
+  "category": "payment",
+  "difficulty": "easy",
+  "expected_docs": [
+    "troubleshooting_guide.md"
+  ],
+  "timestamp": "2025-10-24T14:18:21.868290",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "embedding_type": "bge_m3_multifunctional",
+    "vector_store": "BGE-M3 Custom",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3,
+    "dense_weight": 0.7,
+    "sparse_weight": 0.2,
+    "colbert_weight": 0.1
+  },
+  "retrieval_trace": {
+    "unique_docs": [
+      "troubleshooting_guide.md",
+      "product_faq.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 2,
+    "context_length_chars": 1302,
+    "context_tokens_approx": 325,
+    "retrieved_context_preview": "## Masalah Pembayaran\n\n### Pembayaran gagal tapi saldo terpotong\n**Gejala:** Notifikasi gagal tapi uang sudah terpotong dari rekening\n\n**Solusi:**\n1. **Jangan bayar ulang!**\n2. Cek status pesanan dalam 1x24 jam\n3. Saldo akan auto-refund dalam 3-7 hari kerja\n4. Jika >7 hari, kirim bukti mutasi rekening ke CS\n\n### Virtual Account tidak terdeteksi\n**Gejala:** Sudah transfer tapi status masih \"Menunggu Pembayaran\"\n\n[Docs]\n\n**Solusi:**\n1. Pastikan nominal transfer tepat hingga digit terakhir\n2. Tungg...",
+    "latency_ms": 71.42
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_positives": [
+      "product_faq.md"
+    ],
+    "false_negatives": []
+  }
+}

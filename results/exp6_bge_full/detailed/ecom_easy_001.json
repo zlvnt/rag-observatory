@@ -1,0 +1,44 @@
+{
+  "test_id": "ecom_easy_001",
+  "query": "Bagaimana cara return barang yang rusak?",
+  "category": "returns",
+  "difficulty": "easy",
+  "expected_docs": [
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-24T14:02:54.050433",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "embedding_type": "bge_m3_multifunctional",
+    "vector_store": "BGE-M3 Custom",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3,
+    "dense_weight": 0.4,
+    "sparse_weight": 0.3,
+    "colbert_weight": 0.3
+  },
+  "retrieval_trace": {
+    "unique_docs": [
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 1,
+    "context_length_chars": 1095,
+    "context_tokens_approx": 273,
+    "retrieved_context_preview": "### Q: Refund partial itu bagaimana? \n**A:** Contoh: Beli 5 item, 1 rusak. Bisa refund hanya untuk 1 item tersebut tanpa return semua.\n\n---\n*Catatan Penting:*\n- Screenshot semua komunikasi dengan penjual\n- Simpan packaging original hingga transaksi selesai\n- Video unboxing sangat membantu klaim\n- Baca deskripsi produk teliti sebelum beli\n\n*Hotline Return/Refund: 1500-600 ext 2*\n\n[Docs]\n\n# Kebijakan Return & Refund - TokoPedia\n\n## Ketentuan Umum Return\n\n### Produk yang BISA di-return:\n- Produk ru...",
+    "latency_ms": 842.72
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

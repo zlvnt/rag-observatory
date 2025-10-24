@@ -1,0 +1,70 @@
+============================================================
+BGE-M3 MULTI-FUNCTIONAL RETRIEVAL EVALUATION REPORT
+============================================================
+
+Domain: z3_agent_exp6_bge_full
+Date: 2025-10-24 14:02:56
+Total Queries: 30
+
+------------------------------------------------------------
+RAG CONFIGURATION
+------------------------------------------------------------
+Chunk Size:         500
+Chunk Overlap:      50
+Embedding Model:    BAAI/bge-m3
+Embedding Type:     BGE-M3 Multi-Functional
+Vector Store:       Custom (Dense + Sparse + ColBERT)
+Retrieval K:        3
+Relevance Threshold: 0.3
+Hybrid Weights:     Dense=0.4, Sparse=0.3, ColBERT=0.3
+
+------------------------------------------------------------
+RETRIEVAL METRICS
+------------------------------------------------------------
+Avg Precision@3:   0.639
+Avg Recall@3:      0.850
+Avg F1 Score:      0.674
+Mean Reciprocal Rank: 0.878
+Success Rate:      93.3%
+
+Avg Chunks/Query:  3.0
+Avg Tokens/Query:  323
+
+Latency (avg):     85ms
+Latency (P50):     53ms
+Latency (P95):     92ms
+Latency (P99):     843ms
+
+Status: Precision ⚠ | Recall ⚠ | F1 ⚠
+
+------------------------------------------------------------
+BY DIFFICULTY
+------------------------------------------------------------
+Easy (19 queries):
+  Precision: 0.561 | Recall: 0.895 | F1: 0.649 | MRR: 0.842
+Medium (9 queries):
+  Precision: 0.722 | Recall: 0.778 | F1: 0.689 | MRR: 0.926
+Hard (2 queries):
+  Precision: 1.000 | Recall: 0.750 | F1: 0.834 | MRR: 1.000
+
+------------------------------------------------------------
+BY CATEGORY
+------------------------------------------------------------
+Returns (11 queries):
+  Precision: 0.682 | Recall: 0.727 | F1: 0.667
+Contact (6 queries):
+  Precision: 0.639 | Recall: 1.000 | F1: 0.750
+Account (2 queries):
+  Precision: 0.584 | Recall: 1.000 | F1: 0.734
+Payment (4 queries):
+  Precision: 0.583 | Recall: 0.875 | F1: 0.625
+Shipping (2 queries):
+  Precision: 1.000 | Recall: 0.750 | F1: 0.834
+Product (3 queries):
+  Precision: 0.444 | Recall: 0.833 | F1: 0.578
+Technical (1 queries):
+  Precision: 1.000 | Recall: 1.000 | F1: 1.000
+Out_of_scope (1 queries):
+  Precision: 0.000 | Recall: 1.000 | F1: 0.000
+
+============================================================

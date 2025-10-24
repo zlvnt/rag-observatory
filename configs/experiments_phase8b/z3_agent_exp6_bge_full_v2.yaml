@@ -1,0 +1,23 @@
+domain_name: z3_agent_exp6_bge_full_v2
+
+knowledge_base_dir: docs/
+vector_store_dir: data/vector_stores/z3_agent_exp6_bge_full_v2/
+golden_dataset: golden_datasets/z3_agent_tests.json
+
+personality_config_path: content/reply_config1.json
+supervisor_prompt_path: content/supervisor-prompt.txt
+
+embedding_model: BAAI/bge-m3
+embedding_type: bge_m3_multifunctional
+
+llm_model: gemini-2.0-flash
+llm_temperature: 0.7
+
+relevance_threshold: 0.3
+chunk_size: 500
+chunk_overlap: 50
+retrieval_k: 3
+
+dense_weight: 0.7
+sparse_weight: 0.2
+colbert_weight: 0.1

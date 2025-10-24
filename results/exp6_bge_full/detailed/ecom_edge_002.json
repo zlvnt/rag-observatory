@@ -1,0 +1,44 @@
+{
+  "test_id": "ecom_edge_002",
+  "query": "cs ny gmn kontk ny",
+  "category": "contact",
+  "difficulty": "easy",
+  "expected_docs": [
+    "contact_escalation.md"
+  ],
+  "timestamp": "2025-10-24T14:02:56.429660",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "embedding_type": "bge_m3_multifunctional",
+    "vector_store": "BGE-M3 Custom",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3,
+    "dense_weight": 0.4,
+    "sparse_weight": 0.3,
+    "colbert_weight": 0.3
+  },
+  "retrieval_trace": {
+    "unique_docs": [
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 1,
+    "context_length_chars": 1213,
+    "context_tokens_approx": 303,
+    "retrieved_context_preview": "### Call Center\n- **Nomor**: 1500-600\n- **Jam**: 24/7\n- **Panduan IVR**:\n  - Tekan 1: Masalah Pesanan\n  - Tekan 2: Pembayaran & Refund\n  - Tekan 3: Akun & Keamanan\n  - Tekan 4: Lainnya\n  - Tekan 0: Langsung ke agent\n\n### Email Support\n- **Regular**: cs@tokopedia.com\n- **Priority**: priority-cs@tokopedia.com (member Gold+)\n- **Response time**: \n  - Regular: 2x24 jam\n  - Priority: 1x24 jam\n\n[Docs]\n\n### Kategori LOW (Response <48 jam):\n- Saran & feedback\n- Pertanyaan umum\n- Request fitur\n- Report b...",
+    "latency_ms": 41.97
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "contact_escalation.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

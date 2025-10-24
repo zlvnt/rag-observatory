@@ -1,0 +1,47 @@
+{
+  "test_id": "ecom_easy_006",
+  "query": "Jam operasional live chat TokoPedia?",
+  "category": "contact",
+  "difficulty": "easy",
+  "expected_docs": [
+    "contact_escalation.md"
+  ],
+  "timestamp": "2025-10-24T14:02:55.145846",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "embedding_type": "bge_m3_multifunctional",
+    "vector_store": "BGE-M3 Custom",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3,
+    "dense_weight": 0.4,
+    "sparse_weight": 0.3,
+    "colbert_weight": 0.3
+  },
+  "retrieval_trace": {
+    "unique_docs": [
+      "contact_escalation.md",
+      "product_faq.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 2,
+    "context_length_chars": 1063,
+    "context_tokens_approx": 265,
+    "retrieved_context_preview": "# Prosedur Kontak & Eskalasi - TokoPedia Customer Service\n\n## Level 1: Self-Service\n\n### Help Center Online\n- **URL**: help.tokopedia.com\n- **Tersedia**: 24/7\n- **Gunakan untuk**: FAQ, tutorial, kebijakan umum\n\n### Chatbot TOKI\n- **Akses**: Icon chat di app/website\n- **Respon**: Instant\n- **Capabilities**:\n  - Cek status pesanan\n  - Info resi\n  - FAQ automation\n  - Redirect ke agent jika perlu\n\n[Docs]\n\n### Community Forum\n- **URL**: community.tokopedia.com\n- **Best for**: Tips, diskusi, sharing ...",
+    "latency_ms": 49.03
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "contact_escalation.md"
+    ],
+    "false_positives": [
+      "product_faq.md"
+    ],
+    "false_negatives": []
+  }
+}

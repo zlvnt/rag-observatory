@@ -1,0 +1,47 @@
+{
+  "test_id": "ecom_hard_002",
+  "query": "Saya sudah eskalasi masalah ke CS biasa tapi tidak ada solusi setelah 5 hari. Penjual tetap tidak mau proses refund padahal barang tidak dikirim. Langkah terakhir saya apa? Apakah bisa langsung ke tim legal atau ada jalur lain?",
+  "category": "contact",
+  "difficulty": "hard",
+  "expected_docs": [
+    "contact_escalation.md",
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-24T14:02:56.300448",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "embedding_type": "bge_m3_multifunctional",
+    "vector_store": "BGE-M3 Custom",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3,
+    "dense_weight": 0.4,
+    "sparse_weight": 0.3,
+    "colbert_weight": 0.3
+  },
+  "retrieval_trace": {
+    "unique_docs": [
+      "policy_returns.md",
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 2,
+    "context_length_chars": 1402,
+    "context_tokens_approx": 350,
+    "retrieved_context_preview": "## Prosedur Return\n\n### Step 1: Ajukan Return\n1. Buka \"Pesanan Saya\" → pilih transaksi\n2. Klik \"Ajukan Return/Refund\"\n3. Pilih alasan return dari dropdown\n4. Upload bukti (foto/video) minimal 3 gambar\n5. Tulis deskripsi masalah detail\n\n### Step 2: Persetujuan Penjual\n- Penjual punya 2x24 jam untuk respond\n- Jika tidak respond → otomatis disetujui\n- Jika ditolak → bisa ajukan banding ke TokoPedia\n\n[Docs]\n\n### Tim Mediasi Sengketa\n**Aktivasi ketika:**\n- Dispute buyer-seller > 7 hari\n- Klaim garans...",
+    "latency_ms": 85.86
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md",
+      "contact_escalation.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}
