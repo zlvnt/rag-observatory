@@ -267,8 +267,11 @@ def save_summary_csv(results: List[Dict[str, Any]], output_dir: Path, timestamp:
 def generate_report(results: List[Dict[str, Any]], config: Dict[str, Any], output_dir: Path, timestamp: str):
     overall = aggregate_metrics(results)
 
-    by_difficulty = group_by_category(results, "difficulty")
-    by_category = group_by_category(results, "category")
+    by_difficulty_grouped = group_by_category(results, "difficulty")
+    by_difficulty = {k: aggregate_metrics(v) for k, v in by_difficulty_grouped.items()}
+
+    by_category_grouped = group_by_category(results, "category")
+    by_category = {k: aggregate_metrics(v) for k, v in by_category_grouped.items()}
 
     latencies = [r["retrieval_trace"]["latency_ms"] for r in results]
     tokens = [r["retrieval_trace"]["context_tokens_approx"] for r in results]
@@ -322,18 +325,18 @@ def generate_report(results: List[Dict[str, Any]], config: Dict[str, Any], outpu
         f.write("BY DIFFICULTY\n")
         f.write("-" * 60 + "\n")
         for difficulty, metrics in by_difficulty.items():
-            f.write(f"{difficulty.capitalize()} ({metrics['count']} queries):\n")
-            f.write(f"  Precision: {metrics['precision']:.3f} | Recall: {metrics['recall']:.3f} | ")
-            f.write(f"F1: {metrics['f1']:.3f} | MRR: {metrics['mrr']:.3f}\n")
+            f.write(f"{difficulty.capitalize()} ({metrics['total_queries']} queries):\n")
+            f.write(f"  Precision: {metrics['avg_precision']:.3f} | Recall: {metrics['avg_recall']:.3f} | ")
+            f.write(f"F1: {metrics['avg_f1']:.3f} | MRR: {metrics['mrr']:.3f}\n")
         f.write("\n")
 
         f.write("-" * 60 + "\n")
         f.write("BY CATEGORY\n")
         f.write("-" * 60 + "\n")
         for category, metrics in by_category.items():
-            f.write(f"{category.capitalize()} ({metrics['count']} queries):\n")
-            f.write(f"  Precision: {metrics['precision']:.3f} | Recall: {metrics['recall']:.3f} | ")
-            f.write(f"F1: {metrics['f1']:.3f}\n")
+            f.write(f"{category.capitalize()} ({metrics['total_queries']} queries):\n")
+            f.write(f"  Precision: {metrics['avg_precision']:.3f} | Recall: {metrics['avg_recall']:.3f} | ")
+            f.write(f"F1: {metrics['avg_f1']:.3f}\n")
 
         f.write("\n" + "=" * 60 + "\n")
 
