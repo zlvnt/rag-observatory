@@ -14,8 +14,8 @@ domain_name: z3_agent_exp5
 # Knowledge base (same as baseline)
 knowledge_base_dir: docs/
 
-# Vector store location (NEEDS REBUILD - different embedding model + chunk size)
-vector_store_dir: data/vector_stores/z3_agent_exp5/
+# Vector store location (shared with Exp6, Exp7 - same embedding + chunk config)
+vector_store_dir: data/vector_stores/mpnet_chunk500_overlap50/
 
 # Golden dataset for testing
 golden_dataset: golden_datasets/z3_agent_tests.json

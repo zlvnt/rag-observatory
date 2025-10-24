@@ -1,7 +1,7 @@
 # Phase 8 Roadmap - Qualitative Analysis & Advanced Ablation
 
-**Date:** 2025-10-17 (Updated: 2025-10-19)
-**Status:** Phase 8A complete ✅ | Phase 8B-8D planned
+**Date:** 2025-10-17 (Updated: 2025-10-24)
+**Status:** Phase 8A complete ✅ | Phase 8B in progress ⏳ | Phase 8C-8D planned
 
 ---
 
@@ -125,49 +125,86 @@ Pattern 3: Technical terms (OTP, pre-order) sometimes miss exact matches
 
 **Duration:** 3-4 hours (rebuild vector stores for all configs)
 
-#### Task 3: Select Embedding Model to Test
+#### Task 3: Select Embedding Model to Test ✅ COMPLETE
 
-**Recommended: bge-m3** (BAAI/bge-m3)
+**Selected: bge-m3** (BAAI/bge-m3)
 - Size: 2.2GB
-- Dimension: 1024
+- Dimension: 1024 (dense), + sparse, + ColBERT
 - Performance: SOTA multilingual, proven better than MPNet
 - Run local: ✅ Yes (CPU-friendly, ~30-40s per index build)
 
-**Alternative options:**
+**Alternative options considered:**
 - jina-embeddings-v2 (550MB, faster but less powerful)
 - e5-base-v2 (438MB, competitive with MPNet)
 - OpenAI text-embedding-3-small (API, commercial)
 
 **Why bge-m3:**
 - Best quality among local models
-- Hybrid dense+sparse retrieval capability
+- **Multi-functional retrieval:** dense + sparse + ColBERT (3-in-1)
 - Strong multilingual performance (important for Indonesian queries)
+
+**CRITICAL FINDING:**
+- ⚠️ Langchain's HuggingFaceEmbeddings only uses **dense retrieval** (33% of BGE-M3 capability)
+- ❌ Missing: sparse retrieval (lexical matching), ColBERT (token-level matching)
+- 📊 Initial test: BGE-M3 dense-only UNDERPERFORMED vs MPNet (Precision 0.772 vs 0.783)
+- ✅ Solution: Custom implementation using FlagEmbedding library for full multi-functional retrieval
+
+**Implementation approach:**
+- Use FlagEmbedding library (official BGE-M3 implementation from BAAI)
+- Build custom retriever class (BGEM3Retriever) with hybrid scoring
+- Bypass Langchain's VectorStore abstraction (limited to dense-only)
+- Implement weighted combination: 0.4 dense + 0.3 sparse + 0.3 ColBERT
+
+**Files created:**
+- `z3_core/bge_m3_retriever.py` - Custom BGEM3Retriever class
+- `z3_core/vector_bge_m3.py` - Wrapper functions for integration
+- `runners/test_runner_bge_m3.py` - Dedicated test runner
+- `scripts/test_bge_m3_retriever.py` - Verification test script
+- `configs/experiments_phase8b/z3_agent_exp6_bge_full.yaml` - Config for full multi-functional test
+
+**Testing status:**
+- ✅ Basic test passed (36 chunks, 3 embedding types stored)
+- ✅ Retrieval verified (hybrid scoring working correctly)
+- ✅ Example scores: dense=0.963, sparse=0.946, colbert=0.972, hybrid=0.961
+- ⏳ Full 30-query experiment pending
 
 ---
 
-#### Task 4: Re-run ALL 8 Experiment Configurations with New Embedding
+#### Task 4: Re-run ALL 8 Experiment Configurations with New Embedding ⏳ UPDATED APPROACH
 
-**Critical insight:** This is a **complete ablation study** to isolate embedding impact!
+**REVISED STRATEGY:** Focus on winner config first, then expand if needed
 
-**Experiments to run:**
-1. **Baseline_bge:** k=4, threshold=0.8, chunk=700, overlap=100, **bge-m3**
-2. **Exp1_bge:** k=4, threshold=0.3, chunk=700, overlap=100, **bge-m3**
-3. **Exp2_bge:** k=6, threshold=0.3, chunk=700, overlap=100, **bge-m3**
-4. **Exp3_bge:** k=6, threshold=0.3, chunk=500, overlap=50, **bge-m3**
-5. **Exp4_bge:** k=6, threshold=0.3, chunk=500, overlap=50, **bge-m3** (same as Exp3_bge - redundant)
-6. **Exp5_bge:** k=4, threshold=0.3, chunk=500, overlap=50, **bge-m3**
-7. **Exp6_bge:** k=3, threshold=0.3, chunk=500, overlap=50, **bge-m3**
-8. **Exp7_bge:** k=3, threshold=0.5, chunk=500, overlap=50, **bge-m3**
+**Phase 8B Initial Scope (Current):**
+- Focus: Test BGE-M3 multi-functional on **Exp6 only** (winner config)
+- Config: k=3, threshold=0.3, chunk=500, overlap=50
+- Goal: Validate if full BGE-M3 (dense+sparse+ColBERT) improves over MPNet
+- Compare 3 variants:
+  1. Exp6 (MPNet dense) - Baseline winner
+  2. Exp6_bge (BGE-M3 dense-only) - Already tested, underperformed
+  3. Exp6_bge_full (BGE-M3 multi-functional) - **⏳ Current focus**
 
-**Note:** Exp4 original was same config as Exp3 but with MPNet. With bge-m3, Exp3_bge = Exp4_bge (skip duplicate).
+**Rationale for focused approach:**
+- Exp6_bge (dense-only) showed BGE-M3 alone isn't enough (precision dropped to 0.772)
+- Need to validate full multi-functional approach before expanding to all 8 configs
+- If Exp6_bge_full succeeds → expand to all configs
+- If Exp6_bge_full fails → reconsider embedding choice before wasting 7 more experiments
 
-**Total:** 7 experiments (skip Exp4_bge duplicate)
+**Full ablation (if Exp6_bge_full succeeds):**
+1. **Baseline_bge_full:** k=4, threshold=0.8, chunk=700, overlap=100
+2. **Exp1_bge_full:** k=4, threshold=0.3, chunk=700, overlap=100
+3. **Exp2_bge_full:** k=6, threshold=0.3, chunk=700, overlap=100
+4. **Exp3_bge_full:** k=6, threshold=0.3, chunk=500, overlap=50
+5. **Exp5_bge_full:** k=4, threshold=0.3, chunk=500, overlap=50
+6. **Exp6_bge_full:** k=3, threshold=0.3, chunk=500, overlap=50 ⏳ **IN PROGRESS**
+7. **Exp7_bge_full:** k=3, threshold=0.5, chunk=500, overlap=50
+
+**Note:** Skip Exp4 (duplicate of Exp3 with different embedding)
 
 **Research questions:**
-- Does k=6 still fail with bge-m3? (test if embedding quality can overcome k problem)
-- Does k=3 remain optimal? (validate pattern consistency)
-- Does threshold still have no impact? (reconfirm finding)
-- What's the precision gain vs MPNet at same k? (quantify embedding impact)
+- Does multi-functional BGE-M3 outperform dense-only? (validate implementation value)
+- Does full BGE-M3 beat MPNet at same config? (quantify improvement)
+- What's the precision gain: MPNet (0.783) → BGE-M3 full (target: 0.83+)?
+- If successful, does k=3 remain optimal across all configs?
 
 ---
 
@@ -378,11 +415,16 @@ relevance_threshold: 0.3
 - ✅ Root cause diagnosis: Splitter (70%), Embedding (60%), Chunk size (40%)
 - ✅ Recommendations prioritized for Phase 8B-8C
 
-### Phase 8B Outputs: ⏳ PLANNED
-- ⏳ 7 new experiment results (Baseline_bge through Exp7_bge)
-- ⏳ `embedding_ablation_comparison.csv` (MPNet vs bge-m3 metrics)
-- ⏳ `qualitative_analysis_exp6_bge.csv` (text quality comparison)
-- ⏳ Updated `all_experiments_overview.csv` (now 15 rows total)
+### Phase 8B Outputs: ⏳ IN PROGRESS
+- ✅ `PHASE_8B_BGE_M3_DEBUG_REPORT.md` - Analysis of why dense-only BGE-M3 underperformed
+- ✅ `z3_core/bge_m3_retriever.py` - Custom BGEM3Retriever class implementation
+- ✅ `z3_core/vector_bge_m3.py` - Wrapper functions for BGE-M3 integration
+- ✅ `runners/test_runner_bge_m3.py` - Dedicated test runner for multi-functional retrieval
+- ✅ `configs/experiments_phase8b/z3_agent_exp6_bge_full.yaml` - Config for full test
+- ⏳ Exp6_bge_full results (30-query experiment pending)
+- ⏳ `qualitative_analysis_exp6_bge_full.csv` (text quality comparison)
+- ⏳ `embedding_comparison_exp6.csv` (MPNet vs BGE-M3 dense vs BGE-M3 full)
+- ⏳ Decision: Expand to all 7 configs or adjust approach
 
 ### Phase 8C Outputs: ⏳ PLANNED
 - ⏳ 2-3 splitter experiments
@@ -553,7 +595,7 @@ Phase 8C (MarkdownSplitter):
 
 ## 🚀 Next Actions
 
-**Completed (2025-10-19):**
+**Completed (Phase 8A - 2025-10-19):**
 1. ✅ Created `qualitative_analysis_exp6.csv` with retrieved text
 2. ✅ Generated reusable script `scripts/create_qualitative_csv.py`
 3. ✅ Manual inspection complete (sampled queries with detailed notes)
@@ -561,22 +603,32 @@ Phase 8C (MarkdownSplitter):
 5. ✅ Identified failure patterns: Context Cutting (40%), Meleset Sedikit (30%), Multi-doc (20%)
 6. ✅ Updated PROGRESS.md and PHASE_8_ROADMAP.md
 
+**Completed (Phase 8B - 2025-10-24):**
+7. ✅ Downloaded bge-m3 model (2.2GB) and installed FlagEmbedding library
+8. ✅ Tested BGE-M3 dense-only with Langchain → Found underperformance issue
+9. ✅ Created `PHASE_8B_BGE_M3_DEBUG_REPORT.md` documenting Langchain limitation
+10. ✅ Implemented custom BGEM3Retriever class with full multi-functional retrieval
+11. ✅ Created dedicated test runner (`test_runner_bge_m3.py`)
+12. ✅ Verified basic functionality (test script passed)
+13. ✅ Setup config for Exp6_bge_full
+
 **Immediate (Next):**
-7. ⏳ Download bge-m3 model (2.2GB, prepare for Phase 8B)
-8. ⏳ Setup configs for bge-m3 ablation study
+14. ⏳ Run full 30-query experiment with BGE-M3 multi-functional (Exp6_bge_full)
+15. ⏳ Generate qualitative CSV for Exp6_bge_full
+16. ⏳ Compare 3 variants: MPNet vs BGE-M3 dense vs BGE-M3 full
 
 **Short-term (This Week):**
-6. Run bge-m3 ablation study (7 experiments across all configs)
-7. Compare MPNet vs bge-m3 metrics & text quality
-8. Run splitter experiments (if bge-m3 proves worthy)
+17. Decide: Expand to all 7 configs or adjust approach based on Exp6_bge_full results
+18. If successful, run full ablation study (7 configs with BGE-M3 multi-functional)
+19. Create comprehensive comparison table
 
 **Medium-term (Next Week):**
-9. Create final production config v2
-10. Document all findings
-11. Update EXPERIMENT_RESULTS_ANALYSIS.md with Phase 8 results
-12. Prepare for advanced techniques (reranker, MMR, hybrid search - if needed)
+20. Run splitter experiments (if bge-m3 proves worthy)
+21. Create final production config v2
+22. Update EXPERIMENT_RESULTS_ANALYSIS.md with Phase 8 results
+23. Prepare for advanced techniques (reranker, MMR, hybrid search - if needed)
 
 ---
 
-**Status:** Phase 8A complete ✅ | Ready for Phase 8B
-**Next task:** Download bge-m3 model and begin embedding ablation study
+**Status:** Phase 8A complete ✅ | Phase 8B in progress ⏳ (BGE-M3 multi-functional implemented, pending full experiment)
+**Next task:** Run full 30-query experiment with Exp6_bge_full and analyze results
