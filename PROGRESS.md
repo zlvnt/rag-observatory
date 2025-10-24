@@ -1,7 +1,7 @@
 # RAG Observatory - Progress Report
 
-**Last Updated:** 2025-10-19
-**Status:** 🔬 Phase 8 in progress | Qualitative Analysis + Advanced Optimization
+**Last Updated:** 2025-10-24
+**Status:** 🔬 Phase 8C ready | Splitter Optimization (Phase 8A-8B complete)
 
 ---
 
@@ -44,16 +44,27 @@ Optimize RAG retrieval configuration for e-commerce domain through systematic ab
 - ✅ Root cause analysis: Splitter (70%) + Embedding (60%) + Chunk size (40%)
 - ✅ Summary documented: `PHASE_8A_SUMMARY.md`
 
-### Phase 8B: Embedding Model Ablation (Planned)
-- ⏳ Download bge-m3 model (BAAI/bge-m3, 2.2GB)
-- ⏳ Re-run ALL 8 experiment configs with bge-m3
-- ⏳ Compare MPNet vs bge-m3 side-by-side
-- ⏳ Create `qualitative_analysis_exp6_bge.csv`
+### Phase 8B: Embedding Model Ablation ✅ COMPLETE (Oct 24)
+- ✅ Downloaded bge-m3 model (BAAI/bge-m3, 2.2GB)
+- ✅ Tested BGE-M3 dense-only (Exp6_bge): Precision 0.772 (-1.4% vs MPNet)
+- ✅ Implemented custom multi-functional retriever (dense+sparse+ColBERT)
+- ✅ Tested BGE-M3 multi-functional v1: Precision 0.639 (-14.4% vs MPNet) ❌
+- ✅ Tuned hybrid weights v2 (0.7/0.2/0.1): Precision 0.672 (-11.1% vs MPNet) ❌
+- ✅ **Conclusion: MPNet remains optimal embedding** (all BGE-M3 variants underperformed)
+- ✅ Summary documented: `PHASE_8B_SUMMARY.md`
+- ✅ Debug report created: `PHASE_8B_BGE_M3_DEBUG_REPORT.md`
 
-### Phase 8C: Splitter Ablation (Planned)
+**Key Findings:**
+- ❌ BGE-M3 multi-functional added noise instead of improving quality
+- ❌ Sparse + ColBERT retrieval caused keyword confusion and over-matching
+- ✅ MPNet proven best for Indonesian e-commerce domain (0.783 precision)
+- ✅ Embedding optimization exhausted - move to splitter (bigger lever)
+
+### Phase 8C: Splitter Ablation ⏳ NEXT
 - ⏳ Test MarkdownHeaderTextSplitter
 - ⏳ Compare with RecursiveCharacterTextSplitter
-- ⏳ Re-run optimal config with new splitter
+- ⏳ Re-run Exp6 config (MPNet, k=3) with new splitter
+- ⏳ Target: Precision 0.82-0.85 (+3-5% expected gain)
 
 ### Phase 8D: Final Optimal Configuration (Planned)
 - ⏳ Combine best embedding + best splitter + optimal k
@@ -261,7 +272,8 @@ relevance_threshold: 0.3
 
 ---
 
-**Status:** Phase 8A complete ✅ | Ready for Phase 8B (bge-m3 ablation)
-**Current Best:** Exp6 (k=3, precision 0.783, recall 0.917, F1 0.795)
+**Status:** Phase 8A-8B complete ✅ | Ready for Phase 8C (splitter optimization)
+**Current Best:** Exp6 with MPNet (k=3, precision 0.783, recall 0.917, F1 0.795)
 **Target Gap:** +2.2% precision to reach 0.80 target
-**Root Causes Identified:** Splitter (70%), Embedding (60%), Chunk size (40%)
+**Root Causes Identified:** Splitter (70% impact), Embedding (60% - optimized ✅), Chunk size (40%)
+**Next Focus:** MarkdownHeaderTextSplitter (expected +3-5% precision gain)

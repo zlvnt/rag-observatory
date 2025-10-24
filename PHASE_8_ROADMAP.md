@@ -1,7 +1,7 @@
 # Phase 8 Roadmap - Qualitative Analysis & Advanced Ablation
 
 **Date:** 2025-10-17 (Updated: 2025-10-24)
-**Status:** Phase 8A complete ✅ | Phase 8B in progress ⏳ | Phase 8C-8D planned
+**Status:** Phase 8A-8B complete ✅ | Phase 8C ready ⏳ | Phase 8D planned
 
 ---
 
@@ -415,16 +415,19 @@ relevance_threshold: 0.3
 - ✅ Root cause diagnosis: Splitter (70%), Embedding (60%), Chunk size (40%)
 - ✅ Recommendations prioritized for Phase 8B-8C
 
-### Phase 8B Outputs: ⏳ IN PROGRESS
+### Phase 8B Outputs: ✅ COMPLETE
+- ✅ `PHASE_8B_SUMMARY.md` - Complete Phase 8B documentation (7,500+ words)
 - ✅ `PHASE_8B_BGE_M3_DEBUG_REPORT.md` - Analysis of why dense-only BGE-M3 underperformed
-- ✅ `z3_core/bge_m3_retriever.py` - Custom BGEM3Retriever class implementation
-- ✅ `z3_core/vector_bge_m3.py` - Wrapper functions for BGE-M3 integration
-- ✅ `runners/test_runner_bge_m3.py` - Dedicated test runner for multi-functional retrieval
-- ✅ `configs/experiments_phase8b/z3_agent_exp6_bge_full.yaml` - Config for full test
-- ⏳ Exp6_bge_full results (30-query experiment pending)
-- ⏳ `qualitative_analysis_exp6_bge_full.csv` (text quality comparison)
-- ⏳ `embedding_comparison_exp6.csv` (MPNet vs BGE-M3 dense vs BGE-M3 full)
-- ⏳ Decision: Expand to all 7 configs or adjust approach
+- ✅ `z3_core/bge_m3_retriever.py` - Custom BGEM3Retriever class implementation (350 lines)
+- ✅ `z3_core/vector_bge_m3.py` - Wrapper functions for BGE-M3 integration (100 lines)
+- ✅ `runners/test_runner_bge_m3.py` - Dedicated test runner for multi-functional retrieval (415 lines)
+- ✅ `configs/experiments_phase8b/z3_agent_exp6_bge.yaml` - Dense-only config
+- ✅ `configs/experiments_phase8b/z3_agent_exp6_bge_full.yaml` - Multi-functional v1 config
+- ✅ `configs/experiments_phase8b/z3_agent_exp6_bge_full_v2.yaml` - Multi-functional v2 tuned config
+- ✅ `results/exp6_bge/` - Dense-only experiment results
+- ✅ `results/exp6_bge_full/` - Multi-functional v1 results (weights 0.4/0.3/0.3)
+- ✅ `results/exp6_bge_full_v2/` - Multi-functional v2 results (weights 0.7/0.2/0.1)
+- ✅ **Decision: ABANDON BGE-M3, keep MPNet** (all variants underperformed)
 
 ### Phase 8C Outputs: ⏳ PLANNED
 - ⏳ 2-3 splitter experiments
@@ -630,5 +633,5 @@ Phase 8C (MarkdownSplitter):
 
 ---
 
-**Status:** Phase 8A complete ✅ | Phase 8B in progress ⏳ (BGE-M3 multi-functional implemented, pending full experiment)
-**Next task:** Run full 30-query experiment with Exp6_bge_full and analyze results
+**Status:** Phase 8A-8B complete ✅ | Phase 8C ready ⏳ (Embedding optimization exhausted, moving to splitter)
+**Next task:** Implement MarkdownHeaderTextSplitter and test with Exp6 config (MPNet, k=3)
