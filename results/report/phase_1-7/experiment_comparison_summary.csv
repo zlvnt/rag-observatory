@@ -1,0 +1,9 @@
+experiment,k,threshold,chunk_size,chunk_overlap,embedding_model,precision,recall,f1_score,mrr,tokens_per_query,chunks_per_query,latency_avg_ms,status
+Baseline,4,0.8,700,100,MiniLM-L12,0.706,0.950,0.752,0.872,583,3.9,21,Reference
+Exp1,4,0.3,700,100,MiniLM-L12,0.706,0.950,0.752,0.872,382,2.5,19,No change
+Exp2,6,0.3,700,100,MiniLM-L12,0.539,0.967,0.652,0.872,513,3.4,20,k=6 failed
+Exp3,6,0.3,500,50,MiniLM-L12,0.589,0.950,0.680,0.861,369,3.4,11,Still low
+Exp4,6,0.3,500,50,MPNet-v2,0.639,0.950,0.725,0.950,352,3.2,29,k=6 bottleneck
+Exp5,4,0.3,500,50,MPNet-v2,0.761,0.950,0.798,0.950,248,2.3,28,Best balanced
+Exp6,3,0.3,500,50,MPNet-v2,0.783,0.917,0.795,0.950,211,2.0,55,Best precision (WINNER)
+Exp7,3,0.5,500,50,MPNet-v2,0.783,0.917,0.795,0.950,269,2.5,58,Same as Exp6

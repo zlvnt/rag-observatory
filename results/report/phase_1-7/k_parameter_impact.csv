@@ -1,0 +1,4 @@
+k_value,experiment,embedding,chunk_size,threshold,precision,recall,f1_score,tokens_per_query,chunks_per_query,notes
+6,Exp4,MPNet-v2,500,0.3,0.639,0.950,0.725,352,3.2,Too much noise
+4,Exp5,MPNet-v2,500,0.3,0.761,0.950,0.798,248,2.3,Best balanced
+3,Exp6,MPNet-v2,500,0.3,0.783,0.917,0.795,211,2.0,Best precision

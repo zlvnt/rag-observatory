@@ -1,0 +1,9 @@
+experiment,rank,k,threshold,chunk_size,chunk_overlap,embedding_model,precision,recall,f1_score,mrr,tokens_per_query,chunks_per_query,latency_avg_ms,precision_change_vs_baseline,recall_change_vs_baseline,f1_change_vs_baseline,token_reduction_vs_baseline,best_for,notes
+Exp6,1,3,0.3,500,50,MPNet-v2,0.783,0.917,0.795,0.950,211,2.0,55,+10.9%,-3.5%,+5.7%,-63.8%,Precision + Efficiency,WINNER - Best precision closest to target
+Exp5,2,4,0.3,500,50,MPNet-v2,0.761,0.950,0.798,0.950,248,2.3,28,+7.8%,0.0%,+6.1%,-57.5%,Balanced (safest),Best F1 score and maintains high recall
+Exp7,3,3,0.5,500,50,MPNet-v2,0.783,0.917,0.795,0.950,269,2.5,58,+10.9%,-3.5%,+5.7%,-53.9%,Same as Exp6,Same metrics as Exp6 but less efficient
+Baseline,4,4,0.8,700,100,MiniLM-L12,0.706,0.950,0.752,0.872,583,3.9,21,0.0%,0.0%,0.0%,0.0%,Original reference,Starting point
+Exp1,5,4,0.3,700,100,MiniLM-L12,0.706,0.950,0.752,0.872,382,2.5,19,0.0%,0.0%,0.0%,-34.5%,Efficiency only,Threshold change no impact on metrics
+Exp4,6,6,0.3,500,50,MPNet-v2,0.639,0.950,0.725,0.950,352,3.2,29,-9.5%,0.0%,-3.6%,-39.6%,MRR improvement,k=6 bottleneck prevents MPNet from shining
+Exp3,7,6,0.3,500,50,MiniLM-L12,0.589,0.950,0.680,0.861,369,3.4,11,-16.6%,0.0%,-9.6%,-36.7%,Token efficiency,k=6 hurt precision despite smaller chunks
+Exp2,8,6,0.3,700,100,MiniLM-L12,0.539,0.967,0.652,0.872,513,3.4,20,-23.7%,+1.8%,-13.3%,-12.0%,None,k=6 failed - precision crashed
