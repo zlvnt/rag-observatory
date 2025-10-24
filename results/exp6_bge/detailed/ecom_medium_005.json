@@ -1,0 +1,63 @@
+{
+  "test_id": "ecom_medium_005",
+  "query": "Mau tukar ukuran baju yang sudah dibeli, prosesnya bagaimana?",
+  "category": "returns",
+  "difficulty": "medium",
+  "expected_docs": [
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-24T08:47:33.305461",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.2222222222222222,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.2222222222222222,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md",
+      "troubleshooting_guide.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 2,
+    "context_length_chars": 1426,
+    "context_tokens_approx": 356,
+    "retrieved_context_preview": "[Docs] ## FAQ Return/Refund\n\n### Q: Bolehkah return karena tidak suka?\n**A:** Tergantung kebijakan toko. Beberapa toko terima \"change of mind\" tapi ongkir ditanggung pembeli.\n\n### Q: Bagaimana jika penjual menolak return yang valid?\n**A:** Ajukan banding dengan klik \"Minta Bantuan TokoPedia\". Tim mediasi akan review dalam 2x24 jam.\n\n### Q: Apakah bisa tukar ukuran/warna?\n**A:** Bisa, dengan catatan:\n- Stock pengganti tersedia\n- Biaya kirim PP ditanggung pembeli\n- Melalui proses return dulu\n[Docs...",
+    "latency_ms": 104.22
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_negatives": []
+  }
+}

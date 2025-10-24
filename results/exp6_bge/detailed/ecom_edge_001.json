@@ -1,0 +1,63 @@
+{
+  "test_id": "ecom_edge_001",
+  "query": "gmna cra retrn brng yg rusk?",
+  "category": "returns",
+  "difficulty": "easy",
+  "expected_docs": [
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-24T08:47:33.900037",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "contact_escalation.md",
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 2,
+    "context_length_chars": 1351,
+    "context_tokens_approx": 337,
+    "retrieved_context_preview": "[Docs] ## Prioritas & SLA\n\n### Kategori URGENT (Response <2 jam):\n- Akun di-hack dengan kerugian aktif\n- Transaksi fraud in-progress\n- Data pribadi tersebar\n- Ancaman keselamatan\n\n### Kategori HIGH (Response <6 jam):\n- Payment stuck > Rp 5 juta\n- Pesanan hilang > Rp 2 juta\n- Seller tidak respon > 5 hari\n- Produk berbahaya/ilegal\n\n### Kategori MEDIUM (Response <24 jam):\n- Return/refund normal\n- Pertanyaan produk\n- Update data akun\n- Komplain layanan\n[Docs] ## Eskalasi Matrix\n\n| Masalah | Level 1 ...",
+    "latency_ms": 82.44
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 0.5,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [
+      "contact_escalation.md"
+    ],
+    "false_negatives": []
+  }
+}

@@ -11,7 +11,7 @@ from typing import List, Dict
 
 def load_exp6_results() -> List[Dict]:
     """Load all Exp6 detailed JSON results"""
-    exp6_dir = Path("results/exp6/detailed")
+    exp6_dir = Path("results/exp6_bge/detailed")
     results = []
 
     # Get all JSON files sorted by name
@@ -127,7 +127,7 @@ if __name__ == "__main__":
     results = load_exp6_results()
 
     # Create qualitative CSV
-    output_path = "results/report/qualitative_analysis_exp6.csv"
+    output_path = "results/report/qualitative_analysis_exp6_bge.csv"
     create_qualitative_csv(results, output_path)
 
     print(f"\n📊 Next steps:")

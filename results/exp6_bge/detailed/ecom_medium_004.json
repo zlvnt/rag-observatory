@@ -1,0 +1,63 @@
+{
+  "test_id": "ecom_medium_004",
+  "query": "Akun saya ter-hack dan ada transaksi mencurigakan, langkah apa yang harus dilakukan?",
+  "category": "account",
+  "difficulty": "medium",
+  "expected_docs": [
+    "troubleshooting_guide.md",
+    "contact_escalation.md"
+  ],
+  "timestamp": "2025-10-24T08:47:33.207838",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.5833333333333334,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.16666666666666666,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.16666666666666666,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "troubleshooting_guide.md",
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 2,
+    "context_length_chars": 496,
+    "context_tokens_approx": 124,
+    "retrieved_context_preview": "[Docs] **Solusi:**\n1. Tunggu hingga 5 menit\n2. Cek folder spam untuk OTP email\n3. Pastikan nomor HP aktif dan ada sinyal\n4. Klik \"Kirim Ulang OTP\" (maksimal 3x)\n5. Ganti metode OTP (SMS ↔ Email)\n\n### Akun terkena hack/pembajakan\n**Gejala:** Ada transaksi mencurigakan, password berubah sendiri\n\n**Tindakan Cepat:**\n1. **SEGERA** hubungi CS via 1500-600\n2. Screenshot semua bukti aktivitas mencurigakan\n3. Ubah password email yang terhubung\n4. Aktifkan verifikasi 2 langkah setelah akun dipulihkan",
+    "latency_ms": 97.22
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "troubleshooting_guide.md",
+      "contact_escalation.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

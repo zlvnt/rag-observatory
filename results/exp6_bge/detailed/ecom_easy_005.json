@@ -1,0 +1,60 @@
+{
+  "test_id": "ecom_easy_005",
+  "query": "Nomor customer service TokoPedia berapa?",
+  "category": "contact",
+  "difficulty": "easy",
+  "expected_docs": [
+    "contact_escalation.md"
+  ],
+  "timestamp": "2025-10-24T08:47:31.851754",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.6,
+        "rank": 1,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 1,
+    "context_length_chars": 403,
+    "context_tokens_approx": 100,
+    "retrieved_context_preview": "[Docs] # Prosedur Kontak & Eskalasi - TokoPedia Customer Service\n\n## Level 1: Self-Service\n\n### Help Center Online\n- **URL**: help.tokopedia.com\n- **Tersedia**: 24/7\n- **Gunakan untuk**: FAQ, tutorial, kebijakan umum\n\n### Chatbot TOKI\n- **Akses**: Icon chat di app/website\n- **Respon**: Instant\n- **Capabilities**:\n  - Cek status pesanan\n  - Info resi\n  - FAQ automation\n  - Redirect ke agent jika perlu",
+    "latency_ms": 80.94
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "contact_escalation.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

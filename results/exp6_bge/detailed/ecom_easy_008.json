@@ -1,0 +1,60 @@
+{
+  "test_id": "ecom_easy_008",
+  "query": "Sudah bayar tapi status masih menunggu pembayaran, kenapa?",
+  "category": "payment",
+  "difficulty": "easy",
+  "expected_docs": [
+    "troubleshooting_guide.md"
+  ],
+  "timestamp": "2025-10-24T08:47:32.093493",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.625,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.0,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.125,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "troubleshooting_guide.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 1,
+    "context_length_chars": 420,
+    "context_tokens_approx": 105,
+    "retrieved_context_preview": "[Docs] ## Masalah Pembayaran\n\n### Pembayaran gagal tapi saldo terpotong\n**Gejala:** Notifikasi gagal tapi uang sudah terpotong dari rekening\n\n**Solusi:**\n1. **Jangan bayar ulang!**\n2. Cek status pesanan dalam 1x24 jam\n3. Saldo akan auto-refund dalam 3-7 hari kerja\n4. Jika >7 hari, kirim bukti mutasi rekening ke CS\n\n### Virtual Account tidak terdeteksi\n**Gejala:** Sudah transfer tapi status masih \"Menunggu Pembayaran\"",
+    "latency_ms": 94.24
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}
