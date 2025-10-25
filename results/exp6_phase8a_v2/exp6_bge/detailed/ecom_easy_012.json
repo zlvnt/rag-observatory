@@ -1,0 +1,65 @@
+{
+  "test_id": "ecom_easy_012",
+  "query": "Berapa lama batas waktu bayar setelah checkout?",
+  "category": "payment",
+  "difficulty": "easy",
+  "expected_docs": [
+    "product_faq.md"
+  ],
+  "timestamp": "2025-10-25T11:38:56.472801",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 80,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.7142857142857143,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.2857142857142857,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "product_faq.md",
+      "policy_returns.md",
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 3,
+    "context_length_chars": 676,
+    "context_tokens_approx": 169,
+    "retrieved_context_preview": "[Docs] ### Q: Bagaimana jika saya menerima produk palsu?\n**A:** Segera laporkan melalui:\n1. Klik \"Komplain\" di detail pesanan\n2. Upload bukti foto/video\n3. Tim kami akan investigasi dalam 2x24 jam\n4. Dana akan dikembalikan 100% jika terbukti palsu\n\n## Metode Pembayaran\n\n### Q: Apa saja metode pembayaran yang tersedia?\n**A:** \n- Transfer Bank (BCA, Mandiri, BNI, BRI)\n- Virtual Account\n- E-wallet (GoPay, OVO, DANA, ShopeePay)\n- Kartu Kredit/Debit\n- TokoPedia PayLater (cicilan tanpa kartu kredit)\n\n...",
+    "latency_ms": 80.28
+  },
+  "evaluation": {
+    "precision": 0.333,
+    "recall": 1.0,
+    "f1_score": 0.5,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "product_faq.md"
+    ],
+    "false_positives": [
+      "contact_escalation.md",
+      "policy_returns.md"
+    ],
+    "false_negatives": []
+  }
+}

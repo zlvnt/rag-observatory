@@ -1,0 +1,66 @@
+{
+  "test_id": "ecom_edge_003",
+  "query": "Saya mau komplain produk tapi juga mau tanya promo",
+  "category": "product",
+  "difficulty": "medium",
+  "expected_docs": [
+    "policy_returns.md",
+    "product_faq.md"
+  ],
+  "timestamp": "2025-10-25T11:38:57.849336",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 80,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.125,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.125,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.125,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "troubleshooting_guide.md",
+      "product_faq.md",
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 3,
+    "context_length_chars": 2051,
+    "context_tokens_approx": 512,
+    "retrieved_context_preview": "[Docs] ## Masalah Produk\n\n### Produk tidak sesuai deskripsi\n**Bukti yang diperlukan:**\n1. Foto produk yang diterima (berbagai angle)\n2. Screenshot deskripsi/foto dari listing\n3. Video unboxing jika ada\n\n**Proses komplain:**\n- Ajukan dalam 2x24 jam setelah terima\n- Pilih alasan \"Produk tidak sesuai\"\n- Tunggu mediasi penjual-pembeli\n- Eskalasi ke TokoPedia jika tidak ada solusi\n\n### Produk cacat/tidak berfungsi\n**Dokumentasi wajib:**\n- Video yang menunjukkan cacat/kerusakan\n- Foto serial number/la...",
+    "latency_ms": 84.22
+  },
+  "evaluation": {
+    "precision": 0.667,
+    "recall": 1.0,
+    "f1_score": 0.8,
+    "reciprocal_rank": 0.5,
+    "true_positives": [
+      "product_faq.md",
+      "policy_returns.md"
+    ],
+    "false_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_negatives": []
+  }
+}

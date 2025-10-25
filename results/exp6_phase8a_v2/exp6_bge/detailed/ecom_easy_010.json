@@ -1,0 +1,63 @@
+{
+  "test_id": "ecom_easy_010",
+  "query": "Apa itu produk Pre-Order?",
+  "category": "product",
+  "difficulty": "easy",
+  "expected_docs": [
+    "product_faq.md"
+  ],
+  "timestamp": "2025-10-25T11:38:56.254368",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 80,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.75,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.25,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.25,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "product_faq.md",
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 2,
+    "context_length_chars": 595,
+    "context_tokens_approx": 148,
+    "retrieved_context_preview": "[Docs] # Product FAQ - TokoPedia Customer Service Knowledge Base\n\n## Informasi Umum Produk\n\n### Q: Bagaimana cara mencari produk di TokoPedia?\n**A:** Anda dapat mencari produk dengan 3 cara:\n1. Gunakan search bar di bagian atas halaman\n2. Browse melalui kategori produk di menu utama\n3. Gunakan filter pencarian (harga, lokasi, rating) untuk hasil lebih spesifik\n\n### Q: Apa itu produk \"Ready Stock\" dan \"Pre-Order\"?\n**A:** \n- **Ready Stock**: Produk tersedia dan siap dikirim dalam 1-2 hari kerja\n- ...",
+    "latency_ms": 134.48
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "product_faq.md"
+    ],
+    "false_positives": [
+      "contact_escalation.md"
+    ],
+    "false_negatives": []
+  }
+}

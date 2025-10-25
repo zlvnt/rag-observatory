@@ -1,0 +1,63 @@
+{
+  "test_id": "ecom_easy_011",
+  "query": "Apakah transaksi di TokoPedia aman?",
+  "category": "product",
+  "difficulty": "easy",
+  "expected_docs": [
+    "product_faq.md"
+  ],
+  "timestamp": "2025-10-25T11:38:56.389271",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 80,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 1.0,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.6,
+        "rank": 1,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.2,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "product_faq.md",
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 2,
+    "num_unique_docs": 2,
+    "context_length_chars": 1185,
+    "context_tokens_approx": 296,
+    "retrieved_context_preview": "[Docs] ### Q: Kenapa voucher saya tidak bisa digunakan?\n**A:** Voucher mungkin tidak berlaku karena:\n- Minimum pembelian tidak terpenuhi\n- Voucher sudah kadaluarsa\n- Produk tidak termasuk dalam kategori voucher\n- Kuota voucher sudah habis\n\n## Keamanan Transaksi\n\n### Q: Apakah transaksi di TokoPedia aman?\n**A:** Ya, kami menggunakan:\n- Enkripsi SSL untuk semua transaksi\n- Sistem escrow (dana ditahan sampai barang diterima)\n- Verifikasi 2 langkah untuk akun\n- Monitoring 24/7 untuk aktivitas mencur...",
+    "latency_ms": 83.12
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "product_faq.md"
+    ],
+    "false_positives": [
+      "contact_escalation.md"
+    ],
+    "false_negatives": []
+  }
+}

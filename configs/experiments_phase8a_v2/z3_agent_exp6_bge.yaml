@@ -1,0 +1,41 @@
+# Phase 8A_v2: Exploratory Test
+# Goal: Test BGE-M3 with larger chunks (chunk=700, overlap=80)
+#
+# Baseline comparison: Exp6 (MPNet, chunk=500, overlap=50) → Precision 0.783
+#
+# Hypothesis: Maybe BGE-M3 works better with larger context chunks?
+#   - Phase 8B test: BGE-M3 dense with chunk=500 → 0.772 precision (failed)
+#   - New test: chunk=700, overlap=80 (more context per chunk)
+#
+# Changes from Exp6:
+#   - embedding_model: MPNet → BGE-M3 (dense-only via Langchain)
+#   - chunk_size: 500 → 700
+#   - chunk_overlap: 50 → 80
+#   - retrieval_k: 3 (same as Exp6)
+#
+# Expected Results:
+# - If chunk size matters: Precision 0.772 → 0.78-0.80
+# - If BGE-M3 just doesn't fit: Still underperform MPNet
+
+domain_name: z3_agent_exp6_bge
+
+knowledge_base_dir: docs/
+vector_store_dir: data/vector_stores/z3_agent_exp6_bge_phase8a_v2/
+golden_dataset: golden_datasets/z3_agent_tests.json
+
+personality_config_path: content/reply_config1.json
+supervisor_prompt_path: content/supervisor-prompt.txt
+
+# Embedding: BGE-M3 (dense-only via Langchain)
+embedding_model: BAAI/bge-m3
+
+llm_model: gemini-2.0-flash
+llm_temperature: 0.7
+
+# RAG parameters - LARGER CHUNKS
+relevance_threshold: 0.3
+chunk_size: 700
+chunk_overlap: 80
+retrieval_k: 3
+
+# Text Splitter: RecursiveCharacterTextSplitter (default)

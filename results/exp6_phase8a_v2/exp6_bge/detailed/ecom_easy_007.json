@@ -1,0 +1,63 @@
+{
+  "test_id": "ecom_easy_007",
+  "query": "Kenapa OTP tidak masuk ke HP saya?",
+  "category": "account",
+  "difficulty": "easy",
+  "expected_docs": [
+    "troubleshooting_guide.md"
+  ],
+  "timestamp": "2025-10-25T11:38:56.004029",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 80,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.7142857142857143,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.2857142857142857,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.2857142857142857,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "troubleshooting_guide.md",
+      "product_faq.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 2,
+    "context_length_chars": 635,
+    "context_tokens_approx": 158,
+    "retrieved_context_preview": "[Docs] # Troubleshooting Guide - TokoPedia Customer Service\n\n## Masalah Login dan Akun\n\n### Tidak bisa login ke akun\n**Gejala:** Error \"Username/password salah\" atau \"Akun tidak ditemukan\"\n\n**Solusi:**\n1. Pastikan email/nomor HP sudah benar\n2. Cek huruf besar/kecil pada password\n3. Gunakan fitur \"Lupa Password\" \n4. Jika tetap gagal, kemungkinan akun ter-suspend (hubungi CS)\n\n### Tidak menerima OTP\n**Gejala:** Kode OTP tidak masuk ke SMS/email\n\n**Solusi:**\n1. Tunggu hingga 5 menit\n2. Cek folder s...",
+    "latency_ms": 80.32
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_positives": [
+      "product_faq.md"
+    ],
+    "false_negatives": []
+  }
+}

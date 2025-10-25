@@ -456,23 +456,7 @@ relevance_threshold: 0.3
 
 ---
 
-### 2. Prioritize Local Models (Avoid API Costs)
-
-**For Phase 8B embedding selection:**
-
-**Local-only (recommended):**
-- ✅ bge-m3 (best quality, SOTA)
-- ✅ jina-v2 (faster, good quality)
-- ✅ e5-base-v2 (competitive with MPNet)
-
-**API (only if local insufficient):**
-- ⚠️ OpenAI text-embedding-3-small (costs ~$0.02 per 1M tokens)
-
-**My vote:** Start with bge-m3 (local, free, proven best)
-
----
-
-### 3. Focus on Failed Queries in Qualitative Analysis
+### 2. Focus on Failed Queries in Qualitative Analysis
 
 **Alternative to inspecting all 30 queries:**
 
@@ -573,60 +557,6 @@ Phase 8C (MarkdownSplitter):
 - 🎯 Recall ≥ 0.92
 - 🎯 F1 ≥ 0.87
 - 🎯 All categories ≥ 0.75 precision (fix Payment/Product)
-
----
-
-## 📅 Estimated Timeline
-
-**Total duration:** 1-2 days (8-12 hours)
-
-**Breakdown:**
-- Phase 8A (Qualitative): ✅ 1-2 hours COMPLETE
-- Phase 8B (Embedding ablation): ⏳ 3-4 hours
-- Phase 8C (Splitter ablation): ⏳ 2-3 hours
-- Phase 8D (Final config): ⏳ 1 hour
-- Buffer for analysis/documentation: 1-2 hours
-
-**Can be parallelized:**
-- Manual inspection (8A) can happen while experiments run (8B)
-- CSV creation can happen while vector stores rebuild
-
----
-
-## 🚀 Next Actions
-
-**Completed (Phase 8A - 2025-10-19):**
-1. ✅ Created `qualitative_analysis_exp6.csv` with retrieved text
-2. ✅ Generated reusable script `scripts/create_qualitative_csv.py`
-3. ✅ Manual inspection complete (sampled queries with detailed notes)
-4. ✅ Created `PHASE_8A_SUMMARY.md` with complete analysis
-5. ✅ Identified failure patterns: Context Cutting (40%), Meleset Sedikit (30%), Multi-doc (20%)
-6. ✅ Updated PROGRESS.md and PHASE_8_ROADMAP.md
-
-**Completed (Phase 8B - 2025-10-24):**
-7. ✅ Downloaded bge-m3 model (2.2GB) and installed FlagEmbedding library
-8. ✅ Tested BGE-M3 dense-only with Langchain → Found underperformance issue
-9. ✅ Created `PHASE_8B_BGE_M3_DEBUG_REPORT.md` documenting Langchain limitation
-10. ✅ Implemented custom BGEM3Retriever class with full multi-functional retrieval
-11. ✅ Created dedicated test runner (`test_runner_bge_m3.py`)
-12. ✅ Verified basic functionality (test script passed)
-13. ✅ Setup config for Exp6_bge_full
-
-**Immediate (Next):**
-14. ⏳ Run full 30-query experiment with BGE-M3 multi-functional (Exp6_bge_full)
-15. ⏳ Generate qualitative CSV for Exp6_bge_full
-16. ⏳ Compare 3 variants: MPNet vs BGE-M3 dense vs BGE-M3 full
-
-**Short-term (This Week):**
-17. Decide: Expand to all 7 configs or adjust approach based on Exp6_bge_full results
-18. If successful, run full ablation study (7 configs with BGE-M3 multi-functional)
-19. Create comprehensive comparison table
-
-**Medium-term (Next Week):**
-20. Run splitter experiments (if bge-m3 proves worthy)
-21. Create final production config v2
-22. Update EXPERIMENT_RESULTS_ANALYSIS.md with Phase 8 results
-23. Prepare for advanced techniques (reranker, MMR, hybrid search - if needed)
 
 ---
 

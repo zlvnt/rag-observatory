@@ -1,0 +1,60 @@
+{
+  "test_id": "ecom_medium_007",
+  "query": "Response time CS berapa lama untuk kasus yang high priority?",
+  "category": "contact",
+  "difficulty": "medium",
+  "expected_docs": [
+    "contact_escalation.md"
+  ],
+  "timestamp": "2025-10-25T11:38:57.311786",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 80,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.3,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.2,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 1,
+    "context_length_chars": 678,
+    "context_tokens_approx": 169,
+    "retrieved_context_preview": "[Docs] **Proses:**\n- Auto-escalate dari CS reguler\n- Mediator assigned dalam 24 jam\n- Keputusan final: 3-5 hari kerja\n\n### Legal & Compliance\n**Untuk kasus:**\n- Pemalsuan dokumen\n- Pelanggaran HAKI\n- Kasus ke ranah hukum\n- Permintaan data dari aparat\n\n**Kontak:**\n- Email: legal@tokopedia.com\n- Surat resmi ke kantor pusat\n- Tidak melayani user langsung\n\n## Prioritas & SLA\n\n### Kategori URGENT (Response <2 jam):\n- Akun di-hack dengan kerugian aktif\n- Transaksi fraud in-progress\n- Data pribadi ters...",
+    "latency_ms": 83.81
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "contact_escalation.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

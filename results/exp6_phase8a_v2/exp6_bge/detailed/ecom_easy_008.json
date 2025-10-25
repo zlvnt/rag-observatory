@@ -1,0 +1,63 @@
+{
+  "test_id": "ecom_easy_008",
+  "query": "Sudah bayar tapi status masih menunggu pembayaran, kenapa?",
+  "category": "payment",
+  "difficulty": "easy",
+  "expected_docs": [
+    "troubleshooting_guide.md"
+  ],
+  "timestamp": "2025-10-25T11:38:56.084748",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 80,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.5,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.0,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.25,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "troubleshooting_guide.md",
+      "product_faq.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 2,
+    "context_length_chars": 643,
+    "context_tokens_approx": 160,
+    "retrieved_context_preview": "[Docs] ### Virtual Account tidak terdeteksi\n**Gejala:** Sudah transfer tapi status masih \"Menunggu Pembayaran\"\n\n**Solusi:**\n1. Pastikan nominal transfer tepat hingga digit terakhir\n2. Tunggu 10-30 menit untuk proses verifikasi\n3. Upload bukti transfer di halaman pesanan\n4. Pastikan transfer ke VA yang benar (cek nomor VA)\n\n## Masalah Pengiriman\n\n### Paket tidak kunjung diterima\n**Timeline pengecekan:**\n- H+1: Cek nomor resi di kurir\n- H+3: Hubungi penjual\n- H+7: Ajukan komplain di sistem\n- H+10:...",
+    "latency_ms": 83.88
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_positives": [
+      "product_faq.md"
+    ],
+    "false_negatives": []
+  }
+}

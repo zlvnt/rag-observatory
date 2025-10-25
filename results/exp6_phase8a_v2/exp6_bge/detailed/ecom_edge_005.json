@@ -1,0 +1,60 @@
+{
+  "test_id": "ecom_edge_005",
+  "query": "Resep nasi goreng yang enak apa ya?",
+  "category": "out_of_scope",
+  "difficulty": "easy",
+  "expected_docs": [],
+  "timestamp": "2025-10-25T11:38:58.016402",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 80,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.14285714285714285,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.0,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "contact_escalation.md",
+      "product_faq.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 2,
+    "context_length_chars": 1536,
+    "context_tokens_approx": 384,
+    "retrieved_context_preview": "[Docs] ### Kategori MEDIUM (Response <24 jam):\n- Return/refund normal\n- Pertanyaan produk\n- Update data akun\n- Komplain layanan\n\n### Kategori LOW (Response <48 jam):\n- Saran & feedback\n- Pertanyaan umum\n- Request fitur\n- Report bug minor\n\n## Tips Efektif Kontak CS\n\n### Persiapkan sebelum kontak:\n1. **Order ID** atau nomor transaksi\n2. **Screenshot/foto** bukti masalah\n3. **Kronologi** singkat dan jelas\n4. **Solusi yang diinginkan**\n\n### Template komunikasi efektif:\n```\nHalo CS, saya [nama] menga...",
+    "latency_ms": 79.37
+  },
+  "evaluation": {
+    "precision": 0.0,
+    "recall": 1.0,
+    "f1_score": 0.0,
+    "reciprocal_rank": 0.0,
+    "true_positives": [],
+    "false_positives": [
+      "contact_escalation.md",
+      "product_faq.md"
+    ],
+    "false_negatives": []
+  }
+}
