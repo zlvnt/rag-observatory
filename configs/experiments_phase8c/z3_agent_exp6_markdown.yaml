@@ -1,0 +1,51 @@
+# Phase 8C: MarkdownHeaderTextSplitter + BGE-M3 Test
+# Goal: Test if preserving semantic section boundaries improves retrieval quality
+# Rationale: Phase 8A showed splitter has 70% impact (context cutting, meleset sedikit)
+#
+# Baseline for comparison: Exp6_bge (BGE-M3 + Recursive)
+#   - Precision: 0.772, Recall: 0.917, F1: 0.788
+#
+# Changes from Exp6_bge:
+#   - text_splitter: RecursiveCharacterTextSplitter → MarkdownHeaderTextSplitter
+#   - KEEP: BGE-M3 embedding, k=3, chunk=500, threshold=0.3
+#
+# Expected Results:
+# - Precision: 0.772 → 0.80-0.82 (+3-5% from better chunk boundaries)
+# - Recall: 0.917 → 0.92-0.95 (maintain or improve)
+# - F1: 0.788 → 0.83-0.86
+# - May REACH target 0.80 precision!
+#
+# Future: Compare with MPNet + Markdown splitter (if MPNet re-downloaded)
+
+domain_name: z3_agent_exp6_markdown
+
+# Knowledge base (same as Exp6)
+knowledge_base_dir: docs/
+
+# Vector store location (separate from Exp6 - different chunking)
+vector_store_dir: data/vector_stores/z3_agent_exp6_markdown/
+
+# Golden dataset for testing
+golden_dataset: golden_datasets/z3_agent_tests.json
+
+# Personality & prompts (not used in retrieval-only eval)
+personality_config_path: content/reply_config1.json
+supervisor_prompt_path: content/supervisor-prompt.txt
+
+# Embedding model (Using BGE-M3 for initial test)
+embedding_model: BAAI/bge-m3
+
+# LLM config (not used)
+llm_model: gemini-2.0-flash
+llm_temperature: 0.7
+
+# RAG parameters - SAME AS EXP6 (winner config)
+relevance_threshold: 0.3
+chunk_size: 500
+chunk_overlap: 50
+retrieval_k: 3
+
+# Text Splitter: MarkdownHeaderTextSplitter
+# (Activated by using test_runner_markdown.py instead of test_runner.py)
+# Splits on: #, ##, ### headers
+# Preserves semantic section boundaries

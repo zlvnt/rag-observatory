@@ -51,11 +51,12 @@ def build_index(
     vector_dir: Path,
     embedding_model: str,
     chunk_size: int = 700,
-    chunk_overlap: int = 100
+    chunk_overlap: int = 100,
+    use_markdown_splitter: bool = False
 ) -> None:
     print(f"INFO: Building vector index from docs - docs_dir: {docs_dir}")
     docs = _load_raw_docs(docs_dir)
-    split_docs = _split_docs(docs, chunk_size, chunk_overlap)
+    split_docs = _split_docs(docs, chunk_size, chunk_overlap, use_markdown_splitter)
     from langchain_community.vectorstores.faiss import FAISS
 
     vectordb = FAISS.from_documents(split_docs, _get_embeddings(embedding_model))
@@ -84,9 +85,28 @@ def _load_raw_docs(docs_dir: Path) -> List[Document]:
     print(f"INFO: Docs loaded - total: {len(docs)}")
     return docs
 
-def _split_docs(docs: List[Document], chunk_size: int = 700, chunk_overlap: int = 100) -> List[Document]:
-    from langchain.text_splitter import RecursiveCharacterTextSplitter
-    splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
-    split_docs = splitter.split_documents(docs)
-    print(f"INFO: Using RecursiveCharacterTextSplitter - chunks: {len(split_docs)}")
-    return split_docs
+def _split_docs(docs: List[Document], chunk_size: int = 700, chunk_overlap: int = 100, use_markdown_splitter: bool = False) -> List[Document]:
+    if use_markdown_splitter:
+        from langchain.text_splitter import MarkdownHeaderTextSplitter
+        headers_to_split_on = [
+            ("#", "Header 1"),
+            ("##", "Header 2"),
+            ("###", "Header 3"),
+        ]
+        markdown_splitter = MarkdownHeaderTextSplitter(headers_to_split_on=headers_to_split_on)
+
+        all_splits = []
+        for doc in docs:
+            splits = markdown_splitter.split_text(doc.page_content)
+            for split in splits:
+                split.metadata.update(doc.metadata)
+                all_splits.append(split)
+
+        print(f"INFO: Using MarkdownHeaderTextSplitter - chunks: {len(all_splits)}")
+        return all_splits
+    else:
+        from langchain.text_splitter import RecursiveCharacterTextSplitter
+        splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+        split_docs = splitter.split_documents(docs)
+        print(f"INFO: Using RecursiveCharacterTextSplitter - chunks: {len(split_docs)}")
+        return split_docs
