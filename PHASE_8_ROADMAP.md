@@ -1,7 +1,7 @@
 # Phase 8 Roadmap - Qualitative Analysis & Advanced Ablation
 
 **Date:** 2025-10-17 (Updated: 2025-10-25)
-**Status:** Phase 8A-8C complete ✅ | Basic optimization ceiling reached | Phase 8D decision pending
+**Status:** Phase 8 COMPLETE ✅ | Production config: Exp6 (0.783 precision) | Next: Phase 9 (advanced techniques)
 
 ---
 
@@ -350,50 +350,61 @@ MarkdownHeader next chunk:
 
 ---
 
-### **Phase 8D: Final Optimal Configuration**
+### **Phase 8D: Final Optimal Configuration** ✅ COMPLETE
 
-**Goal:** Combine all best findings into production-ready config
+**Goal:** Identify production-ready config based on Phase 8A-8C findings
 
-**Duration:** 1 hour
+**Duration:** Oct 25, 2025
 
-#### Task 10: Identify Winning Combination
+**CONCLUSION: Phase 8 exhausted basic optimization - Accept Exp6 as production config**
 
-**Based on Phase 8A-8C results:**
-- **Best embedding:** bge-m3 (from 8B)
-- **Best splitter:** MarkdownHeaderTextSplitter (from 8C, if proven better)
-- **Optimal k:** 3 (from Phase 5-6, reconfirmed in 8B)
-- **Optimal chunk:** 500, overlap 50 (from Phase 5-6)
+#### Task 10: Identify Winning Combination ✅ COMPLETE
 
-**Final config:**
+**Phase 8A-8C Results:**
+- ❌ **Embedding (8B):** BGE-M3 failed (all variants underperformed MPNet)
+- ❌ **Splitter (8C):** MarkdownHeaderTextSplitter failed (-8% to -17% precision)
+- ✅ **Current best:** Exp6 remains optimal
+
+**Production Config (Exp6):**
 ```yaml
-domain_name: z3_agent_production_v2
-embedding_model: BAAI/bge-m3
-splitter: MarkdownHeaderTextSplitter
+domain_name: z3_agent_production
+embedding_model: sentence-transformers/paraphrase-multilingual-mpnet-base-v2
+splitter: RecursiveCharacterTextSplitter
 chunk_size: 500
 chunk_overlap: 50
 retrieval_k: 3
 relevance_threshold: 0.3
 ```
 
-**Expected performance:**
-- Precision: 0.85-0.88 (exceed target 0.80!) ✅
-- Recall: 0.92-0.95 (maintain high coverage) ✅
-- F1: 0.87-0.90 (balanced excellence) ✅
+**Performance:**
+- Precision: 0.783 (2.2% gap to 0.80 target)
+- Recall: 0.917 (exceeds 0.90 target) ✅
+- F1: 0.795 (exceeds 0.75 target) ✅
+- MRR: 0.950 (excellent ranking)
+- Tokens/Query: 211 (efficient)
+
+**Optimization Ceiling Reached:**
+- ✅ Embedding: MPNet optimal (BGE-M3 tested, failed)
+- ✅ Splitter: RecursiveCharacterTextSplitter optimal (Markdown tested, failed)
+- ✅ k parameter: k=3 optimal (k=4,6,8 tested)
+- ✅ Threshold: 0.3 optimal (0.5,0.8 tested)
+- ✅ Chunk size: 500 optimal (700,1000 tested)
+
+**Decision:** Accept 0.783 precision as production ceiling for basic optimization
 
 ---
 
-#### Task 11: Create Production Config & Documentation
+#### Task 11: Next Steps - Phase 9 (Advanced Techniques)
 
-**Files to create:**
-1. `configs/z3_agent_production_v2.yaml` - Final optimal config
-2. `PRODUCTION_DEPLOYMENT_GUIDE.md` - How to deploy
-3. Update `PROGRESS.md` with Phase 8 completion
+**To bridge 2.2% gap (0.783 → 0.80+):**
+- Move to advanced techniques (MMR, reranker)
+- See `PHASE_9_ROADMAP.md` for details
 
-**Documentation includes:**
-- Final config with rationale for each parameter
-- Performance benchmarks (precision, recall, F1, latency, tokens)
-- Comparison with Phase 1 winner (Exp6)
-- Migration guide from Exp6 to production_v2
+**Phase 8D Deliverables:**
+- ✅ Production config identified: Exp6
+- ✅ Phase 9 roadmap created
+- ✅ PROGRESS.md updated
+- ✅ PHASE_8_ROADMAP.md updated
 
 ---
 
@@ -560,7 +571,8 @@ Phase 8C (MarkdownSplitter):
 
 ---
 
-**Status:** Phase 8A-8C complete ✅ | Basic optimization exhausted
-**Current best:** Exp6 (MPNet + RecursiveCharacterTextSplitter, k=3) → 0.783 precision
-**Optimization ceiling:** Embedding ✅, Splitter ✅, k parameter ✅, threshold ✅
-**Next decision:** Accept 0.783 as production OR move to Phase 9 (reranker/MMR/hybrid)
+**Status:** Phase 8 COMPLETE ✅ | All basic optimizations exhausted
+**Production config:** Exp6 (MPNet + RecursiveCharacterTextSplitter, k=3) → 0.783 precision
+**Optimization ceiling:** Embedding ✅, Splitter ✅, k ✅, threshold ✅, chunk size ✅
+**Decision:** Accept 0.783 as production ceiling for basic optimization
+**Next:** Phase 9 (MMR/reranker) to bridge 2.2% gap to 0.80 target
