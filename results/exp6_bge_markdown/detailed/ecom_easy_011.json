@@ -1,0 +1,65 @@
+{
+  "test_id": "ecom_easy_011",
+  "query": "Apakah transaksi di TokoPedia aman?",
+  "category": "product",
+  "difficulty": "easy",
+  "expected_docs": [
+    "product_faq.md"
+  ],
+  "timestamp": "2025-10-25T09:01:32.089370",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.2,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.2,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.4,
+        "rank": 2,
+        "passed_threshold": true
+      }
+    ],
+    "unique_docs": [
+      "product_faq.md",
+      "contact_escalation.md",
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 3,
+    "context_length_chars": 126,
+    "context_tokens_approx": 31,
+    "retrieved_context_preview": "[Docs] - Penjual cek kondisi produk (maks 2 hari)\n- Konfirmasi penerimaan di sistem\n- Jika ada dispute, TokoPedia akan mediasi",
+    "latency_ms": 78.8
+  },
+  "evaluation": {
+    "precision": 0.333,
+    "recall": 1.0,
+    "f1_score": 0.5,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "product_faq.md"
+    ],
+    "false_positives": [
+      "policy_returns.md",
+      "contact_escalation.md"
+    ],
+    "false_negatives": []
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "test_id": "ecom_easy_005",
+  "query": "Nomor customer service TokoPedia berapa?",
+  "category": "contact",
+  "difficulty": "easy",
+  "expected_docs": [
+    "contact_escalation.md"
+  ],
+  "timestamp": "2025-10-25T09:09:33.476182",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.4,
+        "rank": 2,
+        "passed_threshold": true
+      }
+    ],
+    "unique_docs": [
+      "contact_escalation.md",
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 2,
+    "context_length_chars": 249,
+    "context_tokens_approx": 62,
+    "retrieved_context_preview": "[Docs] **Garansi Resmi:**\n- Klaim langsung ke service center brand\n- TokoPedia bantu fasilitasi dokumen\n- Berlaku nasional  \n**Garansi Toko:**\n- Klaim melalui penjual\n- Durasi dan coverage sesuai ketentuan toko\n- Biasanya hanya replace, bukan refund",
+    "latency_ms": 26.92
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "contact_escalation.md"
+    ],
+    "false_positives": [
+      "policy_returns.md"
+    ],
+    "false_negatives": []
+  }
+}

@@ -1,0 +1,42 @@
+# Phase 8C v2: MarkdownHeaderTextSplitter + Increased k
+# Goal: Test if higher k compensates for smaller chunks from Markdown splitter
+#
+# Baseline: exp6_bge_markdown (BGE + Markdown + k=3)
+#   - Precision: 0.706, Recall: 0.900, F1: 0.743
+#   - Tokens/Query: 140 (small chunks!)
+#
+# Hypothesis: Markdown creates smaller chunks (~50 tokens vs ~105 tokens)
+#             k=3 insufficient for chunk coverage
+#
+# Changes from exp6_bge_markdown:
+#   - retrieval_k: 3 → 5 (increase chunk coverage)
+#   - KEEP: threshold=0.3, BGE-M3 embedding, Markdown splitter
+#
+# Expected Results:
+# - Precision: 0.706 → 0.75-0.78 (better coverage = more relevant)
+# - Recall: 0.900 → 0.92-0.95 (retrieve more chunks)
+# - F1: 0.743 → 0.80-0.83
+# - Tokens: 140 → ~230 (5 chunks × 50 tokens)
+
+domain_name: z3_agent_exp6_markdown_v2
+
+knowledge_base_dir: docs/
+vector_store_dir: data/vector_stores/z3_agent_exp6_markdown/  # Reuse same index
+golden_dataset: golden_datasets/z3_agent_tests.json
+
+personality_config_path: content/reply_config1.json
+supervisor_prompt_path: content/supervisor-prompt.txt
+
+# Embedding: BGE-M3 (same as v1)
+embedding_model: BAAI/bge-m3
+
+llm_model: gemini-2.0-flash
+llm_temperature: 0.7
+
+# RAG parameters - TUNED for Markdown splitter
+relevance_threshold: 0.3  # Keep same
+chunk_size: 500
+chunk_overlap: 50
+retrieval_k: 5  # ← INCREASED from 3 to 5
+
+# Text Splitter: MarkdownHeaderTextSplitter (via test_runner_markdown.py)

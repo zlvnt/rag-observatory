@@ -1,0 +1,51 @@
+# Phase 8C: MarkdownHeaderTextSplitter + MPNet Test
+# Goal: Test if preserving semantic section boundaries improves retrieval quality
+# Rationale: Phase 8A showed splitter has 70% impact (context cutting, meleset sedikit)
+#
+# Baseline for comparison: Exp6 (MPNet + Recursive)
+#   - Precision: 0.783, Recall: 0.917, F1: 0.795
+#
+# Changes from Exp6:
+#   - text_splitter: RecursiveCharacterTextSplitter → MarkdownHeaderTextSplitter
+#   - KEEP: MPNet embedding (proven best), k=3, chunk=500, threshold=0.3
+#
+# Expected Results:
+# - Precision: 0.783 → 0.82-0.85 (+3-5% from better chunk boundaries)
+# - Recall: 0.917 → 0.92-0.95 (maintain or improve)
+# - F1: 0.795 → 0.85-0.88
+# - EXCEED target 0.80 precision! ✅
+#
+# This is the OPTIMAL COMBO: Best embedding (MPNet) + Best splitter (Markdown)
+
+domain_name: z3_agent_exp6_mpnet_markdown
+
+# Knowledge base (same as Exp6)
+knowledge_base_dir: docs/
+
+# Vector store location (separate - different splitter)
+vector_store_dir: data/vector_stores/z3_agent_exp6_mpnet_markdown/
+
+# Golden dataset for testing
+golden_dataset: golden_datasets/z3_agent_tests.json
+
+# Personality & prompts (not used in retrieval-only eval)
+personality_config_path: content/reply_config1.json
+supervisor_prompt_path: content/supervisor-prompt.txt
+
+# Embedding model (MPNet - proven best from Phase 8B)
+embedding_model: sentence-transformers/paraphrase-multilingual-mpnet-base-v2
+
+# LLM config (not used)
+llm_model: gemini-2.0-flash
+llm_temperature: 0.7
+
+# RAG parameters - SAME AS EXP6 (winner config)
+relevance_threshold: 0.3
+chunk_size: 500
+chunk_overlap: 50
+retrieval_k: 3
+
+# Text Splitter: MarkdownHeaderTextSplitter
+# (Activated by using test_runner_markdown.py)
+# Splits on: #, ##, ### headers
+# Preserves semantic section boundaries

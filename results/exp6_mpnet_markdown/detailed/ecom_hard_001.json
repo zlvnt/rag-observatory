@@ -1,0 +1,63 @@
+{
+  "test_id": "ecom_hard_001",
+  "query": "Barang sampai rusak, seller bilang ini custom order jadi tidak bisa return. Tapi di listing tidak ada informasi itu sama sekali. Apa hak saya sebagai pembeli?",
+  "category": "returns",
+  "difficulty": "hard",
+  "expected_docs": [
+    "policy_returns.md",
+    "product_faq.md"
+  ],
+  "timestamp": "2025-10-25T09:09:33.973259",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.12,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.04,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.04,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 1,
+    "context_length_chars": 711,
+    "context_tokens_approx": 177,
+    "retrieved_context_preview": "[Docs] - **100% refund** untuk:\n- Produk tidak dikirim\n- Produk palsu dari Official Store\n- Kesalahan sistem TokoPedia  \n- **Refund - ongkir** untuk:\n- Return karena berubah pikiran\n- Salah pesan dari pembeli  \n- **Partial refund** untuk:\n- Produk kurang lengkap tapi masih bisa digunakan\n- Kesepakatan pembeli-penjual\n[Docs] Ongkir di-refund JIKA:\n- Penjual kirim produk salah\n- Produk rusak karena packaging buruk\n- Penjual membatalkan sepihak  \nOngkir TIDAK di-refund JIKA:\n- Pembeli berubah pikir...",
+    "latency_ms": 30.64
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 0.5,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [],
+    "false_negatives": [
+      "product_faq.md"
+    ]
+  }
+}

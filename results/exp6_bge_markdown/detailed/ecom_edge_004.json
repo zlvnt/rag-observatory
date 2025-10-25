@@ -1,0 +1,60 @@
+{
+  "test_id": "ecom_edge_004",
+  "query": "Refund atau ganti barang?",
+  "category": "returns",
+  "difficulty": "easy",
+  "expected_docs": [
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-25T09:01:33.580705",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.25,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 1,
+    "context_length_chars": 928,
+    "context_tokens_approx": 232,
+    "retrieved_context_preview": "[Docs] Ongkir di-refund JIKA:\n- Penjual kirim produk salah\n- Produk rusak karena packaging buruk\n- Penjual membatalkan sepihak  \nOngkir TIDAK di-refund JIKA:\n- Pembeli berubah pikiran\n- Salah pilih ukuran/warna (kesalahan pembeli)\n- Return karena tidak suka\n[Docs] - **100% refund** untuk:\n- Produk tidak dikirim\n- Produk palsu dari Official Store\n- Kesalahan sistem TokoPedia  \n- **Refund - ongkir** untuk:\n- Return karena berubah pikiran\n- Salah pesan dari pembeli  \n- **Partial refund** untuk:\n- P...",
+    "latency_ms": 80.81
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

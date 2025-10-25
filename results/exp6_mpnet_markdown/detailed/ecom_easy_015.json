@@ -1,0 +1,60 @@
+{
+  "test_id": "ecom_easy_015",
+  "query": "Apakah ongkir di-refund kalau return?",
+  "category": "returns",
+  "difficulty": "easy",
+  "expected_docs": [
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-25T09:09:33.738334",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.2,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 1,
+    "context_length_chars": 419,
+    "context_tokens_approx": 104,
+    "retrieved_context_preview": "[Docs] - Tetap bisa return dengan alasan valid\n- Refund sesuai harga yang dibayar\n- Voucher yang digunakan hangus (tidak dikembalikan)\n[Docs] **Sebelum dikirim:**\n- Cancel free tanpa penalti\n- Refund 100%  \n**Setelah dikirim:**\n- Ikuti prosedur return normal\n- Ongkir retur ditanggung pembeli\n[Docs] - Return harus seluruh item dalam bundle\n- Tidak bisa return sebagian\n- Refund dihitung dari harga bundle, bukan satuan",
+    "latency_ms": 24.4
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "test_id": "ecom_medium_007",
+  "query": "Response time CS berapa lama untuk kasus yang high priority?",
+  "category": "contact",
+  "difficulty": "medium",
+  "expected_docs": [
+    "contact_escalation.md"
+  ],
+  "timestamp": "2025-10-25T09:01:32.980022",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.1,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 1,
+    "context_length_chars": 571,
+    "context_tokens_approx": 142,
+    "retrieved_context_preview": "[Docs] - **Regular**: cs@tokopedia.com\n- **Priority**: priority-cs@tokopedia.com (member Gold+)\n- **Response time**:\n- Regular: 2x24 jam\n- Priority: 1x24 jam\n[Docs] **Aktivasi ketika:**\n- Dispute buyer-seller > 7 hari\n- Klaim garansi ditolak\n- Return kompleks\n- Nilai transaksi > Rp 5 juta  \n**Proses:**\n- Auto-escalate dari CS reguler\n- Mediator assigned dalam 24 jam\n- Keputusan final: 3-5 hari kerja\n[Docs] ```\nHalo CS, saya [nama] mengalami [masalah].\nOrder ID: [XXXX]\nKronologi: [waktu dan detai...",
+    "latency_ms": 84.1
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "contact_escalation.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

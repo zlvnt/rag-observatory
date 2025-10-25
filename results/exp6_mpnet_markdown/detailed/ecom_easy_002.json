@@ -1,0 +1,63 @@
+{
+  "test_id": "ecom_easy_002",
+  "query": "Berapa lama batas waktu return untuk produk elektronik?",
+  "category": "returns",
+  "difficulty": "easy",
+  "expected_docs": [
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-25T09:09:33.397657",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.125,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.125,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md",
+      "product_faq.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 2,
+    "context_length_chars": 443,
+    "context_tokens_approx": 110,
+    "retrieved_context_preview": "[Docs] - **Elektronik**: 7 hari sejak diterima\n- **Fashion**: 3 hari sejak diterima\n- **Lainnya**: 2 hari sejak diterima\n- **Garansi toko**: Sesuai ketentuan masing-masing toko\n[Docs] **A:**\n- Transfer Bank/VA: 24 jam\n- E-wallet: 2 jam\n- Kartu Kredit/Debit: Instant\n- Setelah batas waktu, pesanan otomatis dibatalkan\n[Docs] - Penjual cek kondisi produk (maks 2 hari)\n- Konfirmasi penerimaan di sistem\n- Jika ada dispute, TokoPedia akan mediasi",
+    "latency_ms": 25.42
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [
+      "product_faq.md"
+    ],
+    "false_negatives": []
+  }
+}

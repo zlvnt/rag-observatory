@@ -436,10 +436,18 @@ def main():
     print("RAG EVALUATION TEST RUNNER")
     print("="*60 + "\n")
 
-    # Load domain config
+    # Load domain config (check Phase 8C v2, then v1, then root configs/)
     try:
-        config = load_domain_config(args.domain)
-        print(f"✓ Loaded domain config: {args.domain}")
+        try:
+            config = load_domain_config(args.domain, config_dir=Path("configs/experiments_phase8c_v2"))
+            print(f"✓ Loaded domain config: {args.domain} (from experiments_phase8c_v2/)")
+        except FileNotFoundError:
+            try:
+                config = load_domain_config(args.domain, config_dir=Path("configs/experiments_phase8c"))
+                print(f"✓ Loaded domain config: {args.domain} (from experiments_phase8c/)")
+            except FileNotFoundError:
+                config = load_domain_config(args.domain)
+                print(f"✓ Loaded domain config: {args.domain}")
     except Exception as e:
         print(f"✗ Failed to load domain config: {e}")
         return 1

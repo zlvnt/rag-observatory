@@ -1,0 +1,63 @@
+{
+  "test_id": "ecom_easy_008",
+  "query": "Sudah bayar tapi status masih menunggu pembayaran, kenapa?",
+  "category": "payment",
+  "difficulty": "easy",
+  "expected_docs": [
+    "troubleshooting_guide.md"
+  ],
+  "timestamp": "2025-10-25T09:01:31.848653",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.5,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.5,
+        "rank": 1,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "troubleshooting_guide.md",
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 2,
+    "num_unique_docs": 2,
+    "context_length_chars": 539,
+    "context_tokens_approx": 134,
+    "retrieved_context_preview": "[Docs] **Gejala:** Sudah transfer tapi status masih \"Menunggu Pembayaran\"  \n**Solusi:**\n1. Pastikan nominal transfer tepat hingga digit terakhir\n2. Tunggu 10-30 menit untuk proses verifikasi\n3. Upload bukti transfer di halaman pesanan\n4. Pastikan transfer ke VA yang benar (cek nomor VA)\n[Docs] **Gejala:** Notifikasi gagal tapi uang sudah terpotong dari rekening  \n**Solusi:**\n1. **Jangan bayar ulang!**\n2. Cek status pesanan dalam 1x24 jam\n3. Saldo akan auto-refund dalam 3-7 hari kerja\n4. Jika >7 ...",
+    "latency_ms": 80.05
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_positives": [
+      "contact_escalation.md"
+    ],
+    "false_negatives": []
+  }
+}
