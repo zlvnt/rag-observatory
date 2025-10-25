@@ -18,7 +18,7 @@
 # - F1: 0.743 → 0.80-0.83
 # - Tokens: 140 → ~230 (5 chunks × 50 tokens)
 
-domain_name: z3_agent_exp6_markdown_v2
+domain_name: z3_agent_exp6_bge_markdown_v2
 
 knowledge_base_dir: docs/
 vector_store_dir: data/vector_stores/z3_agent_exp6_markdown/  # Reuse same index

@@ -1,0 +1,72 @@
+{
+  "test_id": "ecom_easy_006",
+  "query": "Jam operasional live chat TokoPedia?",
+  "category": "contact",
+  "difficulty": "easy",
+  "expected_docs": [
+    "contact_escalation.md"
+  ],
+  "timestamp": "2025-10-25T09:33:05.756342",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 5,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.2,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.2,
+        "rank": 2,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 3,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 4,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 5,
+    "num_unique_docs": 1,
+    "context_length_chars": 582,
+    "context_tokens_approx": 145,
+    "retrieved_context_preview": "[Docs] - **Akses**: Icon chat di app/website\n- **Respon**: Instant\n- **Capabilities**:\n- Cek status pesanan\n- Info resi\n- FAQ automation\n- Redirect ke agent jika perlu\n[Docs] - Email: pr@tokopedia.com\n- Tidak melayani komplain user\n[Docs] - **Twitter/X**: @TokopediaCare\n- **Response**: 1-4 jam (09:00-21:00)\n- **Tips**: Mention dengan hashtag #TolongTokopedia untuk prioritas\n[Docs] - Email: partnership@tokopedia.com\n- Untuk kerja sama bisnis only\n[Docs] - **URL**: community.tokopedia.com\n- **Best...",
+    "latency_ms": 27.02
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "contact_escalation.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "test_id": "ecom_edge_004",
+  "query": "Refund atau ganti barang?",
+  "category": "returns",
+  "difficulty": "easy",
+  "expected_docs": [
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-25T09:33:06.401956",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 5,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.25,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.25,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
+        "rank": 2,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.25,
+        "rank": 3,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.25,
+        "rank": 4,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 5,
+    "num_unique_docs": 1,
+    "context_length_chars": 1090,
+    "context_tokens_approx": 272,
+    "retrieved_context_preview": "[Docs] - Tetap bisa return dengan alasan valid\n- Refund sesuai harga yang dibayar\n- Voucher yang digunakan hangus (tidak dikembalikan)\n[Docs] **Sebelum dikirim:**\n- Cancel free tanpa penalti\n- Refund 100%  \n**Setelah dikirim:**\n- Ikuti prosedur return normal\n- Ongkir retur ditanggung pembeli\n[Docs] - **100% refund** untuk:\n- Produk tidak dikirim\n- Produk palsu dari Official Store\n- Kesalahan sistem TokoPedia  \n- **Refund - ongkir** untuk:\n- Return karena berubah pikiran\n- Salah pesan dari pembel...",
+    "latency_ms": 26.61
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

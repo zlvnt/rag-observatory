@@ -1,0 +1,75 @@
+{
+  "test_id": "ecom_edge_001",
+  "query": "gmna cra retrn brng yg rusk?",
+  "category": "returns",
+  "difficulty": "easy",
+  "expected_docs": [
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-25T09:32:45.662345",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 5,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 2,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 3,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
+        "rank": 4,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "contact_escalation.md",
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 5,
+    "num_unique_docs": 2,
+    "context_length_chars": 932,
+    "context_tokens_approx": 233,
+    "retrieved_context_preview": "[Docs] - Return/refund normal\n- Pertanyaan produk\n- Update data akun\n- Komplain layanan\n[Docs] - Return harus seluruh item dalam bundle\n- Tidak bisa return sebagian\n- Refund dihitung dari harga bundle, bukan satuan\n[Docs] | Masalah | Level 1 | Level 2 | Level 3 |\n|---------|---------|---------|---------|\n| Cek resi | Chatbot | - | - |\n| Return produk | Help Center | CS Chat | Tim Mediasi |\n| Akun hack | - | CS Phone | Tim Fraud |\n| Refund pending | CS Chat | CS Email | Supervisor |\n| Seller frau...",
+    "latency_ms": 79.99
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 0.5,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [
+      "contact_escalation.md"
+    ],
+    "false_negatives": []
+  }
+}

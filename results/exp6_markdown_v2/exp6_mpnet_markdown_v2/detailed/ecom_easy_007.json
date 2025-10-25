@@ -1,0 +1,75 @@
+{
+  "test_id": "ecom_easy_007",
+  "query": "Kenapa OTP tidak masuk ke HP saya?",
+  "category": "account",
+  "difficulty": "easy",
+  "expected_docs": [
+    "troubleshooting_guide.md"
+  ],
+  "timestamp": "2025-10-25T09:33:05.783777",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 5,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.7142857142857143,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.14285714285714285,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.2857142857142857,
+        "rank": 2,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 3,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.14285714285714285,
+        "rank": 4,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "troubleshooting_guide.md",
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 2,
+    "context_length_chars": 242,
+    "context_tokens_approx": 60,
+    "retrieved_context_preview": "[Docs] **Gejala:** Kode OTP tidak masuk ke SMS/email  \n**Solusi:**\n1. Tunggu hingga 5 menit\n2. Cek folder spam untuk OTP email\n3. Pastikan nomor HP aktif dan ada sinyal\n4. Klik \"Kirim Ulang OTP\" (maksimal 3x)\n5. Ganti metode OTP (SMS ↔ Email)",
+    "latency_ms": 25.52
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_positives": [
+      "contact_escalation.md"
+    ],
+    "false_negatives": []
+  }
+}

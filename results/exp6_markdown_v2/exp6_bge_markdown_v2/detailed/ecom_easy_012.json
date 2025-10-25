@@ -1,0 +1,79 @@
+{
+  "test_id": "ecom_easy_012",
+  "query": "Berapa lama batas waktu bayar setelah checkout?",
+  "category": "payment",
+  "difficulty": "easy",
+  "expected_docs": [
+    "product_faq.md"
+  ],
+  "timestamp": "2025-10-25T09:32:44.501841",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "BAAI/bge-m3",
+    "vector_store": "FAISS",
+    "retrieval_k": 5,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.2857142857142857,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 2,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
+        "rank": 3,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.14285714285714285,
+        "rank": 4,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "product_faq.md",
+      "policy_returns.md",
+      "contact_escalation.md",
+      "troubleshooting_guide.md"
+    ],
+    "num_chunks_retrieved": 5,
+    "num_unique_docs": 4,
+    "context_length_chars": 909,
+    "context_tokens_approx": 227,
+    "retrieved_context_preview": "[Docs] **A:**\n- Transfer Bank/VA: 24 jam\n- E-wallet: 2 jam\n- Kartu Kredit/Debit: Instant\n- Setelah batas waktu, pesanan otomatis dibatalkan\n[Docs] - **Elektronik**: 7 hari sejak diterima\n- **Fashion**: 3 hari sejak diterima\n- **Lainnya**: 2 hari sejak diterima\n- **Garansi toko**: Sesuai ketentuan masing-masing toko\n[Docs] - **Jam operasional**: 08:00 - 22:00 WIB\n- **Queue time**: 5-15 menit (peak: 30 menit)\n- **Prioritas untuk**:\n- Transaksi > Rp 1 juta\n- Member Gold/Platinum\n- Case urgent (frau...",
+    "latency_ms": 82.54
+  },
+  "evaluation": {
+    "precision": 0.333,
+    "recall": 1.0,
+    "f1_score": 0.5,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "product_faq.md"
+    ],
+    "false_positives": [
+      "contact_escalation.md",
+      "policy_returns.md",
+      "troubleshooting_guide.md"
+    ],
+    "false_negatives": []
+  }
+}

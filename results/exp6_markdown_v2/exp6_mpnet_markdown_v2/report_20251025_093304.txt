@@ -1,0 +1,76 @@
+============================================================
+RAG RETRIEVAL EVALUATION REPORT
+============================================================
+
+Domain: z3_agent_exp6_mpnet_markdown_v2
+Date: 2025-10-25 09:33:06
+Total Queries: 30
+
+------------------------------------------------------------
+RAG CONFIGURATION
+------------------------------------------------------------
+Chunk Size:         500
+Chunk Overlap:      50
+Embedding Model:    paraphrase-multilingual-mpnet-base-v2
+Text Splitter:      MarkdownHeaderTextSplitter
+Vector Store:       FAISS
+Retrieval K:        5
+Relevance Threshold: 0.3
+
+------------------------------------------------------------
+RETRIEVAL METRICS
+------------------------------------------------------------
+Avg Precision@3:   0.589
+Avg Recall@3:      0.967
+Avg F1 Score:      0.686
+Mean Reciprocal Rank: 0.894
+Success Rate:      100.0%
+
+Avg Chunks/Query:  3.6
+Avg Tokens/Query:  185
+
+Latency (avg):     52ms
+Latency (P50):     27ms
+Latency (P95):     35ms
+Latency (P99):     760ms
+
+Status: Precision ✗ | Recall ✓ | F1 ✗
+
+------------------------------------------------------------
+BY DIFFICULTY
+------------------------------------------------------------
+Easy (19 queries):
+  Precision: 0.544 | Recall: 1.000 | F1: 0.658 | MRR: 0.886
+Medium (9 queries):
+  Precision: 0.630 | Recall: 0.889 | F1: 0.696 | MRR: 0.944
+Hard (2 queries):
+  Precision: 0.834 | Recall: 1.000 | F1: 0.900 | MRR: 0.750
+
+------------------------------------------------------------
+BY CATEGORY
+------------------------------------------------------------
+Returns (11 queries):
+  Precision: 0.636 | Recall: 0.955 | F1: 0.727
+Contact (6 queries):
+  Precision: 0.667 | Recall: 1.000 | F1: 0.772
+Account (2 queries):
+  Precision: 0.584 | Recall: 1.000 | F1: 0.734
+Payment (4 queries):
+  Precision: 0.417 | Recall: 1.000 | F1: 0.575
+Shipping (2 queries):
+  Precision: 0.666 | Recall: 1.000 | F1: 0.750
+Product (3 queries):
+  Precision: 0.667 | Recall: 0.833 | F1: 0.667
+Technical (1 queries):
+  Precision: 0.500 | Recall: 1.000 | F1: 0.667
+Out_of_scope (1 queries):
+  Precision: 0.000 | Recall: 1.000 | F1: 0.000
+
+------------------------------------------------------------
+RECOMMENDATIONS
+------------------------------------------------------------
+⚠ Precision below target (0.8) - too many irrelevant docs retrieved
+  → Consider: Higher relevance threshold, better chunking strategy
+⚠ F1 score below target (0.75) - balance between precision and recall needed
+
+============================================================

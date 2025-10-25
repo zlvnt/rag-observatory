@@ -1,0 +1,77 @@
+{
+  "test_id": "ecom_easy_004",
+  "query": "Berapa lama refund cair ke rekening bank?",
+  "category": "returns",
+  "difficulty": "easy",
+  "expected_docs": [
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-25T09:33:05.698793",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 5,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.2857142857142857,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.0,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.14285714285714285,
+        "rank": 2,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.14285714285714285,
+        "rank": 3,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.14285714285714285,
+        "rank": 4,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "troubleshooting_guide.md",
+      "product_faq.md",
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 5,
+    "num_unique_docs": 3,
+    "context_length_chars": 972,
+    "context_tokens_approx": 243,
+    "retrieved_context_preview": "[Docs] **Gejala:** Notifikasi gagal tapi uang sudah terpotong dari rekening  \n**Solusi:**\n1. **Jangan bayar ulang!**\n2. Cek status pesanan dalam 1x24 jam\n3. Saldo akan auto-refund dalam 3-7 hari kerja\n4. Jika >7 hari, kirim bukti mutasi rekening ke CS\n[Docs] **A:**\n- Transfer Bank/VA: 24 jam\n- E-wallet: 2 jam\n- Kartu Kredit/Debit: Instant\n- Setelah batas waktu, pesanan otomatis dibatalkan\n[Docs] - Tetap bisa return dengan alasan valid\n- Refund sesuai harga yang dibayar\n- Voucher yang digunakan h...",
+    "latency_ms": 28.7
+  },
+  "evaluation": {
+    "precision": 0.333,
+    "recall": 1.0,
+    "f1_score": 0.5,
+    "reciprocal_rank": 0.333,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [
+      "troubleshooting_guide.md",
+      "product_faq.md"
+    ],
+    "false_negatives": []
+  }
+}
