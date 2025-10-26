@@ -1,0 +1,65 @@
+{
+  "test_id": "ecom_easy_005",
+  "query": "Nomor customer service TokoPedia berapa?",
+  "category": "contact",
+  "difficulty": "easy",
+  "expected_docs": [
+    "contact_escalation.md"
+  ],
+  "timestamp": "2025-10-26T09:58:52.719273",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 100,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.6,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.6,
+        "rank": 1,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.6,
+        "rank": 2,
+        "passed_threshold": true
+      }
+    ],
+    "unique_docs": [
+      "contact_escalation.md",
+      "troubleshooting_guide.md",
+      "product_faq.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 3,
+    "context_length_chars": 189,
+    "context_tokens_approx": 47,
+    "retrieved_context_preview": "[Docs] # Prosedur Kontak & Eskalasi - TokoPedia Customer Service\n[Docs] # Troubleshooting Guide - TokoPedia Customer Service\n[Docs] # Product FAQ - TokoPedia Customer Service Knowledge Base",
+    "latency_ms": 26.66
+  },
+  "evaluation": {
+    "precision": 0.333,
+    "recall": 1.0,
+    "f1_score": 0.5,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "contact_escalation.md"
+    ],
+    "false_positives": [
+      "product_faq.md",
+      "troubleshooting_guide.md"
+    ],
+    "false_negatives": []
+  }
+}

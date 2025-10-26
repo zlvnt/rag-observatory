@@ -1,7 +1,7 @@
 # RAG Observatory - Progress Report
 
-**Last Updated:** 2025-10-25
-**Status:** ✅ Phase 8 (A-D) COMPLETE | Production Config: Exp6 (0.783 precision) | Phase 9 Ready
+**Last Updated:** 2025-10-26
+**Status:** ✅ Phase 8 (A-E) COMPLETE | Production Config: Exp6 (0.783 precision) | Phase 9 Ready
 
 ---
 
@@ -96,6 +96,23 @@ Optimize RAG retrieval configuration for e-commerce domain through systematic ab
 - ✅ Phase 8B+8C: 9 hours with 0% gain (negative ROI)
 - ✅ 2.2% gap addressable with advanced techniques (Phase 9)
 - ✅ Production-ready: Stable, efficient (211 tokens/query), fast (P95 168ms)
+
+### Phase 8E: Parent-Child Markdown Splitter ✅ COMPLETE (Oct 26)
+- ✅ Implemented Parent-Child approach (Claude web recommendation)
+- ✅ Tested two variants (parent_max_tokens: 500 vs 1500)
+- ✅ Created dedicated implementation: `z3_core/vector_parent_child.py`
+- ✅ Both experiments failed identically: Precision 0.661 (-15.6% vs Exp6) ❌
+- ✅ Root cause identified: All parent sections < threshold, no child splitting occurred
+- ✅ **Conclusion: Parent-Child NOT suitable for e-commerce domain** (docs already compact)
+- ✅ Summary documented: `PHASE_8E_SUMMARY.md`
+
+**Key Findings:**
+- ❌ All 25 Markdown sections < 500 tokens (no splitting occurred)
+- ❌ Result equivalent to pure Markdown split (Phase 8C) but worse
+- ❌ Easy queries crashed -22.9% precision (0.588 vs 0.762)
+- ✅ E-commerce docs already optimal size (100-300 tokens/section)
+- ✅ Parent-Child best for long technical docs, not compact FAQ content
+- ✅ Exp6 (RecursiveCharacterTextSplitter) confirmed optimal for domain
 
 ---
 
@@ -271,9 +288,13 @@ relevance_threshold: 0.3
 - `experiment_by_category.csv` - Performance by category (returns, payment, etc.)
 - `all_experiments_overview.csv` - Complete overview with rankings
 - `qualitative_analysis_exp6.csv` - ⭐ Phase 8A: Retrieved text inspection
-- `PHASE_8A_SUMMARY.md` - ⭐ Phase 8A: Qualitative analysis & failure patterns
-- `PHASE_8B_SUMMARY.md` - ⭐ Phase 8B: BGE-M3 embedding ablation results
-- `PHASE_8C_SUMMARY.md` - ⭐ Phase 8C: Markdown splitter ablation results
+
+### Phase 8 Summary Documents:
+- `PHASE_8A_SUMMARY.md` - ⭐ Qualitative analysis & failure patterns
+- `PHASE_8B_SUMMARY.md` - ⭐ BGE-M3 embedding ablation results
+- `PHASE_8C_SUMMARY.md` - ⭐ Markdown splitter ablation results
+- `PHASE_8D_SUMMARY.md` - ⭐ Final optimal configuration decision
+- `PHASE_8E_SUMMARY.md` - ⭐ Parent-Child markdown splitter results
 
 ---
 
@@ -296,15 +317,55 @@ relevance_threshold: 0.3
 - ✅ All variants failed (-8% to -17% precision)
 - ✅ Conclusion: RecursiveCharacterTextSplitter remains optimal
 
-**Phase 8D:** ⏳ Next Steps Decision
-- Current best: Exp6 (0.783 precision, 2.2% gap to target)
-- Option 1: Accept as production config
-- Option 2: Move to Phase 9 (advanced techniques)
+**Phase 8D:** ✅ Final Optimal Configuration (Oct 25)
+- ✅ Current best: Exp6 (0.783 precision, 2.2% gap to target)
+- ✅ Decision: Accept Exp6 as production config
+- ✅ Next: Move to Phase 9 (advanced techniques)
+
+**Phase 8E:** ✅ Parent-Child Markdown Splitter (Oct 26)
+- ✅ Tested Parent-Child approach (2 variants: 500 vs 1500 tokens)
+- ✅ Both failed identically: -15.6% precision
+- ✅ Root cause: No parent-child splitting occurred (docs already compact)
+- ✅ Conclusion: Parent-Child NOT suitable for e-commerce domain
 
 ---
 
-**Status:** Phase 8 (A-D) complete ✅ | Basic optimization exhausted | Production config identified
+## 🎓 Phase 8 Final Summary (Complete)
+
+**Total Sub-phases:** 5 (8A, 8B, 8C, 8D, 8E)
+**Total Experiments:** 15 (Phase 1-7: 8, Phase 8B: 4, Phase 8C: 4, Phase 8E: 2)
+**Total Time:** ~3 weeks
+**Outcome:** All basic optimization exhausted, Exp6 confirmed as optimal
+
+### Phase 8 Key Learnings:
+- ✅ **Embedding:** MPNet optimal (BGE-M3 failed: -1.4% to -14.4%)
+- ✅ **Splitter:** RecursiveCharacter optimal (Markdown failed: -8% to -17%)
+- ✅ **Parent-Child:** Not suitable for compact docs (failed: -15.6%)
+- ✅ **Production Config:** Exp6 (k=3, MPNet, chunk=500, precision 0.783)
+- ✅ **Optimization Ceiling:** Embedding ✅, Splitter ✅, k ✅, threshold ✅, chunk ✅
+- ✅ **Gap to Target:** +2.2% precision (addressable with Phase 9 advanced techniques)
+
+### What Worked:
+- Qualitative analysis (Phase 8A) identified failure patterns
+- Systematic ablation testing (8B, 8C, 8E)
+- Negative results documented rigorously
+
+### What Failed:
+- BGE-M3 multi-functional (noise instead of quality)
+- MarkdownHeaderTextSplitter (too many tiny chunks)
+- Parent-Child approach (docs already optimal size)
+
+### Next Direction:
+**Phase 9: Advanced Retrieval Techniques**
+- Reranker (bge-reranker-v2-m3): +6% precision expected → 0.84
+- MMR (multi-doc diversity): +3-5% recall expected
+- BM25 Hybrid Search: +2.5% precision expected
+- **Combined target:** 0.89-0.91 precision (90% milestone)
+
+---
+
+**Status:** ✅ Phase 8 (A-E) COMPLETE | Basic optimization ceiling reached | Phase 9 ready
 **Production Config:** Exp6 with MPNet + RecursiveCharacterTextSplitter (k=3, precision 0.783, recall 0.917, F1 0.795)
 **Target Gap:** +2.2% precision to reach 0.80 target (addressable with Phase 9)
 **Optimization Ceiling:** Embedding (MPNet ✅), Splitter (Recursive ✅), k=3 ✅, threshold=0.3 ✅, chunk=500 ✅
-**Next:** Phase 9 (MMR + reranker) - expected 0.83-0.85 precision
+**Next:** Phase 9 (Reranker + MMR + Hybrid) - expected 0.83-0.91 precision

@@ -1,0 +1,66 @@
+{
+  "test_id": "ecom_edge_003",
+  "query": "Saya mau komplain produk tapi juga mau tanya promo",
+  "category": "product",
+  "difficulty": "medium",
+  "expected_docs": [
+    "policy_returns.md",
+    "product_faq.md"
+  ],
+  "timestamp": "2025-10-26T09:58:53.331740",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 100,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.0,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.125,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.125,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "product_faq.md",
+      "troubleshooting_guide.md",
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 3,
+    "context_length_chars": 1424,
+    "context_tokens_approx": 356,
+    "retrieved_context_preview": "[Docs] # Product FAQ - TokoPedia Customer Service Knowledge Base\n[Docs] ### Produk tidak sesuai deskripsi\n**Bukti yang diperlukan:**\n1. Foto produk yang diterima (berbagai angle)\n2. Screenshot deskripsi/foto dari listing\n3. Video unboxing jika ada  \n**Proses komplain:**\n- Ajukan dalam 2x24 jam setelah terima\n- Pilih alasan \"Produk tidak sesuai\"\n- Tunggu mediasi penjual-pembeli\n- Eskalasi ke TokoPedia jika tidak ada solusi  \n### Produk cacat/tidak berfungsi\n**Dokumentasi wajib:**\n- Video yang men...",
+    "latency_ms": 25.07
+  },
+  "evaluation": {
+    "precision": 0.667,
+    "recall": 1.0,
+    "f1_score": 0.8,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "product_faq.md",
+      "policy_returns.md"
+    ],
+    "false_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_negatives": []
+  }
+}

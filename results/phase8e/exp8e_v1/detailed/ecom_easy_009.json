@@ -1,0 +1,63 @@
+{
+  "test_id": "ecom_easy_009",
+  "query": "Paket sudah 10 hari belum sampai, harus gimana?",
+  "category": "shipping",
+  "difficulty": "easy",
+  "expected_docs": [
+    "troubleshooting_guide.md"
+  ],
+  "timestamp": "2025-10-26T09:58:52.823895",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 100,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.375,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.125,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.0,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "troubleshooting_guide.md",
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 2,
+    "context_length_chars": 864,
+    "context_tokens_approx": 216,
+    "retrieved_context_preview": "[Docs] ### Paket tidak kunjung diterima\n**Timeline pengecekan:**\n- H+1: Cek nomor resi di kurir\n- H+3: Hubungi penjual\n- H+7: Ajukan komplain di sistem\n- H+10: Eskalasi ke CS TokoPedia  \n**Yang perlu disiapkan:**\n- Screenshot tracking terakhir\n- Foto penerima jika status \"Delivered\"\n- Kronologi lengkap  \n### Paket diterima dalam kondisi rusak\n**Langkah immediate:**\n1. **JANGAN konfirmasi pesanan diterima**\n2. Foto/video kondisi paket (packaging + isi)\n3. Buat komplain dengan kategori \"Barang Rus...",
+    "latency_ms": 25.69
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_positives": [
+      "policy_returns.md"
+    ],
+    "false_negatives": []
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "test_id": "ecom_easy_012",
+  "query": "Berapa lama batas waktu bayar setelah checkout?",
+  "category": "payment",
+  "difficulty": "easy",
+  "expected_docs": [
+    "product_faq.md"
+  ],
+  "timestamp": "2025-10-26T09:58:52.903610",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 100,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.14285714285714285,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.7142857142857143,
+        "rank": 2,
+        "passed_threshold": true
+      }
+    ],
+    "unique_docs": [
+      "troubleshooting_guide.md",
+      "policy_returns.md",
+      "product_faq.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 3,
+    "context_length_chars": 693,
+    "context_tokens_approx": 173,
+    "retrieved_context_preview": "[Docs] ### Q: Apa saja metode pembayaran yang tersedia?\n**A:**\n- Transfer Bank (BCA, Mandiri, BNI, BRI)\n- Virtual Account\n- E-wallet (GoPay, OVO, DANA, ShopeePay)\n- Kartu Kredit/Debit\n- TokoPedia PayLater (cicilan tanpa kartu kredit)  \n### Q: Berapa lama batas waktu pembayaran?\n**A:**\n- Transfer Bank/VA: 24 jam\n- E-wallet: 2 jam\n- Kartu Kredit/Debit: Instant\n- Setelah batas waktu, pesanan otomatis dibatalkan  \n### Q: Apakah bisa COD (Cash on Delivery)?\n**A:** COD tersedia untuk:\n- Wilayah terten...",
+    "latency_ms": 24.62
+  },
+  "evaluation": {
+    "precision": 0.333,
+    "recall": 1.0,
+    "f1_score": 0.5,
+    "reciprocal_rank": 0.333,
+    "true_positives": [
+      "product_faq.md"
+    ],
+    "false_positives": [
+      "troubleshooting_guide.md",
+      "policy_returns.md"
+    ],
+    "false_negatives": []
+  }
+}

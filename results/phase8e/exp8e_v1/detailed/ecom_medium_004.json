@@ -1,0 +1,66 @@
+{
+  "test_id": "ecom_medium_004",
+  "query": "Akun saya ter-hack dan ada transaksi mencurigakan, langkah apa yang harus dilakukan?",
+  "category": "account",
+  "difficulty": "medium",
+  "expected_docs": [
+    "troubleshooting_guide.md",
+    "contact_escalation.md"
+  ],
+  "timestamp": "2025-10-26T09:58:53.083870",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 100,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.16666666666666666,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.08333333333333333,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/product_faq.md",
+        "relevance_score": 0.3333333333333333,
+        "rank": 2,
+        "passed_threshold": true
+      }
+    ],
+    "unique_docs": [
+      "contact_escalation.md",
+      "troubleshooting_guide.md",
+      "product_faq.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 3,
+    "context_length_chars": 493,
+    "context_tokens_approx": 123,
+    "retrieved_context_preview": "[Docs] ### Q: Apakah transaksi di TokoPedia aman?\n**A:** Ya, kami menggunakan:\n- Enkripsi SSL untuk semua transaksi\n- Sistem escrow (dana ditahan sampai barang diterima)\n- Verifikasi 2 langkah untuk akun\n- Monitoring 24/7 untuk aktivitas mencurigakan  \n### Q: Bagaimana jika saya menerima produk palsu?\n**A:** Segera laporkan melalui:\n1. Klik \"Komplain\" di detail pesanan\n2. Upload bukti foto/video\n3. Tim kami akan investigasi dalam 2x24 jam\n4. Dana akan dikembalikan 100% jika terbukti palsu",
+    "latency_ms": 25.45
+  },
+  "evaluation": {
+    "precision": 0.667,
+    "recall": 1.0,
+    "f1_score": 0.8,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "contact_escalation.md",
+      "troubleshooting_guide.md"
+    ],
+    "false_positives": [
+      "product_faq.md"
+    ],
+    "false_negatives": []
+  }
+}

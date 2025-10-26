@@ -40,6 +40,13 @@ class DomainConfig:
     chunk_overlap: int = 100
     retrieval_k: int = 4
 
+    # Parent-Child Markdown Splitter parameters (Phase 8E)
+    use_parent_child_splitter: bool = False
+    parent_headers_to_split: Optional[list] = None
+    parent_max_tokens: int = 500
+    child_chunk_size: int = 450
+    child_chunk_overlap: int = 50
+
     @classmethod
     def from_yaml(cls, config_path: Path) -> "DomainConfig":
         # Load domain configuration from YAML file.

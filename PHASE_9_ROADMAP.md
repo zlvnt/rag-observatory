@@ -1,13 +1,15 @@
 # Phase 9 Roadmap - Advanced Retrieval Techniques
 
-**Date:** 2025-10-25
-**Status:** Ready to start | Phase 8 complete (basic optimization exhausted)
+**Date:** 2025-10-26 (Updated)
+**Status:** Ready to start | Phase 8 (A-E) complete (basic optimization exhausted)
 
 ---
 
 ## 🎯 Phase 9 Overview
 
 **Goal:** Bridge the 2.2% precision gap (0.783 → 0.80+) using advanced retrieval techniques
+
+**Target:** Precision ≥ 0.80 (minimum) | Stretch: 0.85-0.90 (with combined techniques)
 
 **Current State:**
 - Winner: Exp6 (MPNet + RecursiveCharacterTextSplitter + k=3)
@@ -16,8 +18,9 @@
 - F1: 0.795 (exceeds target)
 
 **Phase 8 Findings (What We Exhausted):**
-- ✅ Embedding optimization complete (MPNet optimal, BGE-M3 failed)
-- ✅ Splitter optimization complete (Recursive optimal, Markdown failed)
+- ✅ Embedding optimization complete (MPNet optimal, BGE-M3 failed -1.4% to -14.4%)
+- ✅ Splitter optimization complete (Recursive optimal, Markdown failed -8% to -17%)
+- ✅ Parent-Child approach rejected (failed -15.6%, docs too compact)
 - ✅ k parameter optimized (k=3 best)
 - ✅ Threshold optimized (0.3 best)
 
@@ -27,222 +30,71 @@
 3. 🟡 **Multi-doc failures (20%)** - Only 1 doc retrieved when 2+ expected
 4. 🟢 **Context cutting (40%)** - Splitter cuts mid-section (cannot fix with current tools)
 
-**Phase 9 Strategy:**
-- Focus on techniques that don't require changing basic parameters
-- Add post-processing layers (reranking, diversity)
+**Phase 9 Strategy (Revised based on Claude web insights):**
+- **Priority 1:** Reranker (fixes 40% of failures: ranking + meleset sedikit)
+- **Priority 2:** Hybrid Search BM25 (keyword match for exact terms)
+- **Priority 3:** MMR (only if multi-doc still problematic after reranker)
+- **Priority 4:** Query preprocessing (optional, +1-2% polish)
 - No more embedding/splitter experiments
 
 ---
 
-## 🗺️ Phase 9 Roadmap
+## 🗺️ Phase 9 Roadmap (Prioritized by Impact)
 
-### **Phase 9A: MMR (Maximal Marginal Relevance)** ⏳ NEXT
+### **Phase 9A: Reranker (Cross-Encoder)** ⏳ HIGHEST PRIORITY
 
-**Goal:** Improve diversity and reduce redundancy in retrieved chunks
+**Goal:** Fix ranking accuracy using neural cross-encoder model
 
-**Duration:** 2-3 hours
+**Duration:** 3-4 hours (includes model download ~600MB-1.5GB)
 
-**What is MMR:**
-- Algorithm: Balance relevance vs diversity
-- Formula: `MMR = λ × similarity(query, doc) - (1-λ) × max_similarity(doc, selected_docs)`
-- Built-in: Langchain FAISS retriever (no extra model needed)
-- No download required
+**Expected Impact:** +5-7% precision → **0.83-0.85** (exceeds 0.80 target!)
 
-**Target Problem:**
-- 🟡 **Multi-doc failures (20%)** - Retrieve chunks from different docs
-- Avoid redundant chunks from same section
+**Why Priority #1:**
+- Fixes **40% of failures** (ranking 10% + "meleset sedikit" 30%)
+- Highest ROI technique from Claude web analysis
+- No config changes needed (works on top of Exp6)
+- Proven technique in production RAG systems
 
-**How it works:**
-```
-Standard retrieval (k=5):
-→ Chunk 1: policy_returns.md (section A)
-→ Chunk 2: policy_returns.md (section A, redundant!)
-→ Chunk 3: policy_returns.md (section B)
-→ Chunk 4: policy_returns.md (section C)
-→ Chunk 5: troubleshooting_guide.md
+**What is Reranker:**
+- **Model:** Cross-encoder (not bi-encoder like MPNet)
+- **Type:** BAAI/bge-reranker-base (600MB) or bge-reranker-v2-m3 (1.5GB)
+- **Input:** (query, document) pairs → **Output:** relevance score (0-1)
+- **Advantage:** Much more accurate than bi-encoder similarity
+- **How different:**
+  - Bi-encoder: Encode query & doc separately, compute similarity
+  - Cross-encoder: Encode (query + doc) together, learns interaction
 
-MMR retrieval (k=5, λ=0.5):
-→ Chunk 1: policy_returns.md (section A)
-→ Chunk 2: troubleshooting_guide.md (diverse!)
-→ Chunk 3: contact_escalation.md (diverse!)
-→ Chunk 4: policy_returns.md (section B, different from chunk 1)
-→ Chunk 5: product_faq.md (diverse!)
-```
-
-**Implementation:**
-- Modify `z3_core/rag.py` to use `max_marginal_relevance_search()`
-- Test different λ values: 0.3, 0.5, 0.7
-  - λ=1.0: Pure relevance (standard retrieval)
-  - λ=0.0: Pure diversity (not useful)
-  - λ=0.5: Balanced (recommended start)
-
-**Experiments:**
-1. **Exp9a_mmr_03:** λ=0.3 (high diversity)
-2. **Exp9a_mmr_05:** λ=0.5 (balanced)
-3. **Exp9a_mmr_07:** λ=0.7 (high relevance)
-
-**Config (constant):**
-```yaml
-embedding_model: sentence-transformers/paraphrase-multilingual-mpnet-base-v2
-chunk_size: 500
-chunk_overlap: 50
-retrieval_k: 5  # Higher k for MMR (need candidates to diversify)
-relevance_threshold: 0.3
-mmr_lambda: 0.5  # Vary this
-```
-
-**Expected Results:**
-- Precision: 0.783 → 0.80-0.82 (+2-4%)
-- Recall: Maintain 0.92+ (more docs covered)
-- Multi-doc queries: Improved recall (from 0.50 → 0.70+)
-
-**Success Criteria:**
-- Multi-doc recall improvement ≥ +15%
-- Overall precision ≥ 0.80 (reach target!)
-- No significant precision drop on easy queries
-
----
-
-#### Task 1: Implement MMR Retrieval
-
-**Modify:** `z3_core/rag.py`
-
-**Current code:**
-```python
-def get_context(retriever, query: str, k: int = 4) -> tuple:
-    docs = retriever.invoke(query)
-    # ...
-```
-
-**New code:**
-```python
-def get_context(retriever, query: str, k: int = 4, use_mmr: bool = False,
-                mmr_lambda: float = 0.5) -> tuple:
-    if use_mmr:
-        docs = retriever.max_marginal_relevance_search(
-            query,
-            k=k,
-            fetch_k=k*3,  # Fetch 3x candidates for diversity selection
-            lambda_mult=mmr_lambda
-        )
-    else:
-        docs = retriever.invoke(query)
-    # ...
-```
-
-**Parameters:**
-- `fetch_k`: Number of candidates to fetch before MMR filtering (recommend k*3)
-- `lambda_mult`: Balance between relevance (1.0) and diversity (0.0)
-
----
-
-#### Task 2: Create MMR Test Configs
-
-**Create folder:** `configs/experiments_phase9a/`
-
-**Files:**
-1. `z3_agent_exp9a_mmr_03.yaml`
-2. `z3_agent_exp9a_mmr_05.yaml`
-3. `z3_agent_exp9a_mmr_07.yaml`
-
-**Example config:**
-```yaml
-domain_name: z3_agent_exp9a_mmr_05
-knowledge_base_dir: docs/
-vector_store_dir: data/vector_stores/z3_agent_exp6/  # Reuse Exp6 index
-
-embedding_model: sentence-transformers/paraphrase-multilingual-mpnet-base-v2
-chunk_size: 500
-chunk_overlap: 50
-retrieval_k: 5
-relevance_threshold: 0.3
-
-# MMR parameters
-use_mmr: true
-mmr_lambda: 0.5
-mmr_fetch_k: 15  # 3x retrieval_k
-```
-
----
-
-#### Task 3: Run MMR Experiments
-
-**Execute:**
-```bash
-python runners/test_runner.py --domain z3_agent_exp9a_mmr_03 --output results/exp9a_mmr_03/
-python runners/test_runner.py --domain z3_agent_exp9a_mmr_05 --output results/exp9a_mmr_05/
-python runners/test_runner.py --domain z3_agent_exp9a_mmr_07 --output results/exp9a_mmr_07/
-```
-
-**Compare with baseline:**
-- Exp6 (k=3, no MMR): Precision 0.783
-- Exp9a variants (k=5, MMR): Target precision 0.80+
-
----
-
-#### Task 4: Analyze MMR Results
-
-**Metrics to compare:**
-
-| Config | λ | k | Precision | Recall | F1 | Multi-doc Recall | Tokens/Query |
-|--------|---|---|-----------|--------|----|--------------------|--------------|
-| Exp6 (baseline) | - | 3 | 0.783 | 0.917 | 0.795 | 0.50 | 211 |
-| Exp9a_mmr_03 | 0.3 | 5 | ??? | ??? | ??? | ??? | ??? |
-| Exp9a_mmr_05 | 0.5 | 5 | ??? | ??? | ??? | ??? | ??? |
-| Exp9a_mmr_07 | 0.7 | 5 | ??? | ??? | ??? | ??? | ??? |
-
-**Key analyses:**
-1. Does MMR improve multi-doc recall?
-2. Does diversity hurt precision on easy queries?
-3. What's the optimal λ value?
-4. Token efficiency impact (k=5 vs k=3)
-
----
-
-### **Phase 9B: bge-reranker (Cross-Encoder Reranking)** ⏳ PLANNED
-
-**Goal:** Improve ranking accuracy using neural cross-encoder model
-
-**Duration:** 3-4 hours (includes model download)
-
-**What is bge-reranker:**
-- Model: BAAI/bge-reranker-v2-m3 (1.5GB) or BAAI/bge-reranker-base (600MB)
-- Type: Cross-encoder (not bi-encoder like MPNet)
-- Input: (query, document) pairs → Output: relevance score (0-1)
-- Much more accurate than bi-encoder embeddings
-
-**Target Problem:**
-- 🔴 **Ranking issues (10%)** - Fix incorrect ranking
-- 🟠 **"Meleset sedikit" (30%)** - Prefer correct subsection over nearby text
-- **Total 40% of failures!**
+**Target Problems:**
+- 🔴 **Ranking issues (10%)** - Correct doc retrieved but ranked low → **FIXED**
+- 🟠 **"Meleset sedikit" (30%)** - Right doc, wrong subsection → **FIXED**
+- **Total: 40% of failures addressed!**
 
 **How it works:**
 ```
-Standard retrieval (k=7):
-1. policy_returns.md (score: 0.85) ← WRONG section
-2. troubleshooting_guide.md (score: 0.83) ← CORRECT but ranked low
-3. product_faq.md (score: 0.80)
-...
+Standard retrieval (MPNet bi-encoder, k=3):
+1. policy_returns.md (similarity: 0.85) ← WRONG section
+2. troubleshooting_guide.md (similarity: 0.83) ← CORRECT but ranked #2
+3. product_faq.md (similarity: 0.80)
 
-After reranking (top-3):
-1. troubleshooting_guide.md (score: 0.95) ← CORRECT, now ranked #1!
-2. policy_returns.md (score: 0.72) ← Dropped
+After reranking (cross-encoder, top-3):
+1. troubleshooting_guide.md (score: 0.95) ← CORRECT, now ranked #1! ✅
+2. policy_returns.md (score: 0.72) ← Correct section now
 3. contact_escalation.md (score: 0.68)
 ```
 
-**Implementation:**
-- Retrieve k=7 candidates (MPNet bi-encoder)
-- Rerank with bge-reranker (cross-encoder)
-- Return top-3 for LLM
+**Pipeline:**
+```
+Query → Retrieve k=7 (MPNet) → Rerank (cross-encoder) → Return top-3
+```
 
 **Why k=7 → top-3:**
 - Reranker needs more candidates to choose from
-- k=3 too few for reranker to work effectively
-- Cross-encoder slower, so filter down to top-3
+- k=3 too few for reranker to be effective
+- Cross-encoder slower → filter down to top-3 for LLM
 
 ---
 
-#### Task 5: Install bge-reranker
+#### Task 1: Install bge-reranker
 
 **Install FlagEmbedding:**
 ```bash
@@ -265,7 +117,7 @@ reranker = FlagReranker('BAAI/bge-reranker-v2-m3', use_fp16=True)
 
 ---
 
-#### Task 6: Implement Reranker Pipeline
+#### Task 2: Implement Reranker Pipeline
 
 **Create:** `z3_core/reranker.py`
 
@@ -324,17 +176,17 @@ def get_context(retriever, query: str, k: int = 4, use_reranker: bool = False,
 
 ---
 
-#### Task 7: Create Reranker Test Configs
+#### Task 3: Create Reranker Test Configs
 
-**Create folder:** `configs/experiments_phase9b/`
+**Create folder:** `configs/experiments_phase9a/`
 
 **Files:**
-1. `z3_agent_exp9b_reranker_base.yaml` (bge-reranker-base)
-2. `z3_agent_exp9b_reranker_v2.yaml` (bge-reranker-v2-m3, if base succeeds)
+1. `z3_agent_exp9a_reranker_base.yaml` (bge-reranker-base)
+2. `z3_agent_exp9a_reranker_v2.yaml` (bge-reranker-v2-m3, if base succeeds)
 
 **Example config:**
 ```yaml
-domain_name: z3_agent_exp9b_reranker_base
+domain_name: z3_agent_exp9a_reranker_base
 knowledge_base_dir: docs/
 vector_store_dir: data/vector_stores/z3_agent_exp6/  # Reuse Exp6 index
 
@@ -352,11 +204,11 @@ reranker_top_k: 3  # Final number to return
 
 ---
 
-#### Task 8: Run Reranker Experiments
+#### Task 4: Run Reranker Experiments
 
 **Execute:**
 ```bash
-python runners/test_runner.py --domain z3_agent_exp9b_reranker_base --output results/exp9b_reranker_base/
+python runners/test_runner.py --domain z3_agent_exp9a_reranker_base --output results/phase9a/exp9a_reranker_base/
 ```
 
 **Expected results:**
@@ -367,15 +219,15 @@ python runners/test_runner.py --domain z3_agent_exp9b_reranker_base --output res
 
 ---
 
-#### Task 9: Compare Reranker vs Baseline
+#### Task 5: Compare Reranker vs Baseline
 
 **Metrics comparison:**
 
 | Config | Retrieval | Reranker | Precision | Recall | F1 | MRR | Tokens/Query |
 |--------|-----------|----------|-----------|--------|----|----|--------------|
 | Exp6 | MPNet k=3 | None | 0.783 | 0.917 | 0.795 | 0.950 | 211 |
-| Exp9b_base | MPNet k=7 | bge-base | ??? | ??? | ??? | ??? | ??? |
-| Exp9b_v2 | MPNet k=7 | bge-v2-m3 | ??? | ??? | ??? | ??? | ??? |
+| Exp9a_base | MPNet k=7 | bge-base | ??? | ??? | ??? | ??? | ??? |
+| Exp9a_v2 | MPNet k=7 | bge-v2-m3 | ??? | ??? | ??? | ??? | ??? |
 
 **Qualitative check:**
 - Sample 5-10 failed queries from Exp6
@@ -386,31 +238,108 @@ python runners/test_runner.py --domain z3_agent_exp9b_reranker_base --output res
 
 ---
 
-### **Phase 9C: Combined Approach (Optional)** ⏳ PLANNED
+### **Phase 9B: Hybrid Search (BM25 + Semantic)** ⏳ OPTIONAL
 
-**Goal:** Test if MMR + Reranker can be combined
+**Goal:** Combine keyword matching (BM25) with semantic search (MPNet)
+
+**Duration:** 2-3 hours
+
+**Expected Impact:** +2-3% precision → **0.85-0.87** (if after reranker)
+
+**Why Hybrid:**
+- **BM25:** Keyword-based (good for exact terms like "1500-600", "OTP")
+- **Semantic:** Meaning-based (good for paraphrases)
+- **Combined:** Best of both worlds
+
+**Target Problems:**
+- Exact term queries (phone numbers, codes, product names)
+- Reduce "meleset sedikit" further (+10% improvement)
+
+**Implementation:**
+```python
+from langchain.retrievers import EnsembleRetriever
+from langchain_community.retrievers import BM25Retriever
+
+# Current vector retriever
+vector_retriever = faiss_retriever  # MPNet
+
+# Add BM25
+bm25_retriever = BM25Retriever.from_documents(docs)
+
+# Ensemble (65% semantic, 35% keyword)
+hybrid_retriever = EnsembleRetriever(
+    retrievers=[vector_retriever, bm25_retriever],
+    weights=[0.65, 0.35]
+)
+```
+
+**Only test if:**
+- Reranker alone doesn't reach 0.85
+- Exact-term queries still failing
+
+---
+
+### **Phase 9C: MMR (Maximal Marginal Relevance)** ⏳ LOWEST PRIORITY
+
+**Goal:** Improve diversity and reduce redundancy
+
+**Duration:** 2 hours
+
+**Expected Impact:** +3-5% recall on multi-doc queries (precision impact minimal)
+
+**Why Last Priority:**
+- Only fixes 20% of failures (multi-doc)
+- Reranker already addresses 40% of failures
+- Can combine with reranker if needed
+
+**What is MMR:**
+- Algorithm: Balance relevance vs diversity
+- Formula: `MMR = λ × similarity(query, doc) - (1-λ) × max_similarity(doc, selected_docs)`
+- Built-in: Langchain FAISS retriever (no extra model needed)
+
+**How it works:**
+```
+Standard retrieval (k=5):
+→ Chunk 1, 2, 3: policy_returns.md (redundant!)
+→ Chunk 4, 5: troubleshooting_guide.md
+
+MMR retrieval (k=5, λ=0.5):
+→ Chunk 1: policy_returns.md
+→ Chunk 2: troubleshooting_guide.md (diverse!)
+→ Chunk 3: contact_escalation.md (diverse!)
+→ Chunk 4: product_faq.md (diverse!)
+→ Chunk 5: policy_returns.md (different section)
+```
+
+**Only test if:**
+- Multi-doc recall still < 0.70 after reranker
+- Time permits
+
+---
+
+### **Phase 9D: Combined Approach (Optional)** ⏳ IF NEEDED
+
+**Goal:** Test if Reranker + BM25 + MMR can reach 0.90 precision
 
 **Approach:**
 ```
-Query → Retrieve k=10 (MPNet) → MMR (diverse 7) → Rerank (top-3)
+Query → Hybrid Retrieval (BM25 + Semantic) k=10 → MMR (diverse 7) → Rerank (top-3)
 ```
 
-**Hypothesis:**
-- MMR ensures diversity (different docs)
-- Reranker ensures accuracy (correct ranking)
-- Combined: Best of both worlds
+**Expected Impact:** +10-13% → **0.88-0.91** (90% milestone!)
 
 **Only test if:**
-- Both 9A and 9B show improvement
+- Reranker alone reaches 0.83-0.85
+- Want to reach stretch goal (0.90 precision)
 - Time permits
 
 **Config:**
 ```yaml
 retrieval_k: 10
+use_hybrid: true
+hybrid_weights: [0.65, 0.35]  # Semantic, BM25
 use_mmr: true
 mmr_lambda: 0.5
-mmr_fetch_k: 30
-mmr_return_k: 7
 use_reranker: true
 reranker_top_k: 3
 ```
@@ -419,21 +348,25 @@ reranker_top_k: 3
 
 ## 📊 Deliverables Summary
 
-### Phase 9A Outputs:
-- ⏳ Modified `z3_core/rag.py` with MMR support
-- ⏳ 3 MMR experiments (λ=0.3, 0.5, 0.7)
-- ⏳ MMR comparison table (metrics by λ)
-- ⏳ Best λ value identified
-
-### Phase 9B Outputs:
+### Phase 9A Outputs (Reranker - PRIORITY):
 - ⏳ `z3_core/reranker.py` (BGEReranker class)
 - ⏳ Modified `z3_core/rag.py` with reranker support
-- ⏳ 1-2 reranker experiments (base/v2)
+- ⏳ 1-2 reranker experiments (bge-reranker-base / bge-reranker-v2-m3)
 - ⏳ Reranker comparison table
 - ⏳ Qualitative analysis of ranking improvements
 
-### Phase 9C Outputs (Optional):
-- ⏳ Combined MMR + Reranker experiment
+### Phase 9B Outputs (Hybrid BM25 - Optional):
+- ⏳ Modified `z3_core/rag.py` with hybrid retriever support
+- ⏳ 1-2 hybrid experiments (weight variations)
+- ⏳ Hybrid comparison table
+
+### Phase 9C Outputs (MMR - Optional):
+- ⏳ Modified `z3_core/rag.py` with MMR support
+- ⏳ 1-3 MMR experiments (λ variations)
+- ⏳ MMR comparison table
+
+### Phase 9D Outputs (Combined - Optional):
+- ⏳ Combined experiment (Reranker + BM25 + MMR)
 - ⏳ Final comparison table (all Phase 9 variants)
 
 ### Final Documentation:
@@ -451,38 +384,60 @@ reranker_top_k: 3
 3. ✅ F1 score ≥ 0.82
 4. ✅ Identified production-ready configuration
 
-**Stretch goals:**
-- 🎯 Precision ≥ 0.85
+**Minimum success (Phase 9A only):**
+- 🎯 Precision ≥ 0.83 (reranker alone, +5% gain)
+- 🎯 MRR ≥ 0.97 (better ranking)
+- 🎯 Ranking issues reduced from 10% → 3%
+
+**Stretch goals (with combined techniques):**
+- 🎯 Precision ≥ 0.85 (Reranker + BM25)
+- 🎯 Precision ≥ 0.90 (Reranker + BM25 + MMR) - 90% milestone!
 - 🎯 Multi-doc recall ≥ 0.70 (from 0.50)
-- 🎯 MRR ≥ 0.97
 - 🎯 All categories ≥ 0.75 precision
 
 ---
 
-## 📅 Estimated Timeline
+## 📅 Estimated Timeline (Updated)
 
-**Total duration:** 1-2 days (5-7 hours)
+**Minimum path (Phase 9A only): 3-4 hours**
 
 **Breakdown:**
-- Phase 9A (MMR): 2-3 hours
-  - Implementation: 1 hour
-  - Testing (3 experiments): 1.5 hours
-  - Analysis: 0.5 hour
-
-- Phase 9B (Reranker): 3-4 hours
+- **Phase 9A (Reranker - PRIORITY): 3-4 hours**
   - Model download: 30 min
   - Implementation: 1.5 hours
   - Testing (1-2 experiments): 1.5 hours
   - Analysis: 0.5 hour
+  - **Decision point:** If precision ≥ 0.85 → DONE! 🎉
 
-- Phase 9C (Combined): 1 hour (optional)
+- **Phase 9B (Hybrid BM25 - Optional): 2-3 hours**
+  - Only if reranker < 0.85
+  - Implementation: 1 hour
+  - Testing: 1.5 hours
+  - Analysis: 0.5 hour
 
-- Documentation: 1 hour
+- **Phase 9C (MMR - Optional): 2 hours**
+  - Only if multi-doc recall still low
+  - Implementation: 1 hour
+  - Testing: 1 hour
 
-**Can be sequential:**
-- If MMR reaches target (0.80+) → Skip Phase 9B
-- If MMR fails → Proceed to Phase 9B
-- If both fail individually → Try Phase 9C
+- **Phase 9D (Combined - Optional): 1-2 hours**
+  - Only if targeting 0.90 precision
+  - Testing: 1 hour
+  - Analysis: 1 hour
+
+- **Documentation: 1 hour**
+
+**Total estimated:** 3-12 hours (depending on how far we go)
+
+**Sequential decision tree:**
+```
+Phase 9A (Reranker)
+├─ If precision ≥ 0.85 → DONE ✅
+├─ If precision 0.80-0.84 → Try Phase 9B (Hybrid)
+│   ├─ If precision ≥ 0.87 → DONE ✅
+│   └─ If precision < 0.87 → Try Phase 9D (Combined)
+└─ If precision < 0.80 → Failed, accept Exp6 as ceiling
+```
 
 ---
 
@@ -503,28 +458,30 @@ reranker_top_k: 3
 
 ---
 
-## 🚀 Next Actions
+## 🚀 Next Actions (Updated Priority)
 
-**Immediate (Start Phase 9A):**
-1. ⏳ Modify `z3_core/rag.py` to support MMR
-2. ⏳ Create configs for MMR experiments (3 variants)
-3. ⏳ Run MMR experiments
-4. ⏳ Analyze results
+**Immediate (Start Phase 9A - Reranker):**
+1. ⏳ Install bge-reranker model (`pip install FlagEmbedding`)
+2. ⏳ Create `z3_core/reranker.py` (BGEReranker class)
+3. ⏳ Modify `z3_core/rag.py` to support reranker
+4. ⏳ Create configs for reranker experiments (1-2 variants)
+5. ⏳ Run reranker experiments
+6. ⏳ Analyze results → **Decision point**
 
-**Short-term (Phase 9B if needed):**
-5. Install bge-reranker model
-6. Implement reranker pipeline
-7. Run reranker experiments
-8. Compare with baseline
+**Short-term (Phase 9B/9C if needed):**
+7. If precision < 0.85: Try Hybrid BM25
+8. If multi-doc recall low: Try MMR
+9. If targeting 0.90: Try combined approach
 
-**Medium-term (Finalize):**
-9. Create PHASE_9_SUMMARY.md
-10. Update PROGRESS.md
-11. Decide production config
-12. Deploy or move to other advanced techniques
+**Final (Documentation):**
+10. Create PHASE_9_SUMMARY.md
+11. Update PROGRESS.md
+12. Decide production config
+13. Deploy or close research
 
 ---
 
-**Status:** Ready to start Phase 9A (MMR) ⏳
-**Expected outcome:** Precision 0.80+ (reach target!) or accept 0.783 as production ceiling
-**Time investment:** 5-7 hours total (much less than Phase 8B+8C = 9 hours with 0% gain)
+**Status:** Ready to start Phase 9A (Reranker) ⏳ HIGHEST PRIORITY
+**Expected outcome:** Precision 0.83-0.85 (exceeds 0.80 target!)
+**Time investment:** 3-4 hours minimum (reranker only), up to 12 hours if pursuing 0.90 stretch goal
+**Confidence:** 80% reranker alone bridges 2.2% gap (based on Claude web analysis)

@@ -1,0 +1,66 @@
+{
+  "test_id": "ecom_medium_003",
+  "query": "Paket diterima rusak, tapi sudah saya klik terima pesanan. Masih bisa komplain?",
+  "category": "shipping",
+  "difficulty": "medium",
+  "expected_docs": [
+    "troubleshooting_guide.md",
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-26T09:58:53.058657",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 100,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.3333333333333333,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.16666666666666666,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "troubleshooting_guide.md",
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 2,
+    "context_length_chars": 864,
+    "context_tokens_approx": 216,
+    "retrieved_context_preview": "[Docs] ### Paket tidak kunjung diterima\n**Timeline pengecekan:**\n- H+1: Cek nomor resi di kurir\n- H+3: Hubungi penjual\n- H+7: Ajukan komplain di sistem\n- H+10: Eskalasi ke CS TokoPedia  \n**Yang perlu disiapkan:**\n- Screenshot tracking terakhir\n- Foto penerima jika status \"Delivered\"\n- Kronologi lengkap  \n### Paket diterima dalam kondisi rusak\n**Langkah immediate:**\n1. **JANGAN konfirmasi pesanan diterima**\n2. Foto/video kondisi paket (packaging + isi)\n3. Buat komplain dengan kategori \"Barang Rus...",
+    "latency_ms": 24.78
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 0.5,
+    "f1_score": 0.5,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_positives": [
+      "contact_escalation.md"
+    ],
+    "false_negatives": [
+      "policy_returns.md"
+    ]
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "test_id": "ecom_hard_002",
+  "query": "Saya sudah eskalasi masalah ke CS biasa tapi tidak ada solusi setelah 5 hari. Penjual tetap tidak mau proses refund padahal barang tidak dikirim. Langkah terakhir saya apa? Apakah bisa langsung ke tim legal atau ada jalur lain?",
+  "category": "contact",
+  "difficulty": "hard",
+  "expected_docs": [
+    "contact_escalation.md",
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-26T09:59:34.532201",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 100,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 3,
+    "relevance_threshold": 0.3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.15151515151515152,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.21212121212121213,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.18181818181818182,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md",
+      "troubleshooting_guide.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 2,
+    "context_length_chars": 2261,
+    "context_tokens_approx": 565,
+    "retrieved_context_preview": "[Docs] ### Metode Refund:\n1. **Saldo TokoPedia** (instant)\n2. **Rekening Bank** (3-7 hari kerja)\n3. **Kartu Kredit** (7-14 hari kerja)\n4. **E-wallet** (1-3 hari kerja)  \n### Nominal Refund:\n- **100% refund** untuk:\n- Produk tidak dikirim\n- Produk palsu dari Official Store\n- Kesalahan sistem TokoPedia  \n- **Refund - ongkir** untuk:\n- Return karena berubah pikiran\n- Salah pesan dari pembeli  \n- **Partial refund** untuk:\n- Produk kurang lengkap tapi masih bisa digunakan\n- Kesepakatan pembeli-penjua...",
+    "latency_ms": 33.71
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 0.5,
+    "f1_score": 0.5,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_negatives": [
+      "contact_escalation.md"
+    ]
+  }
+}
