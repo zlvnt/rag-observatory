@@ -1,0 +1,45 @@
+# Phase 8E v1: Parent-Child Markdown Splitter (Claude Recommendation)
+# Goal: Test hybrid approach - Markdown semantic boundaries + size control
+#
+# Baseline: Exp6 (Recursive, chunk=500) → Precision 0.783
+# Phase 8C failed: Pure Markdown (18 tiny chunks, -17% precision)
+#
+# New approach (from Claude insights):
+#   - Parent: Markdown sections split on ##
+#   - Child: RecursiveCharacter split if parent > 500 tokens
+#   - Store: child for retrieval, parent metadata for context
+#
+# Variant 1 (This config): Follow Claude recommendation exactly
+#   - parent_max_tokens: 500 (conservative, more granular)
+#   - child_chunk_size: 500 (same as Claude)
+#
+# Expected Results:
+# - Fix "context cutting" (40% of failures in Phase 8A)
+# - More splits → more granular → potentially higher precision
+# - Target: +3% precision → 0.807-0.81
+
+domain_name: z3_agent_exp8e_v1
+
+knowledge_base_dir: docs/
+vector_store_dir: data/vector_stores/z3_agent_exp8e_v1/
+golden_dataset: golden_datasets/z3_agent_tests.json
+
+personality_config_path: content/reply_config1.json
+supervisor_prompt_path: content/supervisor-prompt.txt
+
+# Embedding: MPNet (proven winner from Phase 8)
+embedding_model: sentence-transformers/paraphrase-multilingual-mpnet-base-v2
+
+llm_model: gemini-2.0-flash
+llm_temperature: 0.7
+
+# RAG parameters
+relevance_threshold: 0.3
+retrieval_k: 3
+
+# Parent-Child Markdown Splitter Parameters (Claude recommendation)
+use_parent_child_splitter: true
+parent_headers_to_split: ["##"]  # Split on level 2 headers only
+parent_max_tokens: 500           # ← Claude recommendation: split if > 500
+child_chunk_size: 500            # ← Claude recommendation
+child_chunk_overlap: 50
