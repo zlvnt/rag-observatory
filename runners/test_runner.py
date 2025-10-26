@@ -124,7 +124,10 @@ def run_single_test(
             "embedding_model": config.embedding_model,
             "vector_store": "FAISS",
             "retrieval_k": config.retrieval_k,
-            "relevance_threshold": config.relevance_threshold
+            "relevance_threshold": config.relevance_threshold,
+            "use_reranker": getattr(config, 'use_reranker', False),
+            "reranker_model": getattr(config, 'reranker_model', None) if getattr(config, 'use_reranker', False) else None,
+            "reranker_top_k": getattr(config, 'reranker_top_k', None) if getattr(config, 'use_reranker', False) else None
         },
         "retrieval_trace": {},
         "evaluation": {}
@@ -133,13 +136,23 @@ def run_single_test(
     # no routing, always use docs mode
     start_time = time.time()
     try:
+        # Check if reranker is enabled (Phase 9A)
+        use_reranker = getattr(config, 'use_reranker', False)
+        reranker_model = getattr(config, 'reranker_model', 'BAAI/bge-reranker-base')
+        reranker_top_k = getattr(config, 'reranker_top_k', 3)
+        reranker_use_fp16 = getattr(config, 'reranker_use_fp16', True)
+
         context, retrieval_debug = retrieve_context(
             query=query,
             retriever=retriever,
             mode="docs",  # Always docs mode
             k_docs=config.retrieval_k,
             relevance_threshold=config.relevance_threshold,
-            return_debug_info=True
+            return_debug_info=True,
+            use_reranker=use_reranker,
+            reranker_model=reranker_model,
+            reranker_top_k=reranker_top_k,
+            reranker_use_fp16=reranker_use_fp16
         )
 
         retrieval_latency = (time.time() - start_time) * 1000

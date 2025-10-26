@@ -1,0 +1,48 @@
+# Phase 9A: Reranker Experiment 1 - BGE-Reranker-Base
+# Goal: Test cross-encoder reranking to improve ranking accuracy
+#
+# Baseline: Exp6 (k=3, no reranker) → Precision 0.783
+# Expected: +5-7% precision → 0.83-0.85
+#
+# Strategy:
+# 1. Retrieve k=7 candidates (MPNet bi-encoder)
+# 2. Rerank with bge-reranker-base (cross-encoder)
+# 3. Return top-3 for evaluation
+#
+# Target problems:
+# - Ranking issues (10% of failures)
+# - "Meleset sedikit" (30% of failures)
+# - Total: 40% of failures addressed
+
+domain_name: z3_agent_exp9a1
+
+knowledge_base_dir: docs/
+vector_store_dir: data/vector_stores/z3_agent_exp6/  # Reuse Exp6 index
+golden_dataset: golden_datasets/z3_agent_tests.json
+
+personality_config_path: content/reply_config1.json
+supervisor_prompt_path: content/supervisor-prompt.txt
+
+# Embedding: MPNet (proven winner from Phase 8)
+embedding_model: sentence-transformers/paraphrase-multilingual-mpnet-base-v2
+
+llm_model: gemini-2.0-flash
+llm_temperature: 0.7
+
+# Base RAG parameters (same as Exp6)
+chunk_size: 500
+chunk_overlap: 50
+relevance_threshold: 0.3
+
+# Reranker parameters
+retrieval_k: 7              # Retrieve 7 candidates (more than Exp6's k=3)
+use_reranker: true
+reranker_model: BAAI/bge-reranker-base
+reranker_top_k: 3           # Return top 3 after reranking
+reranker_use_fp16: true     # Speed optimization (half precision)
+
+# Notes:
+# - retrieval_k=7: Give reranker enough candidates to choose from
+# - reranker_top_k=3: Fair comparison with Exp6 (same final k)
+# - Model: bge-reranker-base (~600MB, faster, good quality)
+# - FP16: 2x faster with minimal accuracy loss (~1%)

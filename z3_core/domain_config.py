@@ -47,6 +47,12 @@ class DomainConfig:
     child_chunk_size: int = 450
     child_chunk_overlap: int = 50
 
+    # Reranker parameters (Phase 9A)
+    use_reranker: bool = False
+    reranker_model: str = "BAAI/bge-reranker-base"
+    reranker_top_k: int = 3
+    reranker_use_fp16: bool = True
+
     @classmethod
     def from_yaml(cls, config_path: Path) -> "DomainConfig":
         # Load domain configuration from YAML file.
