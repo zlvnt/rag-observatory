@@ -1,0 +1,66 @@
+{
+  "test_id": "ecom_hard_002",
+  "query": "Saya sudah eskalasi masalah ke CS biasa tapi tidak ada solusi setelah 5 hari. Penjual tetap tidak mau proses refund padahal barang tidak dikirim. Langkah terakhir saya apa? Apakah bisa langsung ke tim legal atau ada jalur lain?",
+  "category": "contact",
+  "difficulty": "hard",
+  "expected_docs": [
+    "contact_escalation.md",
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-26T12:44:46.182811",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 7,
+    "relevance_threshold": 0.3,
+    "use_reranker": true,
+    "reranker_model": "BAAI/bge-reranker-base",
+    "reranker_top_k": 3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.15151515151515152,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.21212121212121213,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.15151515151515152,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md",
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 2,
+    "context_length_chars": 1429,
+    "context_tokens_approx": 357,
+    "retrieved_context_preview": "[Docs] ### Nominal Refund:\n- **100% refund** untuk:\n  - Produk tidak dikirim\n  - Produk palsu dari Official Store\n  - Kesalahan sistem TokoPedia\n  \n- **Refund - ongkir** untuk:\n  - Return karena berubah pikiran\n  - Salah pesan dari pembeli\n  \n- **Partial refund** untuk:\n  - Produk kurang lengkap tapi masih bisa digunakan\n  - Kesepakatan pembeli-penjual\n\n### Refund Ongkir:\nOngkir di-refund JIKA:\n- Penjual kirim produk salah\n- Produk rusak karena packaging buruk\n- Penjual membatalkan sepihak\n[Docs...",
+    "latency_ms": 2174.18
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "contact_escalation.md",
+      "policy_returns.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

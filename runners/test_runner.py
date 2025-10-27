@@ -447,8 +447,14 @@ def main():
 
     # Load domain config
     try:
-        config = load_domain_config(args.domain)
-        print(f"✓ Loaded domain config: {args.domain}")
+        # Try experiments_phase9a subfolder first (Phase 9A)
+        try:
+            config = load_domain_config(args.domain, config_dir=Path("configs/experiments_phase9a"))
+            print(f"✓ Loaded domain config: {args.domain} (from experiments_phase9a/)")
+        except FileNotFoundError:
+            # Fallback to root configs folder
+            config = load_domain_config(args.domain)
+            print(f"✓ Loaded domain config: {args.domain}")
     except Exception as e:
         print(f"✗ Failed to load domain config: {e}")
         return 1
