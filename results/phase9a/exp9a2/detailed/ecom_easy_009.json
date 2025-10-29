@@ -1,0 +1,66 @@
+{
+  "test_id": "ecom_easy_009",
+  "query": "Paket sudah 10 hari belum sampai, harus gimana?",
+  "category": "shipping",
+  "difficulty": "easy",
+  "expected_docs": [
+    "troubleshooting_guide.md"
+  ],
+  "timestamp": "2025-10-28T14:43:03.084602",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 7,
+    "relevance_threshold": 0.3,
+    "use_reranker": true,
+    "reranker_model": "BAAI/bge-reranker-base",
+    "reranker_top_k": 3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.375,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.25,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.25,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "troubleshooting_guide.md",
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 2,
+    "context_length_chars": 582,
+    "context_tokens_approx": 145,
+    "retrieved_context_preview": "[Docs] ### Paket diterima dalam kondisi rusak\n**Langkah immediate:**\n1. **JANGAN konfirmasi pesanan diterima**\n2. Foto/video kondisi paket (packaging + isi)\n3. Buat komplain dengan kategori \"Barang Rusak\"\n4. Tolak paket jika kerusakan parah (saat kurir masih ada)\n\n### Alamat pengiriman salah\n**Jika belum dikirim:**\n- Hubungi penjual SEGERA untuk ubah alamat\n- Biaya perubahan ditanggung pembeli\n\n**Jika sudah dikirim:**\n- Koordinasi dengan kurir untuk redirect (biaya tambahan)\n- Jika gagal, paket ...",
+    "latency_ms": 2559.54
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_positives": [
+      "policy_returns.md"
+    ],
+    "false_negatives": []
+  }
+}

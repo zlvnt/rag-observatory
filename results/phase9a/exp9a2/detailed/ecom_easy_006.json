@@ -1,0 +1,63 @@
+{
+  "test_id": "ecom_easy_006",
+  "query": "Jam operasional live chat TokoPedia?",
+  "category": "contact",
+  "difficulty": "easy",
+  "expected_docs": [
+    "contact_escalation.md"
+  ],
+  "timestamp": "2025-10-28T14:42:56.895286",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 7,
+    "relevance_threshold": 0.3,
+    "use_reranker": true,
+    "reranker_model": "BAAI/bge-reranker-base",
+    "reranker_top_k": 3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.6,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.2,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/contact_escalation.md",
+        "relevance_score": 0.0,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "contact_escalation.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 1,
+    "context_length_chars": 633,
+    "context_tokens_approx": 158,
+    "retrieved_context_preview": "[Docs] ## Level 2: Customer Service\n\n### Live Chat\n- **Jam operasional**: 08:00 - 22:00 WIB\n- **Queue time**: 5-15 menit (peak: 30 menit)\n- **Prioritas untuk**:\n  - Transaksi > Rp 1 juta\n  - Member Gold/Platinum\n  - Case urgent (fraud, hack)\n\n### Call Center\n- **Nomor**: 1500-600\n- **Jam**: 24/7\n- **Panduan IVR**:\n  - Tekan 1: Masalah Pesanan\n  - Tekan 2: Pembayaran & Refund\n  - Tekan 3: Akun & Keamanan\n  - Tekan 4: Lainnya\n  - Tekan 0: Langsung ke agent\n\n### Email Support\n- **Regular**: cs@toko...",
+    "latency_ms": 2183.79
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "contact_escalation.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

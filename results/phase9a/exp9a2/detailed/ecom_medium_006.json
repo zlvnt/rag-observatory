@@ -1,0 +1,63 @@
+{
+  "test_id": "ecom_medium_006",
+  "query": "Saya beli paket bundle, bisa return salah satu item saja atau harus semua?",
+  "category": "returns",
+  "difficulty": "medium",
+  "expected_docs": [
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-10-28T14:43:29.183553",
+  "rag_config": {
+    "chunk_size": 700,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 7,
+    "relevance_threshold": 0.3,
+    "use_reranker": true,
+    "reranker_model": "BAAI/bge-reranker-base",
+    "reranker_top_k": 3
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.38461538461538464,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.3076923076923077,
+        "rank": 1,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.23076923076923078,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 2,
+    "num_unique_docs": 1,
+    "context_length_chars": 1082,
+    "context_tokens_approx": 270,
+    "retrieved_context_preview": "[Docs] ## Kasus Khusus\n\n### Garansi Resmi vs Garansi Toko\n**Garansi Resmi:**\n- Klaim langsung ke service center brand\n- TokoPedia bantu fasilitasi dokumen\n- Berlaku nasional\n\n**Garansi Toko:**\n- Klaim melalui penjual\n- Durasi dan coverage sesuai ketentuan toko\n- Biasanya hanya replace, bukan refund\n\n### Produk Bundle/Paket\n- Return harus seluruh item dalam bundle\n- Tidak bisa return sebagian\n- Refund dihitung dari harga bundle, bukan satuan\n\n### Flash Sale/Diskon Besar\n- Tetap bisa return dengan...",
+    "latency_ms": 2051.13
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}
