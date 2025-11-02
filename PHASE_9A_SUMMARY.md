@@ -124,29 +124,6 @@ Note: Same issue but with more irrelevant context mixed in
 
 ---
 
-## Recommendation
-
-### ✅ Deploy Exp9a1 for Production
-
-**Rationale:**
-1. **Target achieved:** Precision 0.828 exceeds 0.80 goal (+2.8% margin)
-2. **Better on both metrics:** Quantitative (0.828 vs 0.778) AND qualitative (56% vs 52%)
-3. **Perfect on hard queries:** 1.000 precision on difficult cases
-4. **Stronger on easy queries:** +7.9% precision where it matters most
-
-**Production config:**
-```yaml
-chunk_size: 500
-chunk_overlap: 50
-retrieval_k: 7
-use_reranker: true
-reranker_model: BAAI/bge-reranker-base
-reranker_top_k: 3
-reranker_use_fp16: true
-```
-
----
-
 ## What's Still Broken?
 
 1. **"Meleset sedikit" (30%)** - Subsection precision issues persist

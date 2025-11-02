@@ -53,6 +53,10 @@ class DomainConfig:
     reranker_top_k: int = 3
     reranker_use_fp16: bool = True
 
+    # Hybrid search parameters (Phase 9B)
+    use_hybrid_search: bool = False
+    hybrid_weights: Optional[list] = None  # [semantic_weight, bm25_weight] e.g. [0.5, 0.5]
+
     @classmethod
     def from_yaml(cls, config_path: Path) -> "DomainConfig":
         # Load domain configuration from YAML file.

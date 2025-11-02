@@ -1,0 +1,56 @@
+# Phase 9B: Hybrid Search Experiment 1
+# Goal: Fix "meleset sedikit" with BM25 keyword matching
+#
+# Baseline: Exp9a1 (chunk 500, reranker) → Precision 0.828
+# Expected: +3-5% precision (keyword matching catches exact terms)
+#
+# Strategy:
+# 1. Semantic retrieval (MPNet) → top-7
+# 2. BM25 retrieval (keyword) → top-7
+# 3. Combine (max 14 candidates)
+# 4. Reranker → return top-3
+#
+# Hypothesis:
+# - BM25 catches exact matches embeddings miss ("7 hari", "elektronik")
+# - Solves "meleset sedikit" problem (subsection precision)
+# - Combined with reranker = best of both worlds
+
+domain_name: z3_agent_exp9b1
+
+knowledge_base_dir: docs/
+vector_store_dir: data/vector_stores/z3_agent_exp6/  # Reuse Exp6 FAISS index
+golden_dataset: golden_datasets/z3_agent_tests.json
+
+personality_config_path: content/reply_config1.json
+supervisor_prompt_path: content/supervisor-prompt.txt
+
+# Embedding: MPNet (proven winner)
+embedding_model: sentence-transformers/paraphrase-multilingual-mpnet-base-v2
+
+llm_model: gemini-2.0-flash
+llm_temperature: 0.7
+
+# Base RAG parameters (same as Exp9a1)
+chunk_size: 500
+chunk_overlap: 50
+relevance_threshold: 0.3
+
+# Hybrid search parameters (Phase 9B)
+use_hybrid_search: true
+hybrid_weights: [0.5, 0.5]       # Equal weight: Semantic 50%, BM25 50%
+retrieval_k: 7                    # Retrieve 7 from EACH (semantic + BM25)
+
+# Reranker parameters (same as Exp9a1)
+use_reranker: true
+reranker_model: BAAI/bge-reranker-base
+reranker_top_k: 3                 # Final top-3 after reranking
+reranker_use_fp16: true
+
+# Notes:
+# - retrieval_k=7: Each retriever (FAISS + BM25) gets top-7
+# - Max candidates for reranker: 14 (if no overlap between FAISS and BM25)
+# - Typical overlap: 30-50%, so reranker sees ~10-12 unique candidates
+# - hybrid_weights [0.5, 0.5]: Equal importance (can tune later)
+# - Expected to fix: ecom_easy_002 (Batas waktu return → "7 hari" keyword)
+#                    ecom_easy_010 (Pre-Order → exact term match)
+#                    ecom_medium_007 ("Meleset dikit" cases)

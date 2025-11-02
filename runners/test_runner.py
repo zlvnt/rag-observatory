@@ -127,7 +127,9 @@ def run_single_test(
             "relevance_threshold": config.relevance_threshold,
             "use_reranker": getattr(config, 'use_reranker', False),
             "reranker_model": getattr(config, 'reranker_model', None) if getattr(config, 'use_reranker', False) else None,
-            "reranker_top_k": getattr(config, 'reranker_top_k', None) if getattr(config, 'use_reranker', False) else None
+            "reranker_top_k": getattr(config, 'reranker_top_k', None) if getattr(config, 'use_reranker', False) else None,
+            "use_hybrid_search": getattr(config, 'use_hybrid_search', False),
+            "hybrid_weights": getattr(config, 'hybrid_weights', None) if getattr(config, 'use_hybrid_search', False) else None
         },
         "retrieval_trace": {},
         "evaluation": {}
@@ -142,6 +144,10 @@ def run_single_test(
         reranker_top_k = getattr(config, 'reranker_top_k', 3)
         reranker_use_fp16 = getattr(config, 'reranker_use_fp16', True)
 
+        # Check if hybrid search is enabled (Phase 9B)
+        use_hybrid_search = getattr(config, 'use_hybrid_search', False)
+        hybrid_weights = getattr(config, 'hybrid_weights', None)
+
         context, retrieval_debug = retrieve_context(
             query=query,
             retriever=retriever,
@@ -152,7 +158,12 @@ def run_single_test(
             use_reranker=use_reranker,
             reranker_model=reranker_model,
             reranker_top_k=reranker_top_k,
-            reranker_use_fp16=reranker_use_fp16
+            reranker_use_fp16=reranker_use_fp16,
+            use_hybrid_search=use_hybrid_search,
+            hybrid_weights=hybrid_weights,
+            docs_dir=config.knowledge_base_dir if use_hybrid_search else None,
+            chunk_size=config.chunk_size,
+            chunk_overlap=config.chunk_overlap
         )
 
         retrieval_latency = (time.time() - start_time) * 1000
@@ -447,14 +458,23 @@ def main():
 
     # Load domain config
     try:
-        # Try experiments_phase9a subfolder first (Phase 9A)
-        try:
-            config = load_domain_config(args.domain, config_dir=Path("configs/experiments_phase9a"))
-            print(f"✓ Loaded domain config: {args.domain} (from experiments_phase9a/)")
-        except FileNotFoundError:
-            # Fallback to root configs folder
-            config = load_domain_config(args.domain)
-            print(f"✓ Loaded domain config: {args.domain}")
+        # Try experiment subfolders first, then fallback to root
+        config_loaded = False
+        for subfolder in ["experiments_phase9b", "experiments_phase9a", ""]:
+            try:
+                if subfolder:
+                    config = load_domain_config(args.domain, config_dir=Path(f"configs/{subfolder}"))
+                    print(f"✓ Loaded domain config: {args.domain} (from {subfolder}/)")
+                else:
+                    config = load_domain_config(args.domain)
+                    print(f"✓ Loaded domain config: {args.domain}")
+                config_loaded = True
+                break
+            except FileNotFoundError:
+                continue
+
+        if not config_loaded:
+            raise FileNotFoundError(f"Config not found for domain: {args.domain}")
     except Exception as e:
         print(f"✗ Failed to load domain config: {e}")
         return 1

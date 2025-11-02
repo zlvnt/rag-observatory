@@ -21,7 +21,12 @@ def retrieve_context(
     use_reranker: bool = False,
     reranker_model: str = "BAAI/bge-reranker-base",
     reranker_top_k: int = 3,
-    reranker_use_fp16: bool = True
+    reranker_use_fp16: bool = True,
+    use_hybrid_search: bool = False,
+    hybrid_weights: Optional[list] = None,
+    docs_dir: Optional[Path] = None,
+    chunk_size: int = 500,
+    chunk_overlap: int = 50
 ):
     """Retrieve context from documents and/or web.
 
@@ -40,6 +45,11 @@ def retrieve_context(
         reranker_model: HuggingFace model name for reranker
         reranker_top_k: Number of docs to return after reranking
         reranker_use_fp16: Use half precision for reranker (faster, slight accuracy loss)
+        use_hybrid_search: Enable hybrid search (Semantic + BM25) (Phase 9B)
+        hybrid_weights: Weights for [semantic, bm25] (default: [0.5, 0.5])
+        docs_dir: Directory with documents (required for hybrid search)
+        chunk_size: Chunk size for BM25 (required for hybrid search)
+        chunk_overlap: Chunk overlap for BM25 (required for hybrid search)
 
     Returns:
         str: Retrieved context string (if return_debug_info=False)
@@ -63,8 +73,25 @@ def retrieve_context(
         if retriever is None:
             if vector_dir is None:
                 raise ValueError("Either retriever or vector_dir must be provided for docs mode")
-            from z3_core.vector import get_retriever
-            retriever = get_retriever(vector_dir, embedding_model, k=k_docs)
+
+            # Phase 9B: Hybrid search support
+            if use_hybrid_search:
+                if docs_dir is None:
+                    raise ValueError("docs_dir is required for hybrid search")
+                from z3_core.hybrid_search import get_hybrid_retriever
+                retriever = get_hybrid_retriever(
+                    vector_dir=vector_dir,
+                    docs_dir=docs_dir,
+                    embedding_model=embedding_model,
+                    chunk_size=chunk_size,
+                    chunk_overlap=chunk_overlap,
+                    k=k_docs,
+                    weights=hybrid_weights
+                )
+                print(f"DEBUG: Using hybrid retriever (Semantic + BM25)")
+            else:
+                from z3_core.vector import get_retriever
+                retriever = get_retriever(vector_dir, embedding_model, k=k_docs)
 
         docs = retriever.get_relevant_documents(query)
 
