@@ -1,0 +1,71 @@
+{
+  "test_id": "ecom_easy_008",
+  "query": "Sudah bayar tapi status masih menunggu pembayaran, kenapa?",
+  "category": "payment",
+  "difficulty": "easy",
+  "expected_docs": [
+    "troubleshooting_guide.md"
+  ],
+  "timestamp": "2025-11-02T11:18:10.698831",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 7,
+    "relevance_threshold": 0.3,
+    "use_reranker": true,
+    "reranker_model": "BAAI/bge-reranker-base",
+    "reranker_top_k": 3,
+    "use_hybrid_search": true,
+    "hybrid_weights": [
+      0.5,
+      0.5
+    ]
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.625,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.0,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.25,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "troubleshooting_guide.md",
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 2,
+    "context_length_chars": 420,
+    "context_tokens_approx": 105,
+    "retrieved_context_preview": "[Docs] ## Masalah Pembayaran\n\n### Pembayaran gagal tapi saldo terpotong\n**Gejala:** Notifikasi gagal tapi uang sudah terpotong dari rekening\n\n**Solusi:**\n1. **Jangan bayar ulang!**\n2. Cek status pesanan dalam 1x24 jam\n3. Saldo akan auto-refund dalam 3-7 hari kerja\n4. Jika >7 hari, kirim bukti mutasi rekening ke CS\n\n### Virtual Account tidak terdeteksi\n**Gejala:** Sudah transfer tapi status masih \"Menunggu Pembayaran\"",
+    "latency_ms": 2070.88
+  },
+  "evaluation": {
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_positives": [
+      "policy_returns.md"
+    ],
+    "false_negatives": []
+  }
+}

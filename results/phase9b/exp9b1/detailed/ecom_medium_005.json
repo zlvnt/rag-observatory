@@ -1,0 +1,68 @@
+{
+  "test_id": "ecom_medium_005",
+  "query": "Mau tukar ukuran baju yang sudah dibeli, prosesnya bagaimana?",
+  "category": "returns",
+  "difficulty": "medium",
+  "expected_docs": [
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-11-02T11:18:36.722109",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 7,
+    "relevance_threshold": 0.3,
+    "use_reranker": true,
+    "reranker_model": "BAAI/bge-reranker-base",
+    "reranker_top_k": 3,
+    "use_hybrid_search": true,
+    "hybrid_weights": [
+      0.5,
+      0.5
+    ]
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.1111111111111111,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.0,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.1111111111111111,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 1,
+    "context_length_chars": 1407,
+    "context_tokens_approx": 351,
+    "retrieved_context_preview": "[Docs] ### Step 3: Kirim Balik Produk\n**Packaging:**\n- Gunakan packaging original jika ada\n- Sertakan semua aksesoris/bonus\n- Print label return dari sistem\n- Foto paket sebelum kirim sebagai bukti\n\n**Pengiriman:**\n- Gunakan kurir yang ditentukan sistem\n- Input resi dalam 3x24 jam\n- Ongkir ditanggung pembeli (kecuali kesalahan penjual)\n\n### Step 4: Verifikasi Penjual\n- Penjual cek kondisi produk (maks 2 hari)\n- Konfirmasi penerimaan di sistem\n- Jika ada dispute, TokoPedia akan mediasi\n[Docs] Ong...",
+    "latency_ms": 2072.09
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

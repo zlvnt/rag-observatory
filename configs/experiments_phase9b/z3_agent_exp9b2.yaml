@@ -1,0 +1,55 @@
+# Phase 9B: Hybrid Search Experiment 2 (Iseng Test)
+# Goal: Test hybrid search with bge-m3 embedding
+#
+# Baseline: Exp9b1 (MPNet + Hybrid) → Precision 0.794
+# Change: MPNet → bge-m3 (better multilingual embedding)
+# Expected: Unknown (exploratory test)
+#
+# Strategy:
+# 1. Semantic retrieval (bge-m3) → top-7
+# 2. BM25 retrieval (keyword) → top-7
+# 3. Combine (max 14 candidates)
+# 4. Reranker → return top-3
+#
+# Hypothesis:
+# - bge-m3 better semantic understanding than MPNet
+# - Hybrid + better embedding = improved precision?
+# - OR still worse than reranker-only (Exp9a1)?
+
+domain_name: z3_agent_exp9b2
+
+knowledge_base_dir: docs/
+vector_store_dir: data/vector_stores/z3_agent_exp9b2/  # Need rebuild (bge-m3)
+golden_dataset: golden_datasets/z3_agent_tests.json
+
+personality_config_path: content/reply_config1.json
+supervisor_prompt_path: content/supervisor-prompt.txt
+
+# Embedding: bge-m3 (multilingual, better than MPNet)
+embedding_model: BAAI/bge-m3
+
+llm_model: gemini-2.0-flash
+llm_temperature: 0.7
+
+# Base RAG parameters (same as Exp9b1)
+chunk_size: 500
+chunk_overlap: 50
+relevance_threshold: 0.3
+
+# Hybrid search parameters (Phase 9B)
+use_hybrid_search: true
+hybrid_weights: [0.5, 0.5]       # Equal weight: Semantic 50%, BM25 50%
+retrieval_k: 7                    # Retrieve 7 from EACH (semantic + BM25)
+
+# Reranker parameters (same as Exp9b1)
+use_reranker: true
+reranker_model: BAAI/bge-reranker-base
+reranker_top_k: 3                 # Final top-3 after reranking
+reranker_use_fp16: true
+
+# Notes:
+# - embedding_model: bge-m3 (better multilingual understanding)
+# - Need rebuild vector store (different embeddings)
+# - BM25 remains same (keyword-based, no embeddings)
+# - Same hybrid weights and reranker setup as Exp9b1
+# - Iseng test: Does better embedding help hybrid search?

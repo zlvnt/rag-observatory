@@ -497,14 +497,28 @@ def main():
     if not ensure_vector_store(config):
         return 1
 
-    # Get retriever
+    # Get retriever (build once for all queries)
     try:
-        retriever = get_retriever(
-            vector_dir=config.vector_store_dir,
-            embedding_model=config.embedding_model,
-            k=config.retrieval_k
-        )
-        print(f"✓ Retriever initialized")
+        # Phase 9B: Build hybrid retriever if enabled, otherwise regular FAISS
+        if getattr(config, 'use_hybrid_search', False):
+            from z3_core.hybrid_search import get_hybrid_retriever
+            retriever = get_hybrid_retriever(
+                vector_dir=config.vector_store_dir,
+                docs_dir=config.knowledge_base_dir,
+                embedding_model=config.embedding_model,
+                chunk_size=config.chunk_size,
+                chunk_overlap=config.chunk_overlap,
+                k=config.retrieval_k,
+                weights=getattr(config, 'hybrid_weights', None)
+            )
+            print(f"✓ Hybrid retriever initialized (Semantic + BM25)")
+        else:
+            retriever = get_retriever(
+                vector_dir=config.vector_store_dir,
+                embedding_model=config.embedding_model,
+                k=config.retrieval_k
+            )
+            print(f"✓ Retriever initialized (FAISS)")
     except Exception as e:
         print(f"✗ Failed to initialize retriever: {e}")
         return 1

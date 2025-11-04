@@ -1,0 +1,68 @@
+{
+  "test_id": "ecom_easy_007",
+  "query": "Kenapa OTP tidak masuk ke HP saya?",
+  "category": "account",
+  "difficulty": "easy",
+  "expected_docs": [
+    "troubleshooting_guide.md"
+  ],
+  "timestamp": "2025-11-02T11:18:08.118870",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 7,
+    "relevance_threshold": 0.3,
+    "use_reranker": true,
+    "reranker_model": "BAAI/bge-reranker-base",
+    "reranker_top_k": 3,
+    "use_hybrid_search": true,
+    "hybrid_weights": [
+      0.5,
+      0.5
+    ]
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.7142857142857143,
+        "rank": 0,
+        "passed_threshold": true
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.2857142857142857,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/troubleshooting_guide.md",
+        "relevance_score": 0.2857142857142857,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "troubleshooting_guide.md"
+    ],
+    "num_chunks_retrieved": 1,
+    "num_unique_docs": 1,
+    "context_length_chars": 446,
+    "context_tokens_approx": 111,
+    "retrieved_context_preview": "[Docs] # Troubleshooting Guide - TokoPedia Customer Service\n\n## Masalah Login dan Akun\n\n### Tidak bisa login ke akun\n**Gejala:** Error \"Username/password salah\" atau \"Akun tidak ditemukan\"\n\n**Solusi:**\n1. Pastikan email/nomor HP sudah benar\n2. Cek huruf besar/kecil pada password\n3. Gunakan fitur \"Lupa Password\" \n4. Jika tetap gagal, kemungkinan akun ter-suspend (hubungi CS)\n\n### Tidak menerima OTP\n**Gejala:** Kode OTP tidak masuk ke SMS/email",
+    "latency_ms": 2579.39
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "troubleshooting_guide.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "test_id": "ecom_edge_004",
+  "query": "Refund atau ganti barang?",
+  "category": "returns",
+  "difficulty": "easy",
+  "expected_docs": [
+    "policy_returns.md"
+  ],
+  "timestamp": "2025-11-02T11:18:55.777143",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 7,
+    "relevance_threshold": 0.3,
+    "use_reranker": true,
+    "reranker_model": "BAAI/bge-reranker-base",
+    "reranker_top_k": 3,
+    "use_hybrid_search": true,
+    "hybrid_weights": [
+      0.5,
+      0.5
+    ]
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.25,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.25,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.25,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 1,
+    "context_length_chars": 923,
+    "context_tokens_approx": 230,
+    "retrieved_context_preview": "[Docs] Ongkir TIDAK di-refund JIKA:\n- Pembeli berubah pikiran\n- Salah pilih ukuran/warna (kesalahan pembeli)\n- Return karena tidak suka\n\n## Kasus Khusus\n\n### Garansi Resmi vs Garansi Toko\n**Garansi Resmi:**\n- Klaim langsung ke service center brand\n- TokoPedia bantu fasilitasi dokumen\n- Berlaku nasional\n\n**Garansi Toko:**\n- Klaim melalui penjual\n- Durasi dan coverage sesuai ketentuan toko\n- Biasanya hanya replace, bukan refund\n[Docs] # Kebijakan Return & Refund - TokoPedia\n\n## Ketentuan Umum Retu...",
+    "latency_ms": 2131.69
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [],
+    "false_negatives": []
+  }
+}
