@@ -1,0 +1,71 @@
+{
+  "test_id": "ecom_hard_001",
+  "query": "Barang sampai rusak, seller bilang ini custom order jadi tidak bisa return. Tapi di listing tidak ada informasi itu sama sekali. Apa hak saya sebagai pembeli?",
+  "category": "returns",
+  "difficulty": "hard",
+  "expected_docs": [
+    "policy_returns.md",
+    "product_faq.md"
+  ],
+  "timestamp": "2025-11-06T11:01:07.443090",
+  "rag_config": {
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "vector_store": "FAISS",
+    "retrieval_k": 7,
+    "relevance_threshold": 0.3,
+    "use_reranker": true,
+    "reranker_model": "BAAI/bge-reranker-base",
+    "reranker_top_k": 3,
+    "use_hybrid_search": true,
+    "hybrid_weights": [
+      0.7,
+      0.3
+    ]
+  },
+  "retrieval_trace": {
+    "docs_retrieved": [
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.08,
+        "rank": 0,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.12,
+        "rank": 1,
+        "passed_threshold": false
+      },
+      {
+        "source": "docs/policy_returns.md",
+        "relevance_score": 0.08,
+        "rank": 2,
+        "passed_threshold": false
+      }
+    ],
+    "unique_docs": [
+      "policy_returns.md"
+    ],
+    "num_chunks_retrieved": 3,
+    "num_unique_docs": 1,
+    "context_length_chars": 1291,
+    "context_tokens_approx": 322,
+    "retrieved_context_preview": "[Docs] ### Produk yang TIDAK BISA di-return:\n- Produk digital (voucher, software, top-up)\n- Makanan, minuman, dan produk kadaluarsa\n- Produk custom/made-by-order\n- Produk yang sudah dibuka segel khusus\n- Underwear dan produk kesehatan personal\n- Produk dengan tag \"No Return\" yang jelas\n\n### Batas waktu pengajuan return:\n- **Elektronik**: 7 hari sejak diterima\n- **Fashion**: 3 hari sejak diterima\n- **Lainnya**: 2 hari sejak diterima\n- **Garansi toko**: Sesuai ketentuan masing-masing toko\n[Docs] #...",
+    "latency_ms": 2179.69
+  },
+  "evaluation": {
+    "precision": 1.0,
+    "recall": 0.5,
+    "f1_score": 0.667,
+    "reciprocal_rank": 1.0,
+    "true_positives": [
+      "policy_returns.md"
+    ],
+    "false_positives": [],
+    "false_negatives": [
+      "product_faq.md"
+    ]
+  }
+}

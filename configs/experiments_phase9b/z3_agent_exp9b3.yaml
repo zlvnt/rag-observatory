@@ -1,0 +1,61 @@
+# Phase 9B: Hybrid Search Experiment 3 - Fixed Weights (70/30)
+# Goal: Fix hybrid search with proper weight balance
+#
+# Problem identified: Exp9b1 & 9b2 failed due to 50/50 weights
+# - Too much BM25 (50%) adds noise
+# - Indonesian tokenization: common words create false positives
+# - Reranker overwhelmed by noisy candidates
+#
+# Baseline: Exp9a1 (Reranker only) → Precision 0.828
+# Expected: 0.84-0.86 (+2-4% improvement with proper weights)
+#
+# Strategy:
+# 1. Semantic retrieval (MPNet, 70% weight) → top-7
+# 2. BM25 retrieval (keyword, 30% weight) → top-7
+# 3. Combine with 70/30 balance → ~10-12 candidates
+# 4. Reranker → return top-3
+#
+# Hypothesis:
+# - 70% semantic = maintains proven baseline strength
+# - 30% BM25 = enough to catch exact keyword matches
+# - Fixes "meleset sedikit" without adding noise
+# - Should exceed 0.80 target, possibly reach 0.85+
+
+domain_name: z3_agent_exp9b3
+
+knowledge_base_dir: docs/
+vector_store_dir: data/vector_stores/z3_agent_exp6/  # Reuse Exp6 FAISS index
+golden_dataset: golden_datasets/z3_agent_tests.json
+
+personality_config_path: content/reply_config1.json
+supervisor_prompt_path: content/supervisor-prompt.txt
+
+# Embedding: MPNet (proven winner)
+embedding_model: sentence-transformers/paraphrase-multilingual-mpnet-base-v2
+
+llm_model: gemini-2.0-flash
+llm_temperature: 0.7
+
+# Base RAG parameters (same as Exp9a1)
+chunk_size: 500
+chunk_overlap: 50
+relevance_threshold: 0.3
+
+# Hybrid search parameters (FIXED WEIGHTS)
+use_hybrid_search: true
+hybrid_weights: [0.70, 0.30]  # 70% Semantic, 30% BM25 (was [0.5, 0.5])
+retrieval_k: 7                 # Retrieve 7 from EACH
+
+# Reranker parameters (same as Exp9a1)
+use_reranker: true
+reranker_model: BAAI/bge-reranker-base
+reranker_top_k: 3              # Final top-3 after reranking
+reranker_use_fp16: true
+
+# Notes:
+# - Key change: weights [0.70, 0.30] (was [0.5, 0.5])
+# - Semantic dominates (70%) → maintains baseline quality
+# - BM25 assists (30%) → catches exact keywords for "meleset sedikit" cases
+# - Expected to fix Exp9b1/9b2 regression
+# - Target: Precision 0.84-0.86 (vs Exp9a1: 0.828)
+# - Success criteria: Precision ≥ 0.83 (beat baseline by +0.2%)
