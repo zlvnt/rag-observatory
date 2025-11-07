@@ -402,6 +402,17 @@ relevance_threshold: 0.3
   - ecom_hard_002: BM25 added troubleshooting_guide.md incorrectly (-33.3%)
 - **Verdict:** BM25 (even at 30% weight) adds more noise than value
 
+### Phase 9 Final Results
+
+| Experiment | Config | Precision | Recall | F1 | Change vs Exp6 | Status |
+|------------|--------|-----------|--------|-----|----------------|--------|
+| Exp6 (Baseline) | k=3, MPNet | 0.783 | 0.917 | 0.795 | Baseline | Reference |
+| **Exp9a1** | **k=7 + Reranker** | **0.828** ✅ | **0.950** | **0.845** | **+5.7%** | **🏆 WINNER** |
+| Exp9a2 | chunk 700 + Reranker | 0.778 | 0.933 | 0.800 | +0.6% | ⚠️ Reranker helps but chunk 700 worse |
+| Exp9b1 | Hybrid 50/50 | 0.794 | 0.950 | 0.821 | +1.4% | ❌ Below reranker-only |
+| Exp9b2 | bge-m3 + Hybrid 50/50 | Lower | - | - | Negative | ❌ Failed |
+| Exp9b3 | Hybrid 70/30 | 0.811 | 0.950 | 0.832 | +3.6% | ⚠️ Better but still below 9a1 |
+
 ### Phase 9 Key Learnings
 
 **✅ What Worked:**
