@@ -1,7 +1,7 @@
 # Phase 9 Roadmap - Advanced Retrieval Techniques
 
-**Date:** 2025-10-26 (Updated)
-**Status:** Ready to start | Phase 8 (A-E) complete (basic optimization exhausted)
+**Date:** 2025-10-26 (Updated: 2025-11-06)
+**Status:** ✅ COMPLETED | Phase 9A SUCCESS, Phase 9B TESTED & REJECTED
 
 ---
 
@@ -41,13 +41,14 @@
 
 ## 🗺️ Phase 9 Roadmap (Prioritized by Impact)
 
-### **Phase 9A: Reranker (Cross-Encoder)** ⏳ HIGHEST PRIORITY
+### **Phase 9A: Reranker (Cross-Encoder)** ✅ COMPLETED - SUCCESS!
 
 **Goal:** Fix ranking accuracy using neural cross-encoder model
 
-**Duration:** 3-4 hours (includes model download ~600MB-1.5GB)
+**Duration:** Completed in 3 hours
 
 **Expected Impact:** +5-7% precision → **0.83-0.85** (exceeds 0.80 target!)
+**Actual Result:** **+5.7% precision → 0.828** ✅ TARGET ACHIEVED!
 
 **Why Priority #1:**
 - Fixes **40% of failures** (ranking 10% + "meleset sedikit" 30%)
@@ -89,13 +90,14 @@ Query → Retrieve k=7 (MPNet) → Rerank (cross-encoder) → Return top-3
 
 ---
 
-### **Phase 9B: Hybrid Search (BM25 + Semantic)** ⏳ OPTIONAL
+### **Phase 9B: Hybrid Search (BM25 + Semantic)** ❌ TESTED & REJECTED
 
 **Goal:** Combine keyword matching (BM25) with semantic search (MPNet)
 
-**Duration:** 2-3 hours
+**Duration:** 4 hours (3 experiments tested)
 
 **Expected Impact:** +2-3% precision → **0.85-0.87** (if after reranker)
+**Actual Result:** REGRESSION - All variants worse than reranker-only
 
 **Why Hybrid:**
 - **BM25:** Keyword-based (good for exact terms like "1500-600", "OTP")
@@ -290,7 +292,53 @@ reranker_top_k: 3
 
 ---
 
-**Status:** Ready to start Phase 9A (Reranker) ⏳ HIGHEST PRIORITY
-**Expected outcome:** Precision 0.83-0.85 (exceeds 0.80 target!)
-**Time investment:** 3-4 hours minimum (reranker only), up to 12 hours if pursuing 0.90 stretch goal
-**Confidence:** 80% reranker alone bridges 2.2% gap (based on Claude web analysis)
+---
+
+## ✅ **PHASE 9 FINAL RESULTS**
+
+### **Experiments Completed:**
+
+| Experiment | Config | Precision | Recall | F1 | Status |
+|------------|--------|-----------|--------|-----|--------|
+| **Exp9a1** (Reranker) | MPNet + chunk 500 + Reranker | **0.828** | 0.950 | 0.845 | ✅ **WINNER** |
+| Exp9a2 (Chunk test) | chunk 700 + Reranker | 0.778 | 0.933 | 0.800 | ❌ Failed |
+| Exp9b1 (Hybrid 50/50) | Hybrid [0.5, 0.5] | 0.794 | 0.950 | 0.821 | ❌ Failed |
+| Exp9b2 (bge-m3 50/50) | bge-m3 + Hybrid [0.5, 0.5] | Lower | - | - | ❌ Failed |
+| Exp9b3 (Hybrid 70/30) | Hybrid [0.7, 0.3] | 0.811 | 0.950 | 0.832 | ⚠️ Improved but below 9a1 |
+
+### **Key Findings:**
+
+1. **✅ Reranker SUCCESS (+5.7%)**
+   - Exp9a1 achieved 0.828 precision (TARGET EXCEEDED)
+   - Perfect 1.000 precision on hard queries
+   - Cross-encoder dramatically improves ranking quality
+
+2. **❌ Hybrid Search FAILED (all variants)**
+   - 50/50 weights: Too much BM25 noise (-3.4%)
+   - 70/30 weights: Improved but still below reranker-only (-1.7%)
+   - Root cause: BM25 adds noise for Indonesian CS docs
+   - Only 2 queries different: both regressions from BM25 keyword matches
+
+3. **✅ Simpler is Better**
+   - Semantic + Reranker beats all hybrid variants
+   - BM25 keyword matching confuses Indonesian text
+   - No need for complex multi-stage pipelines
+
+### **Production Config: Exp9a1**
+```yaml
+embedding_model: paraphrase-multilingual-mpnet-base-v2
+chunk_size: 500
+chunk_overlap: 50
+retrieval_k: 7
+use_reranker: true
+reranker_model: BAAI/bge-reranker-base
+reranker_top_k: 3
+```
+
+**Final Metrics:**
+- Precision: **0.828** ✅ (exceeds 0.80 target)
+- Recall: **0.950** ✅
+- F1: **0.845** ✅
+- MRR: **0.950** ✅
+
+**Status:** ✅ **PHASE 9 COMPLETE - TARGET ACHIEVED!**
