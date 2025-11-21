@@ -1,10 +1,19 @@
+# Python
 __pycache__/
 *.pyc
 .venv/
 venv/
+
+# Results (generated files)
 results/*.json
 results/*.jsonl
+
+# Environment
 .env
+
+# Mac system files
+.DS_Store
+*.DS_Store
 
 prompt/
 
@@ -13,3 +22,8 @@ content/
 CLAUDE.md
 
 docs/
+# Session notes
+.session_notes.md
+
+# Future tasks (personal notes)
+.future_tasks.md

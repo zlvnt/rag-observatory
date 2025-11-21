@@ -33,8 +33,9 @@ class BGEReranker:
         self,
         query: str,
         documents: List[Document],
-        top_k: int = 3
-    ) -> List[Document]:
+        top_k: int = 3,
+        return_scores: bool = False
+    ):
         """
         Rerank documents using cross-encoder model.
 
@@ -42,9 +43,11 @@ class BGEReranker:
             query: User query
             documents: List of retrieved documents (from bi-encoder)
             top_k: Number of top documents to return after reranking
+            return_scores: If True, return (document, score) tuples instead of just documents
 
         Returns:
-            Top-k reranked documents (sorted by relevance score)
+            If return_scores=False: List of top-k reranked documents
+            If return_scores=True: List of (document, score) tuples
         """
         if not documents:
             return []
@@ -67,10 +70,11 @@ class BGEReranker:
         for doc, score in doc_score_pairs:
             doc.metadata['reranker_score'] = float(score)
 
-        # Return top-k documents
-        top_docs = [doc for doc, score in doc_score_pairs[:top_k]]
-
-        return top_docs
+        # Return based on return_scores flag
+        if return_scores:
+            return doc_score_pairs[:top_k]
+        else:
+            return [doc for doc, score in doc_score_pairs[:top_k]]
 
     def rerank_with_scores(
         self,

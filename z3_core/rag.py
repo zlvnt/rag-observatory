@@ -102,13 +102,69 @@ def retrieve_context(
             from z3_core.reranker import BGEReranker
 
             reranker = BGEReranker(model_name=reranker_model, use_fp16=reranker_use_fp16)
-            docs = reranker.rerank(query, docs, top_k=reranker_top_k)
+            # Get docs WITH reranker scores
+            docs_with_scores = reranker.rerank(query, docs, top_k=reranker_top_k, return_scores=True)
 
-            print(f"DEBUG: Reranker applied - initial: {debug_data['num_docs_initial']}, reranked top-{reranker_top_k}: {len(docs)}")
+            print(f"DEBUG: Reranker applied - initial: {debug_data['num_docs_initial']}, reranked top-{reranker_top_k}: {len(docs_with_scores)}")
 
-        # Apply simple relevance filtering (threshold 0.8)
-        if docs:
-            # Filter docs based on simple content relevance
+            # Filter based on RERANKER SCORES (not word overlap!)
+            filtered_docs = []
+
+            for i, (doc, reranker_score) in enumerate(docs_with_scores):
+                # Store doc metadata for debug
+                doc_metadata = {
+                    "source": doc.metadata.get("source", "unknown"),
+                    "relevance_score": float(reranker_score),  # Now using reranker score!
+                    "rank": i,
+                    "passed_threshold": reranker_score >= relevance_threshold
+                }
+                debug_data["docs_retrieved"].append(doc_metadata)
+
+                # Filter by reranker score
+                if reranker_score >= relevance_threshold:
+                    filtered_docs.append(doc)
+
+            # Smart fallback: if none pass threshold, use top chunks based on score
+            if filtered_docs:
+                final_docs = filtered_docs
+            else:
+                # Adaptive fallback based on top score quality
+                top_score = docs_with_scores[0][1] if docs_with_scores else 0
+
+                if top_score >= 0.3:  # Decent score
+                    # Use top 2 chunks
+                    final_docs = [doc for doc, _ in docs_with_scores[:2]]
+                    print(f"DEBUG: Fallback - top score {top_score:.3f}, using top 2 chunks")
+                elif top_score >= 0.2:  # Low score
+                    # Use only top 1 chunk
+                    final_docs = [docs_with_scores[0][0]]
+                    print(f"DEBUG: Fallback - low score {top_score:.3f}, using top 1 chunk")
+                else:
+                    # Very low scores, return empty or top 1
+                    final_docs = [docs_with_scores[0][0]] if docs_with_scores else []
+                    print(f"DEBUG: Fallback - very low score {top_score:.3f}, using top 1 chunk")
+
+            debug_data["num_docs_final"] = len(final_docs)
+
+            # Store individual chunk texts for qualitative analysis
+            debug_data["retrieved_chunks_full"] = [
+                {
+                    "source": doc.metadata.get("source", "unknown"),
+                    "text": doc.page_content.strip()
+                }
+                for doc in final_docs if doc.page_content.strip()
+            ]
+
+            context_docs = "\n".join(
+                f"[Docs] { _safe_content(d.page_content.strip(), max_len) }"
+                for d in final_docs if d.page_content.strip()
+            )
+            contexts.append(context_docs)
+            print(f"DEBUG: RAG.docs - found: {len(docs_with_scores)}, filtered: {len(final_docs)}")
+
+        # If reranker NOT enabled, use old word overlap method (backward compatibility)
+        elif docs:
+            # Filter docs based on simple content relevance (word overlap)
             filtered_docs = []
             query_words = set(query.lower().split())
 
@@ -134,6 +190,15 @@ def retrieve_context(
             # Use filtered docs if any pass threshold, otherwise use all
             final_docs = filtered_docs if filtered_docs else docs
             debug_data["num_docs_final"] = len(final_docs)
+
+            # Store individual chunk texts for qualitative analysis
+            debug_data["retrieved_chunks_full"] = [
+                {
+                    "source": doc.metadata.get("source", "unknown"),
+                    "text": doc.page_content.strip()
+                }
+                for doc in final_docs if doc.page_content.strip()
+            ]
 
             context_docs = "\n".join(
                 f"[Docs] { _safe_content(d.page_content.strip(), max_len) }"
