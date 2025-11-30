@@ -440,16 +440,8 @@ Our 0.828 precision looked like success. But manual evaluation revealed that one
 
 ### Time Investment
 
-- Manual evaluation: ~2 hours per experiment
+- Manual evaluation: ~1 hours per experiment
 - Analysis and pattern identification: ~1 hour
-- Total for thorough quality assessment: ~3 hours
+- Total for thorough quality assessment: ~2 hours
 
 This investment revealed a 24-point gap that automated metrics completely missed.
-
----
-
-<p align="center">
-  <i>"Not everything that counts can be counted, and not everything that can be counted counts."</i>
-  <br>
-  — William Bruce Cameron
-</p>
