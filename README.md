@@ -1,6 +1,6 @@
 # RAG Observatory 🔭
 
-> **"When 0.828 precision actually means 50% quality"**
+> **"When 80% precision actually means 50% quality"**
 > A systematic study on why your RAG metrics might be lying to you.
 
 [![Research Status](https://img.shields.io/badge/Research-Complete-success)](https://github.com/zlvnt/rag-observatory)
