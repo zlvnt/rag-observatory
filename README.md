@@ -305,7 +305,6 @@ rag-observatory/
 
 - **Duration:** 2 months (October - November 2025)
 - **Total Experiments:** 20+
-- **Phases Completed:** 9
 - **Golden Dataset:** 30 queries (Easy: 19, Medium: 9, Hard: 2)
 - **Documents Indexed:** 4 policy documents
 - **Final Precision:** 0.828 (target: 0.80)
