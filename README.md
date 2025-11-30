@@ -11,7 +11,7 @@
 
 ## 🎯 TL;DR
 
-A 2-month research project optimizing RAG retrieval for Indonesian e-commerce customer service, featuring:
+A research project optimizing RAG retrieval for Indonesian e-commerce customer service, featuring:
 
 - **20+ experiments** across 9 systematic phases
 - **30-query golden dataset** with difficulty stratification
@@ -325,7 +325,7 @@ This project is for research and educational purposes.
 ---
 
 <p align="center">
-  <i>Research is formalized curiosity. It is poking and prying with a purpose.</i>
+  <i>Let your plans be dark and impenetrable as night, and when you move, fall like a thunderbolt.</i>
   <br>
-  — Zora Neale Hurston
+  — Sun Tzu
 </p>
