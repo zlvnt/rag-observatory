@@ -292,6 +292,8 @@ User Query: "What's the CS phone number?"
 │  Metric says: ✅ Correct document!                  │
 │  Reality: ❌ Wrong section, user gets no phone #    │
 └─────────────────────────────────────────────────────┘
+
+![Document vs Subsection Problem](./images/deepdive-1.png)
 ```
 
 ---
