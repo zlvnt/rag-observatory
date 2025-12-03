@@ -293,11 +293,10 @@ User Query: "What's the CS phone number?"
 │  Reality: ❌ Wrong section, user gets no phone #    │
 └─────────────────────────────────────────────────────┘
 
-deepdive-1.png
+![Document vs Subsection Problem](./images/deepdive-1.png)
 
 ```
-
-deepdive-1.png
+![Document vs Subsection Problem](./images/deepdive-1.png)
 
 ---
 
