@@ -1,6 +1,12 @@
 # When Precision Lies: The Gap Between RAG Metrics and Real Quality
 
-> **TL;DR:** Our RAG system achieved 0.828 precision — a number that would make any ML engineer proud. But when we manually evaluated every single query, actual quality was only 58%. This document explores why automated metrics can be dangerously misleading and what to do about it.
+> **TL;DR:** Our RAG system achieved 0.828 precision — a number that would make any ML engineer proud. But when we manually evaluated every single query, actual quality was only 59%. This document explores why automated metrics can be dangerously misleading and what to do about it.
+
+> ⚠️ **Disclaimer:** Company and product names (e.g., "TokoPedia") are fictional placeholders used for illustration purposes.
+
+---
+
+📖 **Part of [RAG Observatory](../../README.md)** | Next: [Reranker Deep Dive →](02-reranker-deep-dive.md)
 
 ---
 
@@ -43,7 +49,7 @@ What we found was sobering.
 | Evaluation Method | Score | What It Measures |
 |-------------------|-------|------------------|
 | **Automated Precision** | 82.8% | "Did we retrieve the right document?" |
-| **Manual Quality** | 58.67% | "Did the user get a complete, correct answer?" |
+| **Manual Quality** | 59% | "Did the user get a complete, correct answer?" |
 
 **A 24-point gap.**
 
@@ -221,9 +227,9 @@ But users need answers at the **subsection level**:
 
 This creates a systematic blind spot.
 
-### The Three Failure Patterns
+### The Four Failure Patterns
 
-After analyzing all 30 queries, we identified three recurring patterns:
+After analyzing all 30 queries, we identified four recurring patterns:
 
 #### Pattern 1: "Meleset Sedikit" (Slightly Off) — 30% of queries
 
@@ -245,11 +251,21 @@ After analyzing all 30 queries, we identified three recurring patterns:
 
 ---
 
-#### Pattern 3: Keyword Match, Context Mismatch — 20% of queries
+#### Pattern 3: Ranking Issues — 10% of queries
 
-**What Happens:** Retrieved text contains the keywords from the query, but in a different context than what the user needs.
+**What Happens:** The correct document is retrieved, but ranked too low (position 2 or 3 instead of position 1), while a less relevant document takes the top spot.
 
-**Why Metrics Miss It:** Embedding similarity is high because keywords match.
+**Why Metrics Miss It:** Recall-based metrics count it as success if the document appears anywhere in top-k.
+
+**Example:** User asks about refund timeline, correct policy document is ranked #2 while a general troubleshooting guide is ranked #1.
+
+---
+
+#### Pattern 4: Multi-doc Failures — 20% of queries
+
+**What Happens:** Query requires information from multiple documents, but only one is retrieved. The answer is incomplete.
+
+**Why Metrics Miss It:** Partial retrieval still scores as "some correct documents retrieved."
 
 **Example:** User asks for "phone number," retrieves text that mentions "phone" in context of "phone verification" not "phone to call."
 
@@ -445,3 +461,7 @@ Our 0.828 precision looked like success. But manual evaluation revealed that one
 - Total for thorough quality assessment: ~2 hours
 
 This investment revealed a 24-point gap that automated metrics completely missed.
+
+---
+
+📖 **[← Back to RAG Observatory](../../README.md)** | **[Next: Reranker Deep Dive →](02-reranker-deep-dive.md)**
