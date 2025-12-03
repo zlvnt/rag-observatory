@@ -1,6 +1,6 @@
 # RAG Observatory 🔭
 
-> **"When 80% precision actually means 50% quality"**
+> **"When 80% precision actually means 59% quality"**
 > A systematic study on why your RAG metrics might be lying to you.
 
 [![Research Status](https://img.shields.io/badge/Research-Complete-success)](https://github.com/zlvnt/rag-observatory)
@@ -18,7 +18,9 @@ A research project optimizing RAG retrieval for Indonesian e-commerce customer s
 - **Critical finding:** Automated metrics can be dangerously misleading
 - **Counter-intuitive results:** SOTA models underperformed simpler alternatives
 
-**Final Achievement:** 0.828 precision with cross-encoder reranking — but manual evaluation revealed only 56% actual quality.
+**Final Achievement:** 0.828 precision with cross-encoder reranking — but manual evaluation revealed only 59% actual quality.
+
+> ⚠️ **Disclaimer:** Company and product names (e.g., "TokoPedia") are fictional placeholders used for illustration purposes.
 
 ---
 
@@ -32,6 +34,7 @@ A research project optimizing RAG retrieval for Indonesian e-commerce customer s
 - [Final Configuration](#-final-configuration)
 - [Repository Structure](#-repository-structure)
 - [Lessons Learned](#-lessons-learned)
+- [Deep Dive Documentation](#-deep-dive-documentation)
 
 ---
 
@@ -93,9 +96,9 @@ This is the most important finding of this research.
 
 | Experiment | Automated Precision | Manual Quality Score |
 |------------|---------------------|----------------------|
-| Exp9a1 | 0.828 (83%) | **0.56 (56%)** |
+| Exp9a1 | 0.828 (83%) | **0.59 (59%)** |
 
-**A 27-point gap between what metrics say and what users experience.**
+**A 24-point gap between what metrics say and what users experience.**
 
 ### Why the Gap?
 
@@ -298,6 +301,19 @@ rag-observatory/
 8. **Time-box experiments** — Know when to stop and pivot (16 hours on failed approaches)
 9. **Domain fit > Model size** — 420MB MPNet beat 2.2GB BGE-M3
 10. **Qualitative analysis reveals root causes** — Numbers tell you what, inspection tells you why
+
+---
+
+## 📚 Deep Dive Documentation
+
+For detailed analysis on specific topics, see:
+
+| Document | Description |
+|----------|-------------|
+| [When Precision Lies: Metrics vs Quality Gap](research/deep-dives/01-metrics-vs-quality-gap.md) | In-depth analysis of why automated metrics can be misleading, with real case studies |
+| [Reranker Deep Dive](research/deep-dives/02-reranker-deep-dive.md) | Complete guide to implementing cross-encoder reranking with code examples |
+| [Why SOTA Failed: BGE-M3 Analysis](research/deep-dives/03-why-sota-failed-bge-m3.md) | Technical analysis of why larger models underperformed |
+| [Indonesian NLP Challenges](research/deep-dives/04-indonesian-nlp-challenges.md) | Domain-specific challenges with Indonesian text and BM25 |
 
 ---
 
