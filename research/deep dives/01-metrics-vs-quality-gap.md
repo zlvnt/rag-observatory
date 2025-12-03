@@ -297,6 +297,8 @@ deepdive-1.png
 
 ```
 
+deepdive-1.png
+
 ---
 
 ## Implications for RAG Systems
