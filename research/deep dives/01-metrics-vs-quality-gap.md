@@ -293,7 +293,8 @@ User Query: "What's the CS phone number?"
 │  Reality: ❌ Wrong section, user gets no phone #    │
 └─────────────────────────────────────────────────────┘
 
-./images/deepdive-1.png
+deepdive-1.png
+
 ```
 
 ---
