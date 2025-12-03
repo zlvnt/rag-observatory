@@ -273,29 +273,6 @@ After analyzing all 30 queries, we identified four recurring patterns:
 
 ### Visualizing the Gap
 
-```
-User Query: "What's the CS phone number?"
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────┐
-│              Document Level (Metrics)               │
-│  ┌─────────────────────────────────────────────┐   │
-│  │         contact_escalation.md                │   │
-│  │  ┌──────────────────────────────────────┐   │   │
-│  │  │ Section: Community Forum             │   │   │
-│  │  │ Section: Live Chat        ◄── RETRIEVED   │  │
-│  │  │ Section: Phone Support    ◄── NEEDED  │   │  │
-│  │  │ Section: Email            │           │   │  │
-│  │  └──────────────────────────────────────┘   │   │
-│  └─────────────────────────────────────────────┘   │
-│                                                     │
-│  Metric says: ✅ Correct document!                  │
-│  Reality: ❌ Wrong section, user gets no phone #    │
-└─────────────────────────────────────────────────────┘
-
-![Document vs Subsection Problem](./images/deepdive-1.png)
-
-```
 ![Document vs Subsection Problem](./images/deepdive-1.png)
 
 ---
