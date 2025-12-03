@@ -4,6 +4,10 @@
 
 ---
 
+📖 **Part of [RAG Observatory](../../README.md)** | Previous: [← Metrics vs Quality Gap](01-metrics-vs-quality-gap.md)
+
+---
+
 ## Table of Contents
 
 - [The Problem with Bi-Encoders](#the-problem-with-bi-encoders)
@@ -347,20 +351,22 @@ reranker_top_k = 3 (final results)
 
 | retrieval_k | reranker_top_k | Precision | Notes |
 |-------------|----------------|-----------|-------|
-| 3 | 3 | 0.783 | No reranking benefit (same as baseline) |
+| 3 | 3 | 0.783 | No benefit (reranker sees same docs as final output) |
 | 5 | 3 | 0.811 | Slight improvement |
-| **7** | **3** | **0.828** | **Sweet spot** |
+| **7** | **3** | **0.828** | **Sweet spot** ✅ |
 | 10 | 3 | 0.822 | Diminishing returns |
+
+> **Key insight:** When `retrieval_k` equals `reranker_top_k`, there's no benefit — the reranker just re-orders the same documents you'd get anyway. The magic happens when you retrieve more candidates than you need, letting the reranker pick the best ones.
 
 ### Model Selection
 
 We tested with `BAAI/bge-reranker-base`. Other options:
 
-| Model | Size | Speed | Quality | Notes |
-|-------|------|-------|---------|-------|
-| `bge-reranker-base` | 278MB | Fast | Good | **Our choice** — best balance |
-| `bge-reranker-large` | 560MB | Medium | Better | +1-2% quality, 2x slower |
-| `bge-reranker-v2-m3` | 568MB | Medium | Best | Multilingual optimized |
+| Model | File Size | Loaded Memory | Speed | Quality | Notes |
+|-------|-----------|---------------|-------|---------|-------|
+| `bge-reranker-base` | 278MB | ~600MB | Fast | Good | **Our choice** — best balance |
+| `bge-reranker-large` | 560MB | ~1.2GB | Medium | Better | +1-2% quality, 2x slower |
+| `bge-reranker-v2-m3` | 568MB | ~1.2GB | Medium | Best | Multilingual optimized |
 
 For Indonesian e-commerce, `bge-reranker-base` was sufficient. The larger models showed minimal improvement for our domain.
 
@@ -392,8 +398,10 @@ Without Reranker:
 
 With Reranker:
   Query → FAISS lookup → Rerank 7 docs → Results
-  Total: ~150-300ms (estimate)
+  Total: ~150-300ms (estimated, not measured in this study)
 ```
+
+> **Note:** Latency figures are estimates based on typical cross-encoder performance. Actual latency depends on hardware, model size, and document length. We recommend benchmarking in your specific environment.
 
 **Mitigation strategies:**
 - Use `fp16=True` for faster inference
@@ -404,10 +412,10 @@ With Reranker:
 
 Reranker models need to be loaded in memory:
 
-| Model | Memory |
-|-------|--------|
-| `bge-reranker-base` | ~600MB |
-| `bge-reranker-large` | ~1.2GB |
+| Model | File Size | Loaded Memory |
+|-------|-----------|---------------|
+| `bge-reranker-base` | 278MB | ~600MB |
+| `bge-reranker-large` | 560MB | ~1.2GB |
 
 **Tip:** Load reranker once at startup, not per-query.
 
@@ -524,3 +532,7 @@ reranker_use_fp16: true
 <p align="center">
   <i>"The best optimization is often not a better algorithm, but a second opinion."</i>
 </p>
+
+---
+
+📖 **[← Back to RAG Observatory](../../README.md)** | **[← Previous: Metrics vs Quality Gap](01-metrics-vs-quality-gap.md)**
