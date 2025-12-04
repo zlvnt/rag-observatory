@@ -258,18 +258,12 @@ use_hybrid_search: false    # BM25 adds noise for Indonesian
 
 ```
 rag-observatory/
-├── configs/              # YAML experiment configurations
-├── data/vector_stores/   # FAISS vector indexes
-├── evaluators/           # Evaluation metrics & logic
 ├── golden_datasets/      # 30-query test set with ground truth
 ├── research/             # Phase summaries & detailed analysis
 │   ├── PHASE_8A_SUMMARY.md
 │   ├── PHASE_8B_SUMMARY.md
 │   ├── PHASE_9A_SUMMARY.md
 │   └── ...
-├── results/              # Experiment outputs (CSV, JSON, reports)
-├── runners/              # Test execution scripts
-├── scripts/              # Utility & analysis scripts
 ├── z3_core/              # Core RAG engine
 │   ├── vector.py         # FAISS & embeddings
 │   ├── rag.py            # Retrieval logic
